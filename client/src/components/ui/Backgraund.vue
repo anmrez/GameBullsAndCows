@@ -6,8 +6,6 @@
 
       return {
 
-        // numberStars: 45,
-        coordinates: []
 
       }
 
@@ -23,62 +21,42 @@
           
           let X = this.generateX()
           let Y = this.generateY()
-          // let randomCoordinate = this.createUniqueCoordinate()
-          // let X = randomCoordinate[0]
-          // let Y = randomCoordinate[1]
 
           let img = document.createElement( 'img' )
-          img.src = `/src/assets/backgraund/star${ this.randomStar() }.svg`
-          img.alt = `star${ this.randomStar() }`
+          let numberStar = this.randomStar()
+          img.src = `/backgraund/star${ numberStar }.svg`
+          img.alt = `star${ numberStar }`
           img.style.width = '30px'
           img.style.position = 'absolute'
           img.style.opacity = this.generateOpacity()
-          img.dataset.star = ''
-          // img.style.transform = `rotate(${ this.generateRotate() }deg)`
+          // img.dataset.star = ''
           img.style.left = X + '%'
           img.style.top = Y + '%'
-
+          img.style.transform = `rotate( ${ this.generateRotate() }deg)`
           backgraund.append( img )
 
         }
 
       },
 
-      // createUniqueCoordinate(){
-
-      //   let coordinate = []
-
-      //   let randomX = this.generateX()
-      //   let randomY = this.generateY() 
-
-      //   coordinate.push( randomX )
-      //   coordinate.push( randomY )
-
-      //   console.log( `======` )
-      //   let allStar = document.querySelectorAll( '[data-star]' )
-      //   console.log( allStar )
-      //   // for (let index = 0; index < this.coordinates.length; index++) {
-
-          
-      //   // }
-
-      //   return coordinate
-
-      // },
-
       generateRotate(){
 
-        let rotate = Math.floor( Math.random() * 30 )
-        if ( rotate > 20 ) return this.generateRotate()
-        return rotate
+        let random = Math.floor( Math.random() * 100 )
+        if ( random > 90 ) return 45 
+        return 0
 
       },
 
       randomStar(){
 
-        let star = Math.floor( Math.random() * 10 )
-        if ( star > 3 || star < 1 ) return this.randomStar()
-        return star
+        let star = Math.floor( Math.random() * 100 )
+        
+        let returnValue = 1
+        if ( star > 40 ) returnValue = 1
+        if ( star <= 40 && star > 20 ) returnValue = 2
+        if ( star <= 20 && star > 10 ) returnValue = 3
+        if ( star <= 10 && star > 0 ) returnValue = 4
+        return returnValue
 
       },
 
@@ -92,8 +70,6 @@
 
       generateX(){
 
-        // let randomX = Math.random() * document.body.clientWidth
-        // if ( randomX > document.body.clientWidth - 75 ) return this.generateX()
         let randomX = Math.random() * 100
         if ( randomX > 95 ) return this.generateX()
         return randomX
@@ -102,8 +78,6 @@
 
       generateY(){
 
-        // let randomY = Math.random() * document.body.clientHeight
-        // if ( randomY > document.body.clientHeight - 75 ) return this.generateY()
         let randomY = Math.random() * 100
         if ( randomY > 95 ) return this.generateY()
         return randomY
@@ -114,7 +88,7 @@
 
     mounted(){
 
-      let numberStars = 45
+      let numberStars = 65
       if ( document.body.clientWidth < 640 ) numberStars = 10
       this.generateStars( numberStars )
 
@@ -127,7 +101,7 @@
   
   <section id="backgraundSpace" class="w-full h-[100vh] absolute top-0 left-0 pointer-events-none">
 
-    <img src="\src\assets\backgraund\moon.svg" alt="" class="w-[100px] top-[5%] md:top-[25%] left-[10%] md:left-[35%] opacity-95 absolute">
+    <img src="/backgraund/moon.svg" alt="" class="w-[100px] top-[5%] md:top-[25%] left-[10%] md:left-[35%] opacity-95 absolute">
 
     <!-- <img src="\src\assets\backgraund\star1.svg" alt="" class="w-[30px] top-[40px] left-[60px] absolute"> -->
     <!-- <img src="\src\assets\backgraund\star2.svg" alt="" class="w-[30px] top-[40px] left-[120px] absolute">

@@ -16,32 +16,32 @@
 
     methods: {
 
-      difficultyGame( e ){
+      // difficultyGame( e ){
 
-        let value = e.target.value
-        if ( value.length > 1 ) e.target.value = value.substring( value.length -1, value.length )
-        if ( /\D/.test( e.target.value ) ) e.target.value = 2
-        value = Number( e.target.value )
-        if ( Number( value ) > 7 ) e.target.value = 7
-        if ( Number( value ) < 2 ) e.target.value = 2
+      //   let value = e.target.value
+      //   if ( value.length > 1 ) e.target.value = value.substring( value.length -1, value.length )
+      //   if ( /\D/.test( e.target.value ) ) e.target.value = 2
+      //   value = Number( e.target.value )
+      //   if ( Number( value ) > 7 ) e.target.value = 7
+      //   if ( Number( value ) < 2 ) e.target.value = 2
 
-        this.difficulty = e.target.value
+      //   this.difficulty = e.target.value
 
-      },
+      // },
 
-      startGame( ){
+      // startGame( ){
       
-        this.hiddenNumber = this.generateNumber()
-        this.game = true
-        let response = {
-          game: this.game,
-          difficulty: this.difficulty,
-          hiddenNumber: this.hiddenNumber
-        }
-        this.$emit( 'startGameParam', response )
+      //   this.hiddenNumber = this.generateNumber()
+      //   this.game = true
+      //   let response = {
+      //     game: this.game,
+      //     difficulty: this.difficulty,
+      //     hiddenNumber: this.hiddenNumber
+      //   }
+      //   this.$emit( 'startGameParam', response )
       
       
-      },
+      // },
 
       generateNumber(){
 
@@ -82,6 +82,20 @@
 
       },
 
+      NewstartGame( difficulty ){
+
+        this.difficulty = difficulty
+        this.hiddenNumber = this.generateNumber()
+        this.game = true
+        let response = {
+          game: this.game,
+          difficulty: this.difficulty,
+          hiddenNumber: this.hiddenNumber
+        }
+        this.$emit( 'startGameParam', response )
+
+      }
+
     }
 
   }
@@ -90,12 +104,32 @@
 
 <template>
 
-    
+  <section>
+
     <h1 class="mx-auto text-3xl mb-20"> Singleplayer </h1>
-    <p> Сколько цифр будет в загаданном числе? ( 2 - 7 ) </p>
-    <h1> number {{ difficulty }} </h1>
-    <input v-bind:value='this.difficulty' @input='difficultyGame' class='bg-gray-500 w-14 text-4xl text-center rounded' type="tel" name="">
-    <br>
-    <button @click="startGame()" class="border border-sky-500 rounded py-1 px-6 text-lg hover:bg-sky-700"> Start </button>
+    <section class="space-y-8">
+  
+      <p> The number of digits in a number </p>
+      <!-- <h1> number {{ this.difficulty }} </h1> -->
+      <!-- <input v-bind:value='this.difficulty' @input='difficultyGame' class='bg-gray-500 w-14 text-4xl text-center rounded' type="tel" name=""> -->
+      <ul class="flex place-content-center space-x-3 select-none">
+        <li @click="NewstartGame( 2 )" class="px-4 py-2 active border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 2 </li>
+        <li @click="NewstartGame( 3 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 3 </li>
+        <li @click="NewstartGame( 4 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 4 </li>
+        <li @click="NewstartGame( 5 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 5 </li>
+        <li @click="NewstartGame( 6 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 6 </li>
+        <li @click="NewstartGame( 7 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 7 </li>
+      </ul>
+      <section>
+        <router-link to="/" class="py-3 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10" > Back to menu </router-link>
+      </section>
+      <!-- <section class=" space-x-3 ">
+        <button @click="startGame()" class="py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10"> Start </button>
+        <button class="py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10" > Back to menu </button>
+      </section> -->
+  
+    </section>
+
+  </section>
 
 </template>

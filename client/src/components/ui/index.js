@@ -7,6 +7,8 @@ import Alert from '@/components/ui/Alert.vue'
 import MobileKey from '@/components/ui/MobileKey.vue'
 import WindowWin from '@/components/ui/WindowWin.vue'
 import Backgraund from '@/components/ui/Backgraund.vue'
+import MenuBar from '@/components/ui/MenuBar.vue'
+import RulesGame from '@/components/mainMenu/RulesGame.vue'
 
 export default [
 
@@ -18,6 +20,8 @@ export default [
   Alert,
   MobileKey,
   WindowWin,
-  Backgraund
+  Backgraund,
+  MenuBar,
+  RulesGame
 
 ]

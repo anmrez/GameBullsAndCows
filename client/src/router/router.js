@@ -1,7 +1,6 @@
 import Main from '@/pages/Main.vue'
 import NotFound from '@/pages/NotFound.vue'
 import singlePlayer from '@/pages/Single.vue'
-import multiPlayer from '@/components/multiPl.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 

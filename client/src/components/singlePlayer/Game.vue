@@ -296,46 +296,53 @@ export default {
 
 <template>
 
-  <modal-win v-bind:turn="this.amountTurns" v-bind:time="this.amountTime" ></modal-win>
+  <section class="flex w-full" >
 
-  <section class="md:flex space-x-0 md:space-x-7 w-full relative ">
+    <menu-bar></menu-bar>
 
-    
+    <modal-win v-bind:difficulty="this.difficulty" v-bind:turn="this.amountTurns" v-bind:time="this.amountTime" ></modal-win>
   
-    <section class="px-5 md:px-0 mt-10 w-full md:w-1/2 hidden md:block space-y-3 text-center" >
+    <section class="md:flex space-x-0 md:space-x-7 w-full relative ">
+  
       
-      <support-table v-bind:difficulty="this.difficulty" class=" md:hidden sm:hidden"></support-table>
-      <section class="flex space-x-3">
-        <section class="relative">
-          <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-1 outline-transparent outline-offset-1 focus:outline-neon">
-          <ul class="absolute flex mt-2">
-            <li>
-              <alert-red id="alertRepeat"> Digit repeats </alert-red>
-            </li>
-            <li>
-              <alert-red id="alertInput"> Not enough digit </alert-red>
-            </li>
-          </ul>
+    
+      <section class="px-5 md:px-0 mt-10 w-full md:w-1/2 hidden md:block space-y-3 text-center" >
+        
+        <support-table v-bind:difficulty="this.difficulty" class=" md:hidden sm:hidden"></support-table>
+        <section class="flex space-x-3">
+          <section class="relative">
+            <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-1 outline-transparent outline-offset-1 focus:outline-neon">
+            <ul class="absolute flex mt-2">
+              <li>
+                <alert-red id="alertRepeat"> Digit repeats </alert-red>
+              </li>
+              <li>
+                <alert-red id="alertInput"> Not enough digit </alert-red>
+              </li>
+            </ul>
+          </section>
+          <button @click="makeMove" class="w-1/3 py-2 px-4 mx-5 border-2 border-white rounded hover:bg-whiteOpacity-10" > Make a move </button>
         </section>
-        <button @click="makeMove" class="w-1/3 border border-neon rounded hover:bg-neonOpacity-10 py-2 px-6" > Make a move </button>
+  
       </section>
-
+  
+      <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-3 max-h-[90vh] overflow-y-auto">
+        <move-table 
+          v-bind:arrayMove="this.arrayMove"
+          v-bind:hiddenNumber="this.hiddenNumber"
+          v-bind:arrayBulls="this.arrayBulls"
+          v-bind:arrayCows="this.arrayCows"
+          v-bind:checkStatusNumverMoveTable="this.checkStatusNumverMoveTable"
+  
+        ></move-table>
+      </section>
+  
+      <mobile-keyboard id="mobileKeyboard" v-bind:difficulty="this.difficulty" @clickMove="makeMove( )" @checkMobileInput="checkInputGame" class="" ></mobile-keyboard>
+  
     </section>
-
-    <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-3 max-h-[90vh] overflow-y-auto">
-      <move-table 
-        v-bind:arrayMove="this.arrayMove"
-        v-bind:hiddenNumber="this.hiddenNumber"
-        v-bind:arrayBulls="this.arrayBulls"
-        v-bind:arrayCows="this.arrayCows"
-        v-bind:checkStatusNumverMoveTable="this.checkStatusNumverMoveTable"
-
-      ></move-table>
-    </section>
-
-    <mobile-keyboard id="mobileKeyboard" v-bind:difficulty="this.difficulty" @clickMove="makeMove( )" @checkMobileInput="checkInputGame" class="" ></mobile-keyboard>
 
   </section>
+
 
 </template>
 
