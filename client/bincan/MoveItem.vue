@@ -71,11 +71,11 @@
 
 <template>
     
-    <div class="flex justify-center content-center space-x-4">
-        <div v-for="digit in getDigit( number )" class="p-4" >
-            <span class="border border-gray-500 p-2 cursor-pointer hover:bg-sky-700"> {{ digit }}  </span>
-        </div>
-        <p> {{ findBullsAndCows( number ) }} </p>
-    </div> 
+  <div class="flex justify-center content-center space-x-4">
+    <div v-for="digit in getDigit( number )" class="p-4" data-popopo>
+      <span class="border border-gray-500 p-2 cursor-pointer hover:bg-sky-700"> {{ digit }}  </span>
+    </div>
+    <p> {{ findBullsAndCows( number ) }} </p>
+  </div> 
 
 </template>

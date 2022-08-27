@@ -302,7 +302,7 @@ export default {
 
     <modal-win v-bind:difficulty="this.difficulty" v-bind:turn="this.amountTurns" v-bind:time="this.amountTime" ></modal-win>
   
-    <section class="md:flex space-x-0 md:space-x-7 w-full relative ">
+    <section class="md:flex space-x-0 md:space-x-7 w-full z-[1] ">
   
       
     
@@ -311,7 +311,7 @@ export default {
         <support-table v-bind:difficulty="this.difficulty" class=" md:hidden sm:hidden"></support-table>
         <section class="flex space-x-3">
           <section class="relative">
-            <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-1 outline-transparent outline-offset-1 focus:outline-neon">
+            <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
             <ul class="absolute flex mt-2">
               <li>
                 <alert-red id="alertRepeat"> Digit repeats </alert-red>

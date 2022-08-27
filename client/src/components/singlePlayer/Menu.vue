@@ -110,8 +110,6 @@
     <section class="space-y-8">
   
       <p> The number of digits in a number </p>
-      <!-- <h1> number {{ this.difficulty }} </h1> -->
-      <!-- <input v-bind:value='this.difficulty' @input='difficultyGame' class='bg-gray-500 w-14 text-4xl text-center rounded' type="tel" name=""> -->
       <ul class="flex place-content-center space-x-3 select-none">
         <li @click="NewstartGame( 2 )" class="px-4 py-2 active border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 2 </li>
         <li @click="NewstartGame( 3 )" class="px-4 py-2 border-2 border-white rounded hover:bg-whiteOpacity-10 active:bg-blackOpacity-50 active:text-whiteOpacity-75 active:border-whiteOpacity-75 cursor-pointer" > 3 </li>
@@ -123,10 +121,6 @@
       <section>
         <router-link to="/" class="py-3 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10" > Back to menu </router-link>
       </section>
-      <!-- <section class=" space-x-3 ">
-        <button @click="startGame()" class="py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10"> Start </button>
-        <button class="py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10" > Back to menu </button>
-      </section> -->
   
     </section>
 

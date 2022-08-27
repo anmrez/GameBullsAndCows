@@ -30,7 +30,7 @@ export default {
 
           // item.classList.remove( 'hover:bg-green-600' )
           item.classList.remove( 'bg-green-600' )
-          item.classList.remove( 'bg-redOpacity' )
+          item.classList.remove( 'bg-red-500' )
           item.classList.remove( 'bg-yellowOpacity' )
           // item.classList.add( 'hover:bg-red-800' )
           item.classList.add( 'bg-inherit-600' )
@@ -49,7 +49,7 @@ export default {
       if ( count === '1' ) {
 
           // item.classList.remove( 'hover:bg-yellowOpacity' )
-          item.classList.remove( 'bg-redOpacity' )
+          item.classList.remove( 'bg-red-500' )
           // item.classList.add( 'hover:bg-green-600' )
           item.classList.add( 'bg-yellowOpacity' )
 
@@ -57,10 +57,10 @@ export default {
 
       if ( count === '0' ) {
 
-          // item.classList.remove( 'hover:bg-redOpacity' )
+          // item.classList.remove( 'hover:bg-red-500' )
           item.classList.remove( 'bg-yellowOpacity' )
           item.classList.remove( 'bg-inherit-600' )
-          item.classList.add( 'bg-redOpacity' )
+          item.classList.add( 'bg-red-500' )
 
       }
 

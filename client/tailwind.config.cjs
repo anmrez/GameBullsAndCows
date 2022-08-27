@@ -2,7 +2,7 @@
 module.exports = {
   content: [
     "./src/*/*.{html,js,vue}",
-    "./src/components/ui/*.{html,js,vue}",
+    "./src/components/**/*.{html,js,vue}",
     "./src/components/singlePlayer/*.{html,js,vue}",
     "./index.html",
     "./src/App.vue",
