@@ -25,7 +25,7 @@ export default {
 <template>
   
   <section id="modalWindowWin" class="w-full h-[100vh] z-50 bg-blackOpacity-25 top-0 left-0 absolute hidden" >
-    <section class="w-[50%] py-4 px-14 space-y-6 bg-blackOpacity-50 border border-white rounded translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] absolute" >
+    <section class="w-[90%] md:w-[50%] py-4 px-14 space-y-6 bg-blackOpacity-50 border border-white rounded translate-x-[-50%] translate-y-[-50%] left-[50%] top-[50%] absolute" >
       <h1 class="w-full text-xl text-center"> You Win! </h1>
       <section>
         <ul class="flex justify-between space-x-3 hover:bg-whiteOpacity-25 border-b border-white" >

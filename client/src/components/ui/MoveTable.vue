@@ -1,5 +1,5 @@
 <script>
-
+import { isProxy, toRaw } from 'vue'; 
 
 export default {
   name: 'move-table',
@@ -33,14 +33,58 @@ export default {
 
   },
 
-
   updated() {
 
     this.$nextTick().then( this.checkStatusNumverMoveTable( ) );
+    this.checkLastBullsAndCows()
 
   },
 
   methods:{
+
+    checkLastBullsAndCows(){
+      // if last turn bulls = 0 and cows = 0 color all digits red 
+
+      let lastCows = this.arrayCows; 
+      if ( isProxy( this.arrayCows ) ){ lastCows = toRaw( this.arrayCows )} 
+      lastCows = lastCows[ lastCows.length - 1 ]
+
+      let lastBulls = this.arrayBulls; 
+      if ( isProxy( this.arrayBulls ) ){ lastBulls = toRaw( this.arrayBulls )} 
+      lastBulls = lastBulls[ lastBulls.length - 1 ]
+
+      if ( lastBulls === 0 && lastCows === 0 ) {
+
+        let lastRowInMovetable = document.querySelector( `[data-moveTableNumber="${ this.arrayMove.length - 1 }"]` )
+
+        let digits = []
+        for (let index = 0; index < lastRowInMovetable.children.length; index++) {
+          digits.push( lastRowInMovetable.children[index].outerText ) 
+        }
+
+        this.ColorAllDigitsRedInSupportTable( digits )
+
+      }
+
+    },
+
+    ColorAllDigitsRedInSupportTable( digits ){
+
+      for (let i = 0; i < digits.length; i++) {
+
+        let rowInSuportTableBtns = document.querySelectorAll( `[data-supportrow="${ digits[i] }"]` ) 
+
+        for (let k = 0; k < rowInSuportTableBtns.length; k++) {
+
+          let btn = rowInSuportTableBtns[k];
+          btn.dataset.count = 0
+          btn.click()
+          
+        }
+
+      }
+
+    },
 
     getDigit( number ){
 
@@ -136,10 +180,10 @@ export default {
   
 
   <section class="flex justify-between bg-whiteOpacity-25 rounded-t-lg" >
-    <h1 class="p-2"> Game table </h1> 
+    <h1 class="p-2"> Turn table </h1> 
   </section>
 
-  <table class="table w-full">
+  <table class="table w-full select-none">
     <thead >
 
       <tr class="border-b border-whiteOpacity-10 hover:bg-whiteOpacity-10 ">
@@ -169,7 +213,7 @@ export default {
       <tr v-for="(number, index) in arrayMove" class="table-row h-[60px] border-b border-whiteOpacity-10 hover:bg-whiteOpacity-10">
         <td class="text-center"> {{ index + 1 }} </td>
 
-        <td class="flex justify-center" data-moveTableNumber >
+        <td class="flex justify-center" :data-moveTableNumber="index"  >
           <div 
           @contextmenu="this.rbmDigit( $event )"
           @mouseover="this.hoverDigit( $event )" 

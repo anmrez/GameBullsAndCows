@@ -9,6 +9,16 @@
       },
     },
 
+    data(){
+
+      return{
+
+        countTable: 0
+
+      }
+
+    },
+
     methods: {
 
       checkInputGame( input ){
@@ -34,12 +44,28 @@
           this.$emit( 'clickMove' )
 
         }
-        if ( key === 'Support' ) {
+        if ( key === 'Switch' ) {
 
-          let mobileKeyboard = document.querySelector( '#mobileKeyboard' )
+          let moveTable = document.querySelector( '#totalMove' )
+          let parentSupportTable = document.querySelector( '#supportTable' ).parentElement
+          console.log( supportTable )
+          if ( this.countTable === 0 ) {
 
-          mobileKeyboard.classList.add( 'hidden' )
-          console.log( `show support menu` )
+            moveTable.classList.add( 'hidden' )
+            parentSupportTable.classList.remove( 'hidden' )
+
+            this.countTable = 1
+
+          } else {
+
+            moveTable.classList.remove( 'hidden' )
+            parentSupportTable.classList.add( 'hidden' )
+            this.countTable = 0
+
+          }
+
+
+          // console.log( `show support menu` )
 
         }
         if ( inputMove.value.length < difficulty ) {
@@ -125,9 +151,9 @@
       > 9 
       </button>
       <button 
-        @click="clickButton( 'Support' )" 
+        @click="clickButton( 'Switch' )" 
         class="font-pixel p-2 bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10" 
-      > Support 
+      > Switch table
       </button>
       <button 
         @click="clickButton( 0 )" 

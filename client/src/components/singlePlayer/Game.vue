@@ -75,6 +75,9 @@ export default {
         let tableMove = document.querySelector( '#totalMove' )
         tableMove.style.maxHeight = difference - 25 + 'px'
 
+        let tableSupport = document.querySelector( '#supportTable' )
+        tableSupport.style.maxHeight = difference - 50 + 'px'
+
       }
 
     },
@@ -135,7 +138,7 @@ export default {
         let moveItemColumn = moveButton.children[0]
         let count = supportButton.dataset.count
 
-        if( count === '1' ) moveItemColumn.classList.add( 'border-redOpacity' )
+        if( count === '1' ) moveItemColumn.classList.add( 'border-red-500' )
         if( count === '2' ) moveItemColumn.classList.add( 'border-yellow-500' )
         if( count === '3' ) moveItemColumn.classList.add( 'border-green-500' )
 
@@ -308,8 +311,8 @@ export default {
     
       <section class="px-5 md:px-0 mt-10 w-full md:w-1/2 hidden md:block space-y-3 text-center" >
         
-        <support-table v-bind:difficulty="this.difficulty" class=" md:hidden sm:hidden"></support-table>
-        <section class="flex space-x-3">
+        <support-table v-bind:difficulty="this.difficulty"></support-table>
+        <section id="moveInput" class="hidden md:flex space-x-3 ">
           <section class="relative">
             <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
             <ul class="absolute flex mt-2">

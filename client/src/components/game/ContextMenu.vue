@@ -108,7 +108,6 @@ export default {
           let item = supportTableRows[index]
           if ( item.outerText === this.digit ) {
 
-            console.log( supportTableRows[index] )
             let btn = supportTableRows[index]
 
             if ( param === 'allWhite' ) btn.dataset.count = '3'

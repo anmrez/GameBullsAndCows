@@ -8,7 +8,6 @@ export default{
 
     resize( e ){
 
-      console.log( e )
       logHeight.innerHTML = document.documentElement.clientHeight
       logWidth.innerHTML = document.documentElement.clientWidth
 

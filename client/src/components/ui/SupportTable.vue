@@ -47,6 +47,7 @@
         function removeBorder( item ) {
           
           item.classList.remove( 'border-redOpacity' )
+          item.classList.remove( 'border-red-500' )
           item.classList.remove( 'border-yellow-500' )
           item.classList.remove( 'border-green-500' )
 
@@ -143,6 +144,24 @@
 
       },
 
+      clearAll( e ){
+
+        for (let i = 0; i < 10; i++) {
+
+          let allRowsItems = document.querySelectorAll( `[data-supportrow="${ i }"]` )
+
+          for (let k = 0; k < allRowsItems.length; k++) {
+
+            let btn = allRowsItems[k];
+            btn.dataset.count = '3'
+            btn.click()
+            
+          }
+          
+        }
+
+      },
+
       editStatCols( tableBody, indexCols, param ){
 
         let tableChild = tableBody.children
@@ -196,77 +215,77 @@
 </script>
 
 <template>
-  
-  <section class="flex justify-between bg-whiteOpacity-25 rounded-t-lg hidden md:flex" >
-    <h1 class="p-2"> Support table </h1> 
+
+  <section id="supportTable" class="block max-h-[90vh] overflow-y-auto" >
+    
+    <section class="flex justify-between bg-whiteOpacity-25 rounded-t-lg " >
+      <h1 class="p-2"> Support table </h1> 
+    </section>
+
+
+    <table class="table table-auto w-full">
+      <thead >
+        <tr class="border-b border-gray-700 hover:bg-whiteOpacity-10">
+          <th v-for="( number, index ) in Number( difficulty )"> {{ index + 1 }} </th>
+          <!-- <th> </th> -->
+          <th class=""> Highlight </th>
+        </tr>
+      </thead>
+
+      <tbody id="supportTableBody" class="">
+
+        <tr v-for="( number, index ) in 10" class="table-row h-[60px] border-b border-gray-700 hover:bg-whiteOpacity-10" data-supportRows >
+
+          <td v-for="( i ) in Number( difficulty )" class=""> 
+            <button-digit @edit="editStatusNumverMoveTable" v-bind:column="i - 1" :data-supportrow="index" :data-supportcolumn="i - 1"> {{ index }} </button-digit> 
+          </td>
+
+          <td class=""> 
+            <section class="flex place-content-center">
+              <button @click="nullRows( $event, index )" class="p-2 rounded hover:bg-whiteOpacity-25">
+                n
+              </button>
+              <button @click="yellowRows( $event, index )" class="p-2 rounded hover:bg-yellowOpacity">
+                y
+              </button>
+              <button @click="redRows( $event, index )" class="p-2 rounded hover:bg-redOpacity">
+                r
+              </button>
+            </section>
+          </td>
+
+        </tr>
+
+        <tr class="">
+
+          <td v-for="( number, index ) in Number( difficulty )" > 
+            <section class="flex place-content-center">
+
+              <button @click="nullCols( $event, index )" class="p-2 rounded hover:bg-whiteOpacity-25">
+                n
+              </button>
+              <button @click="yellowCols( $event, index )" class="p-2 rounded hover:bg-yellowOpacity">
+                y
+              </button>
+              <button @click="redCols( $event, index )" class="p-2 rounded hover:bg-redOpacity">
+                r
+              </button>
+            </section>
+          </td>
+
+          <td class="font-bold">
+            <!-- Highlight -->
+            <button @click="clearAll( $event )" class="p-2 rounded hover:bg-whiteOpacity-25">
+              clear all
+            </button>
+          </td>
+
+        </tr>
+
+
+      </tbody>
+    </table>
+
   </section>
-
-
-  <table class="table-auto w-full hidden md:table">
-    <thead >
-      <tr class="border-b border-gray-700 hover:bg-whiteOpacity-10">
-        <th v-for="( number, index ) in Number( difficulty )"> {{ index + 1 }} </th>
-        <!-- <th> </th> -->
-        <th class=""> Highlight </th>
-      </tr>
-    </thead>
-
-    <tbody id="supportTableBody" class="">
-
-      <tr v-for="( number, index ) in 10" class="table-row h-[60px] border-b border-gray-700 hover:bg-whiteOpacity-10" data-supportRows >
-
-        <td v-for="( i ) in Number( difficulty )" class=""> 
-          <button-digit @edit="editStatusNumverMoveTable" v-bind:column="i - 1" :data-supportrow="index" :data-supportcolumn="i - 1"> {{ index }} </button-digit> 
-        </td>
-
-        <td class=""> 
-          <section class="flex place-content-center">
-            <button @click="nullRows( $event, index )" class="p-2 rounded hover:bg-whiteOpacity-25">
-              n
-            </button>
-            <button @click="yellowRows( $event, index )" class="p-2 rounded hover:bg-yellowOpacity">
-              y
-            </button>
-            <button @click="redRows( $event, index )" class="p-2 rounded hover:bg-redOpacity">
-              r
-            </button>
-          </section>
-        </td>
-
-      </tr>
-
-      <tr class="">
-
-        <td v-for="( number, index ) in Number( difficulty )" > 
-          <section class="flex place-content-center">
-
-            <button @click="nullCols( $event, index )" class="p-2 rounded hover:bg-whiteOpacity-25">
-              n
-            </button>
-            <button @click="yellowCols( $event, index )" class="p-2 rounded hover:bg-yellowOpacity">
-              y
-            </button>
-            <button @click="redCols( $event, index )" class="p-2 rounded hover:bg-redOpacity">
-              r
-            </button>
-          </section>
-        </td>
-
-        <td class="font-bold">
-          Highlight
-        </td>
-
-      </tr>
-
-      <!-- <tr class="">
-
-        <td v-for="( number, index ) in Number( difficulty )">
-          <input class="bg-inherit text-white border-b-4 border-gray-600 text-center text-xl w-[50px] h-[50px]" type="text">
-        </td>
-
-      </tr> -->
-
-    </tbody>
-  </table>
 
 </template>

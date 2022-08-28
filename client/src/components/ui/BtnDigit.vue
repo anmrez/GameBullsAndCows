@@ -28,39 +28,36 @@ export default {
 
       if ( count === '3' ) {
 
-          // item.classList.remove( 'hover:bg-green-600' )
-          item.classList.remove( 'bg-green-600' )
-          item.classList.remove( 'bg-red-500' )
-          item.classList.remove( 'bg-yellowOpacity' )
-          // item.classList.add( 'hover:bg-red-800' )
-          item.classList.add( 'bg-inherit-600' )
+        item.classList.remove( 'bg-green-600' )
+        item.classList.remove( 'bg-red-500' )
+        item.classList.remove( 'bg-yellowOpacity' )
+        item.classList.add( 'bg-inherit-600' )
 
       }
 
       if ( count === '2' ) {
 
-          // item.classList.remove( 'hover:bg-green-600' )
-          item.classList.remove( 'bg-yellowOpacity' )
-          // item.classList.add( 'hover:bg-gray-800' )
-          item.classList.add( 'bg-green-600' )
+        item.classList.remove( 'bg-yellowOpacity' )
+        item.classList.remove( 'bg-red-500' )
+        item.classList.add( 'bg-green-600' )
+        this.redAllRowAndColumnInSupportTable( item )
 
       }
 
       if ( count === '1' ) {
 
-          // item.classList.remove( 'hover:bg-yellowOpacity' )
-          item.classList.remove( 'bg-red-500' )
-          // item.classList.add( 'hover:bg-green-600' )
-          item.classList.add( 'bg-yellowOpacity' )
+        item.classList.remove( 'bg-green-600' )
+        item.classList.remove( 'bg-red-500' )
+        item.classList.add( 'bg-yellowOpacity' )
 
       }
 
       if ( count === '0' ) {
 
-          // item.classList.remove( 'hover:bg-red-500' )
-          item.classList.remove( 'bg-yellowOpacity' )
-          item.classList.remove( 'bg-inherit-600' )
-          item.classList.add( 'bg-red-500' )
+        item.classList.remove( 'bg-green-600' )
+        item.classList.remove( 'bg-yellowOpacity' )
+        item.classList.remove( 'bg-inherit-600' )
+        item.classList.add( 'bg-red-500' )
 
       }
 
@@ -68,7 +65,41 @@ export default {
       if ( item.dataset.count > '3' ) item.dataset.count = '0'
       this.$emit( 'edit', item, this.column )
 
+    },
+
+    redAllRowAndColumnInSupportTable( btnDigit ){
+
+      let numberRow = btnDigit.dataset.supportrow
+      let numberColumn = btnDigit.dataset.supportcolumn
+
+      let rowBtnsInSupportTable = document.querySelectorAll( `[data-supportrow="${ numberRow }"]` )
+      for (let i = 0; i < rowBtnsInSupportTable.length; i++) {
+
+        let btn = rowBtnsInSupportTable[i];
+        if ( btn.dataset.count !== '2' ) {
+
+          btn.dataset.count = '0'
+          btn.click()
+
+        }
+        
+      }
+
+      let columnBtnsInSupportTable = document.querySelectorAll( `[data-supportcolumn="${ numberColumn }"]` )
+      for (let i = 0; i < columnBtnsInSupportTable.length; i++) {
+
+        let btn = columnBtnsInSupportTable[i];
+        if ( btn.dataset.count !== '2' ) {
+
+          btn.dataset.count = '0'
+          btn.click()
+
+        }
+        
+      }
+
     }
+
 
   }
 
