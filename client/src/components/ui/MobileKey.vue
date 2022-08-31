@@ -7,6 +7,9 @@
       difficulty: {
         require: true
       },
+      windowResize: {
+        require: true
+      }
     },
 
     data(){
@@ -42,17 +45,29 @@
         if ( key === 'Move' ) {
 
           this.$emit( 'clickMove' )
+          this.windowResize()
+
+          this.scrollTableTurn()
 
         }
         if ( key === 'Switch' ) {
 
           let moveTable = document.querySelector( '#totalMove' )
           let parentSupportTable = document.querySelector( '#supportTable' ).parentElement
-          console.log( supportTable )
+          let keySwitch = document.querySelector( '#mobileKeyboardSwitch' )
+          let mobileKeyboardNumber = document.querySelector( '#mobileKeyboardNumber' )
+          let mobileKeyboardInput = document.querySelector( '#mobileKeyboardInput' )
           if ( this.countTable === 0 ) {
 
             moveTable.classList.add( 'hidden' )
             parentSupportTable.classList.remove( 'hidden' )
+
+            keySwitch.classList.remove( 'hidden' )
+            mobileKeyboardNumber.classList.add( 'hidden' )
+            mobileKeyboardInput.classList.add( 'hidden' )
+
+            this.windowResize()
+            this.scrollTableTurn()
 
             this.countTable = 1
 
@@ -60,14 +75,20 @@
 
             moveTable.classList.remove( 'hidden' )
             parentSupportTable.classList.add( 'hidden' )
+
+            keySwitch.classList.add( 'hidden' )
+            mobileKeyboardNumber.classList.remove( 'hidden' )
+            mobileKeyboardInput.classList.remove( 'hidden' )
+
+            this.windowResize()
+            this.scrollTableTurn()
+
             this.countTable = 0
 
           }
 
-
-          // console.log( `show support menu` )
-
         }
+        
         if ( inputMove.value.length < difficulty ) {
           
           if ( typeof key === 'number' ) inputMove.value += key
@@ -77,6 +98,14 @@
 
 
         
+      },
+
+      scrollTableTurn(){
+
+        let tableMove = document.querySelector( '#totalMove' )
+        let tableMoveHeight = tableMove.scrollHeight + 50
+        tableMove.scroll( 0, tableMoveHeight )
+
       }
 
 
@@ -95,7 +124,8 @@
       <alert-red id="alertRepeat"> Digit repeats </alert-red>
       <alert-red id="alertInput"> Not enough digit </alert-red>
     </section>
-    <section class="flex justify-between space-x-1 w-full">
+
+    <section id="mobileKeyboardInput" class="flex justify-between space-x-1 w-full">
       <input id="inputMobileMove" type="text" class="w-2/3 max-h-[42px] p-2 rounded border border-gray-800 bg-transparent text-lg text-center rounded focus:outline-none" readOnly >
       <button @click="clickButton( 'Delete' )" class="w-1/3 max-h-[42px] py-2 px-1 flex place-content-center bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10">
         <svg class="fill-red-500" width="30px" height="30px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -104,7 +134,7 @@
       </button>
     </section>
 
-    <section id="mobileKeyboard" class="grid grid-cols-3 gap-1  ">
+    <section id="mobileKeyboardNumber" class="grid grid-cols-3 gap-1  ">
       <button 
         @click="clickButton( 1 )" 
         class="p-2 bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10" 
@@ -152,7 +182,7 @@
       </button>
       <button 
         @click="clickButton( 'Switch' )" 
-        class="font-pixel p-2 bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10" 
+        class="text-sm font-pixel p-2 bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10" 
       > Switch table
       </button>
       <button 
@@ -166,6 +196,14 @@
       > Move 
       </button>
   
+    </section>
+
+    <section id="mobileKeyboardSwitch" class="grid grid-cols-3 gap-1 hidden">
+      <button 
+        @click="clickButton( 'Switch' )" 
+        class="text-sm font-pixel p-2 bg-blackOpacity-25 rounded border border-gray-800 hover:bg-whiteOpacity-10" 
+      > Switch table
+      </button>
     </section>
 
     <section id="mobileSupport" class="hidden" >

@@ -179,7 +179,7 @@ export default {
 
   
 
-  <section class="flex justify-between bg-whiteOpacity-25 rounded-t-lg" >
+  <section class="w-full flex justify-between bg-whiteOpacity-25 rounded-t-lg" >
     <h1 class="p-2"> Turn table </h1> 
   </section>
 

@@ -12,10 +12,17 @@ import ContextMenu from '@/components/game/ContextMenu.vue'
 
 
 // main menu
-import RulesGame from '@/components/mainMenu/RulesGame.vue'
-import HelpDev from '@/components/mainMenu/HelpDev.vue'
+// import RulesGame from '@/components/mainMenu/RulesGame.vue'
+// import HelpDev from '@/components/mainMenu/HelpDev.vue'
+// import info from '@/components/mainMenu/info.vue'
 import AlertScreen from '@/components/mainMenu/AlertScreen.vue'
-import info from '@/components/mainMenu/info.vue'
+import modalWindow from '@/components/mainMenu/modalWindow.vue'
+
+// main modalWindow
+import Rules from '@/components/mainMenu/modal/Rules.vue'
+import Support from '@/components/mainMenu/modal/Support.vue'
+import AppMobileDownload from '@/components/mainMenu/modal/AppMobile.vue'
+import Interface from '@/components/mainMenu/modal/Interface.vue'
 
 
 export default [
@@ -31,9 +38,15 @@ export default [
 
   ContextMenu,
 
-  RulesGame,
-  HelpDev,
+  // RulesGame,
+  // HelpDev,
+  // info,
   AlertScreen,
-  info
+  modalWindow,
+
+  Rules,
+  Support,
+  AppMobileDownload,
+  Interface
 
 ]

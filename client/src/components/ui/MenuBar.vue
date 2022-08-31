@@ -6,42 +6,34 @@ export default {
 
   methods:{
 
-    editStatusMenu ( ) {
+    menu( e ){
 
-      let menu = document.querySelector( '#menu' )
-      let menuArrow = document.querySelector( '#menuArrow' )
-      let leftMenu = menu.style.left
-      // let menuWidth = menu.clientWidth
-      let width = document.body.clientWidth
-      let menuBar = document.querySelector( '#menuBar' )
+      let menuItem = document.querySelector( '#menuItem' )
 
-      
-      if ( leftMenu === '0px' ) {
+      if ( menuItem.classList.contains( 'right-5' ) ){
 
-        menu.style.left = '-25%'
-        if ( width < 640 ) menu.style.left = '-100%'
-        if ( width < 640 ) menuBar.classList.remove( 'rotate-180' )
-
-        if ( width > 640 ) menuArrow.classList.remove( 'rotate-180' )
+        menuItem.classList.add( 'right-[-100%]' )
+        menuItem.classList.remove( 'right-5' )
 
       } else {
-        
-        menu.style.left = '0px'
-        if ( width < 640 ) menuBar.classList.add( 'rotate-180' )
-        
-        if ( width > 640 ) menuArrow.classList.add( 'rotate-180' )
+
+        menuItem.classList.remove( 'right-[-100%]' )
+        menuItem.classList.add( 'right-5' )
 
       }
-
-      
-
 
 
     },
 
-    handlerKey( e ){
+    closeMenu( e ){
+      
+      if ( e.target.dataset.menu !== '' ) {
 
-      if ( e.key === 'Escape' ) this.editStatusMenu()
+        let menuItem = document.querySelector( '#menuItem' )
+        menuItem.classList.add( 'right-[-100%]' )
+        menuItem.classList.remove( 'right-5' )
+
+      }
 
     },
 
@@ -49,12 +41,16 @@ export default {
   },
   mounted(){
 
-    document.addEventListener( 'keyup', this.handlerKey )
+    let menu = document.querySelector( '#menuButton' )
+    menu.addEventListener( 'click', this.menu )
+    document.addEventListener( 'click', this.closeMenu )
 
   },
   beforeUnmount() {
 
-    document.removeEventListener( 'keyup', this.handlerKey )
+    let menu = document.querySelector( '#menuButton' )
+    menu.removeEventListener( 'click', this.menu )
+    document.removeEventListener( 'click', this.closeMenu )
 
   }
 
@@ -64,37 +60,18 @@ export default {
 
 <template>
 
-  <section>
-
-    
-    <section id="menu" class="w-[100%] md:w-[25%] h-[100vh] bg-blackOpacity-75 border-r-2 border-white ease-in duration-300 translate-y-[-50%] top-[50%] left-[-100%] md:left-[-25%] fixed z-10 ">
-
-      <section id="menuBar" @click="editStatusMenu" class="w-[60px] h-[80px] cursor-pointer translate-y-[-50%] top-[50%] translate-x-[100%] right-[0px] origin-left  absolute overflow-hidden ease-in duration-200 z-20">
-        <section class="w-[60px] h-[60px] border-2 border-white translate-y-[-50%] top-[50%]  rounded-full left-[-30px] absolute " >
-    
-          <span id="menuArrow" class="text-lg translate-x-[-50%] translate-y-[-50%] top-[50%] left-[70%] absolute origin-center duration-100 ">
-            >
-          </span>
-      
-        </section>
+  <section class="w-full h-[100vh] overflow-hidden top-0 left-0 absolute">
+    <button id="menuButton" class="w-[40px] h-[40px] rounded border-2 border-white flex flex-col justify-center content-center justify-items-center bg-blackOpacity-75 hover:bg-whiteOpacity-25 top-[5%] right-5 absolute z-50" data-menu>
+      <section class="space-y-1 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute" data-menu>
+        <span class="w-[20px] h-[3px] rounded bg-white block" data-menu></span>
+        <span class="w-[20px] h-[3px] rounded bg-white block" data-menu></span>
+        <span class="w-[20px] h-[3px] rounded bg-white block" data-menu></span>
       </section>
-      
-      <section class="w-full flex flex-col justify-center space-y-5">
-        <h1 class="text-lg my-6 text-center"> Bulls and Cows </h1>
-  
-        <ul class="mx-5 "> statistics
-          <li class="ml-5" > time </li>  
-          <li class="ml-5" > turn </li>
-          <li class="ml-5" > difficulty </li>
-        </ul>
-
-        <router-link to="/" class="py-2 px-4 mx-5 text-center border-2 border-white rounded hover:bg-whiteOpacity-10" > Back to menu </router-link>
-
-      </section>
-
+    </button>
+    <section id="menuItem" class="duration-200 top-[15%] right-[-100%] absolute z-50"> 
+      <router-link to="/" class="py-3 px-4 border-2 border-white rounded bg-blackOpacity-75 hover:bg-whiteOpacity-10" > Back to menu </router-link>
     </section>
-
   </section>
-  
+
 
 </template>

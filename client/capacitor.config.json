@@ -1,0 +1,6 @@
+{
+  "appId": "bullsAndCows.myapp",
+  "appName": "Bulls and cows",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}

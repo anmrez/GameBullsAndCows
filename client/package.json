@@ -11,6 +11,9 @@
     "tailwind": "npx tailwindcss -i ./src/assets/css/input.css -o ./src/assets/css/output.css --watch"
   },
   "dependencies": {
+    "@capacitor/android": "^4.1.0",
+    "@capacitor/cli": "^4.1.0",
+    "@capacitor/core": "^4.1.0",
     "axios": "^0.27.2",
     "serve": "^14.0.1",
     "vue": "^3.2.37",

@@ -305,7 +305,7 @@ export default {
 
     <modal-win v-bind:difficulty="this.difficulty" v-bind:turn="this.amountTurns" v-bind:time="this.amountTime" ></modal-win>
   
-    <section class="md:flex space-x-0 md:space-x-7 w-full z-[1] ">
+    <section class="md:flex space-x-0 md:space-x-7 w-full z-[1]">
   
       
     
@@ -314,7 +314,7 @@ export default {
         <support-table v-bind:difficulty="this.difficulty"></support-table>
         <section id="moveInput" class="hidden md:flex space-x-3 ">
           <section class="relative">
-            <input id="inputMove" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
+            <input id="inputMove" autocomplete="off" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
             <ul class="absolute flex mt-2">
               <li>
                 <alert-red id="alertRepeat"> Digit repeats </alert-red>
@@ -329,7 +329,7 @@ export default {
   
       </section>
   
-      <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-3 max-h-[90vh] overflow-y-auto">
+      <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-3 max-h-[90vh] overflow-scroll">
         <move-table 
           v-bind:arrayMove="this.arrayMove"
           v-bind:hiddenNumber="this.hiddenNumber"
@@ -340,7 +340,7 @@ export default {
         ></move-table>
       </section>
   
-      <mobile-keyboard id="mobileKeyboard" v-bind:difficulty="this.difficulty" @clickMove="makeMove( )" @checkMobileInput="checkInputGame" class="" ></mobile-keyboard>
+      <mobile-keyboard id="mobileKeyboard" v-bind:windowResize="this.windowResize" v-bind:difficulty="this.difficulty" @clickMove="makeMove( )" @checkMobileInput="checkInputGame" class="" ></mobile-keyboard>
   
     </section>
 
