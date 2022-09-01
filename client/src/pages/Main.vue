@@ -165,18 +165,18 @@
         </button>
 
         <button @click="showTraining" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
-          <img src="/rule.svg" alt="coin" class="w-[25px]">
+          <img src="/training.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
-            interface training
+            interface guide
           </p>
         </button>
 
-        <button @click="showAppMobile" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
+        <!-- <button @click="showAppMobile" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/rule.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             download app on android
           </p>
-        </button>
+        </button> -->
 
         <button @click="showSupportDev" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/coin.svg" alt="coin" class="w-[25px]">
@@ -190,10 +190,10 @@
     </section>
   
     <modal-window v-bind:modalType="this.typeModalWindow" ></modal-window>
-    <!-- <modal-rules ></modal-rules>
-    <modal-helpDev></modal-helpDev>
+    <!-- <modal-rules ></modal-rules> -->
+    <!-- <modal-helpDev></modal-helpDev> -->
 
-    <information-game></information-game> -->
+    <information-game></information-game>
 
   </section>
 

@@ -14,7 +14,7 @@ import ContextMenu from '@/components/game/ContextMenu.vue'
 // main menu
 // import RulesGame from '@/components/mainMenu/RulesGame.vue'
 // import HelpDev from '@/components/mainMenu/HelpDev.vue'
-// import info from '@/components/mainMenu/info.vue'
+import info from '@/components/mainMenu/info.vue'
 import AlertScreen from '@/components/mainMenu/AlertScreen.vue'
 import modalWindow from '@/components/mainMenu/modalWindow.vue'
 
@@ -40,7 +40,7 @@ export default [
 
   // RulesGame,
   // HelpDev,
-  // info,
+  info,
   AlertScreen,
   modalWindow,
 

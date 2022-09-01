@@ -329,7 +329,7 @@ export default {
   
       </section>
   
-      <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-3 max-h-[90vh] overflow-scroll">
+      <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-0 max-h-[90vh] overflow-scroll">
         <move-table 
           v-bind:arrayMove="this.arrayMove"
           v-bind:hiddenNumber="this.hiddenNumber"
@@ -353,22 +353,10 @@ export default {
 
 <style>
 
-body::-webkit-scrollbar {
-  width: 12px;               /* ширина scrollbar */
-}
-body::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.25);        /* цвет дорожки */
-}
-body::-webkit-scrollbar-thumb {
-  background-color: rgba(255, 255, 255, 0.25);    /* цвет плашки */
-  border-radius: 20px;       /* закругления плашки */
-  border: 3px solid orange;  /* padding вокруг плашки */
+#totalMove::-webkit-scrollbar {
+  display: none; /* for Chrome, Safari, and Opera */
+  scrollbar-width: none;
 }
 
-body {
-  scrollbar-radius: 20px; 
-  scrollbar-width: thin;          /* "auto" или "thin"  */
-  scrollbar-color: rgba(255, 255, 255, 0.10) rgba(0, 0, 0, 0);   /* плашка скролла и дорожка */ 
-}
 
 </style>
