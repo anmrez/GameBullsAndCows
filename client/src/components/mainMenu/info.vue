@@ -44,7 +44,7 @@ export default{
     <section class="text-sm bottom-5 right-5 absolute ">
       <!-- <div> Height: <span id="logHeight" >  </span> </div>
       <div> Width: <span id="logWidth" >  </span> </div> -->
-      <span> Version: 0.0.13 </span>
+      <span> Version: 0.0.14 </span>
     </section>
 
   </section>
