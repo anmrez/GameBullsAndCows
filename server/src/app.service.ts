@@ -5,6 +5,7 @@ export class AppService {
 
   
   getHello(): string {
+    console.log( 'get hello' )
     return 'Hello World!';
   }
 

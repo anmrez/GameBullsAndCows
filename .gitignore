@@ -3,3 +3,4 @@
 *.spec.ts
 server/test
 send_server
+apk

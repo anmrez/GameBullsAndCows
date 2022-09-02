@@ -39,7 +39,7 @@
   
   <template>
     
-    <section id="modalWindowMain" class="w-full h-[100vh] top-0 left-0 absolute hidden" @click="this.hiddenModalWindow ( $event )" >
+    <section id="modalWindowMain" class="w-full h-[100vh] top-0 left-0 absolute hidden z-50" @click="this.hiddenModalWindow ( $event )" >
     
         <section id="modalWindow" class="w-[90%] md:w-[60%] h-[0%] md:h-auto max-h-[90%] md:max-h-[60%] p-4 bg-blackOpacity-75 translate-x-[-50%] translate-y-[-50%]  top-[50%] left-[50%] relative duration-300 border-2 border-white z-50 space-y-3 indent-4 rounded"  > 
           <section class="w-full flex flex-nowrap justify-between relative"  >

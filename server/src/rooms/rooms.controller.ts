@@ -16,10 +16,11 @@ export class RoomsController {
     // @Headers( 'Access-Control-Allow-Origin' ) headers: string
   ) {
 
+    return 'room get'
     // return this.roomsService.generateCodeRoom()
-    let rooms = await this.roomsService.getAll()
-    console.log( rooms )
-    return rooms
+    // let rooms = await this.roomsService.getAll()
+    // console.log( rooms )
+    // return rooms
 
   }
 

@@ -13,9 +13,9 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
 
-    ServeStaticModule.forRoot({
-      rootPath: join( __dirname, '..', 'client/dist' ),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join( __dirname, '..', 'client/dist' ),
+    // }),
 
 
     ConfigModule.forRoot({
@@ -23,7 +23,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     }),
 
 
-    TypeOrmModule.forRoot({
+  TypeOrmModule.forRoot({
     type: 'postgres',
     host: process.env.POSTGRES_HOST,
     port: Number( process.env.POSTGRES_PORT ),

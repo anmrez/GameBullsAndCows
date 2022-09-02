@@ -1,6 +1,7 @@
 import Main from '@/pages/Main.vue'
 import NotFound from '@/pages/NotFound.vue'
 import singlePlayer from '@/pages/Single.vue'
+import multiPlayer from '@/pages/MultiPlayer.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 
@@ -14,6 +15,11 @@ const routes = [
           path: '/singleplayer',
           name: 'singlePlayer',
           component: singlePlayer
+     },
+     {
+          path: '/multiplayer',
+          name: 'multiPlayer',
+          component: multiPlayer
      },
      // { path: '/404', component: NotFound },
      // { path: '/:catchAll(.*)', redirect: '/404' },

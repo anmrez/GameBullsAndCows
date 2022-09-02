@@ -1,9 +1,11 @@
 import { SubscribeMessage, WebSocketGateway } from '@nestjs/websockets';
 
 @WebSocketGateway({
-  cors:{
+  // cors: true
+  cors: {
     origin: '*'
   }
+
 })
 export class RoomGateway {
 
@@ -12,7 +14,7 @@ export class RoomGateway {
   @SubscribeMessage( 'connectInRoom' )
   connectRoom(  ) {
 
-    return 'success2';
+    return 'Подключение успешно';
 
   }
 

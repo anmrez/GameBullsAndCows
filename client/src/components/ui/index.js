@@ -7,6 +7,9 @@ import WindowWin from '@/components/ui/WindowWin.vue'
 import Backgraund from '@/components/ui/Backgraund.vue'
 import MenuBar from '@/components/ui/MenuBar.vue'
 
+// ui
+import PixelButton from '@/components/ui/Pixel-button.vue'
+
 // game
 import ContextMenu from '@/components/game/ContextMenu.vue'
 
@@ -35,6 +38,8 @@ export default [
   WindowWin,
   Backgraund,
   MenuBar,
+
+  PixelButton,
 
   ContextMenu,
 
