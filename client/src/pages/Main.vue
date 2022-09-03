@@ -150,12 +150,20 @@
           </p>
         </router-link>
 
-        <router-link to="/multiplayer" class='flex justify-center content-center text-xl text-whiteOpacity-75 py-2 px-4 border-2 border-whiteOpacity-75 rounded bg-blackOpacity-75 cursor-default pointer-events-none flex justify-center space-x-3'>
+
+        <router-link to="/multiplayer" class='flex justify-center content-center text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3'>
+          <img src="/multiplayer.svg" alt="coin" class="w-[25px]">
+          <p class="pt-1">
+            Multiplayer
+          </p>
+        </router-link>
+
+        <!-- <router-link to="/multiplayer" class='flex justify-center content-center text-xl text-whiteOpacity-75 py-2 px-4 border-2 border-whiteOpacity-75 rounded bg-blackOpacity-75 cursor-default pointer-events-none flex justify-center space-x-3'>
           <img src="/multiplayer.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             multiplayer
           </p>
-        </router-link>
+        </router-link> -->
 
         <button @click="showRulesGame" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/rule.svg" alt="coin" class="w-[25px]">
