@@ -65,6 +65,9 @@ export default {
 
     this.checkUsername()
 
+    let inputUsername = document.querySelector( '#inputUsername' )
+    inputUsername.focus()
+
   }
 
 

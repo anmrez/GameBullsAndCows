@@ -31,7 +31,7 @@ export class RoomsController {
   ) {
 
     // return this.roomsService.generateCodeRoom()
-    return this.roomsService.create( dto )
+    // return this.roomsService.create( dto )
 
   }
 
@@ -41,7 +41,7 @@ export class RoomsController {
     @Body() dto,
   ) {
 
-    return this.roomsService.delete( dto )
+    // return this.roomsService.delete( dto )
 
   }
 

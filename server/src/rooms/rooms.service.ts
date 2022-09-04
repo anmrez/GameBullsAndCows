@@ -15,67 +15,75 @@ export class RoomsService {
 
   ){ }
 
+    
+  async createRoomInDB( username :string, codeRoom :string ){
 
-  async getAll (){
-
-    return this.roomRepository.find()
-
-  }
-
-  async create( dto: RoomsDto ){
-
-    dto.password = this.hashingPass( dto.password )
-    dto.code = await this.generateCodeRoom()
-    dto.maxPlayers = 2
-    dto.players = 1
-
-    await this.roomRepository.save( dto )
-    return dto
+    let dto: RoomsDto = {
+      host: username,
+      code: codeRoom,
+      guest: ''
+    }
+    return await this.roomRepository.save( dto )
 
   }
 
-  async delete( dto ){
+  async create( data: any ){
 
-    await this.roomRepository.delete({
-      code: dto.code
-    });
+    let username = this.getUsername( data )
+    console.log( `username: ${ username }` )
+
+    let codeRoom = this.generateCodeRoom()
+    console.log( codeRoom )
+
+    let room = await this.createRoomInDB( username, codeRoom )
+    console.log( room )
+
+    return room
+
+  }
+
+  getUsername( data ) :string {
+
+    let arrCookie = data.cookie.split( '; ' )
+
+    let username :string = ''
+    arrCookie.forEach( item => {
+      
+      let index = item.indexOf( 'username=' )
+      if ( index >= 0 ) username = item.replace( 'username=', '' )
+      
+    })
+    if ( username === '' ) return 'error'
+    return username
+
+  }
+
+  generateCodeRoom(){
+
+    let length = 6
+    let random = Math.random() * 1_000_000
+    random = Math.floor( random )
+    if ( String( random ).length !== length ) return this.generateCodeRoom()
+    return String( random )
 
   }
 
 
-  async generateCodeRoom() :Promise< number > {
+  async connect( data ){
 
-    let random = Math.random()
-    random *= 10_000
-    let ceil = Math.ceil( random )
+    let username = this.getUsername( data )
+    let codeRoom = data.codeRoom
 
-    let length = ceil.toString().length
-    if ( length > 4 || length < 4 ) return this.generateCodeRoom()
-
-    let result = await this.checkUnique( ceil )
-    if ( result === null ) return ceil
-    if ( result !== null ) return this.generateCodeRoom()
-
-  }
-
-  async checkUnique( floor ){
-
-    return this.roomRepository.findOne({
-      where: {
-        code: floor
+    let room = await this.roomRepository.findOne({
+      where:{
+        code: codeRoom
       }
     })
-
-  }
-
-  // === Prtivate ===
-
-  private hashingPass( password: string ){
-
-    const hash = new SHA3(512);
-
-    hash.update( password );
-    return hash.digest('hex');
+    console.log( room )
+    if ( room === null ) return null
+    room.guest = username
+    await this.roomRepository.save( room )
+    return room
 
   }
 

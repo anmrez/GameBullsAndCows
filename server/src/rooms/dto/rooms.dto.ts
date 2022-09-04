@@ -2,9 +2,8 @@
 
 export class RoomsDto {
 
-  code: number;
-  players: number;
-  maxPlayers: number;
-  password: string;
+  code: string;
+  host: string;
+  guest: string;
 
 }

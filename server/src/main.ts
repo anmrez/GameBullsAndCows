@@ -18,7 +18,7 @@ async function start() {
   // app.setGlobalPrefix('api')
   // app.useStaticAssets( join( __dirname, '..', 'views' ) )
 
-  await app.listen( PORT, () => console.log( `[App] - sercer started on ${ PORT } port` ) );
+  await app.listen( PORT, () => console.log( `[App] - server started on ${ PORT } port` ) );
 
 }
 start();

@@ -43,6 +43,6 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 
   ],
   controllers: [AppController],
-  providers: [AppService, RoomGateway],
+  providers: [AppService],
 })
 export class AppModule {}

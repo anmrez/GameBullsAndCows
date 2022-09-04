@@ -23,7 +23,7 @@ const routes = [
           component: multiPlayer
      },
      {
-          path: '/multiplayer/Lobbi',
+          path: '/multiplayer/lobbi',
           name: 'lobbi',
           component: Lobbi
      },

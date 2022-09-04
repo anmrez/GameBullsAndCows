@@ -9,15 +9,12 @@ export class RoomModel {
   @Column({
     unique: true
   })
-  code: number;
+  code: string;
 
   @Column()
-  players: number;
+  host: string;
 
   @Column()
-  maxPlayers: number;
-
-  @Column()
-  password: string;
+  guest: string;
 
 }
