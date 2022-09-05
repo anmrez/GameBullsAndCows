@@ -10,7 +10,7 @@ export default{
       // socket: this.$route.params.socket
       socket: io( 'http://localhost:3000' ),
       codeRoom: this.$route.params.code,
-      codeRoomP1: '',
+      codeRoomP1: '', // P - Part
       codeRoomP2: '',
       nameHost: this.$route.params.host,
       nameGuest: this.$route.params.guest,
@@ -111,8 +111,8 @@ export default{
     this.socket.on( 'userConnected', ( response ) => {
 
       console.log( response )
-      this.UserConnect = response
-      this.nameGuest = response.guest
+      this.UserConnect = response.player2
+      this.nameGuest = this.UserConnect.username
 
     })
 

@@ -4,11 +4,12 @@ import { SHA3 } from 'sha3';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RoomModel } from './rooms.model';
 import { Repository } from 'typeorm';
+import { RoomGateway } from './rooms.gateway';
 
 @Injectable()
 export class RoomsService {
 
-
+  parametr: string
   constructor(
 
     @InjectRepository( RoomModel ) private roomRepository: Repository < RoomModel >,
@@ -16,18 +17,21 @@ export class RoomsService {
   ){ }
 
     
-  async createRoomInDB( username :string, codeRoom :string ){
+  // async createRoomInDB( username :string, codeRoom :string ){
 
-    let dto: RoomsDto = {
-      host: username,
-      code: codeRoom,
-      guest: ''
-    }
-    return await this.roomRepository.save( dto )
+  //   let dto: RoomsDto = {
+  //     host: username,
+  //     code: codeRoom,
+  //     guest: ''
+  //   }
+  //   return await this.roomRepository.save( dto )
 
-  }
+  // }
 
-  async create( data: any ){
+  async create( data: any, clientID: string ){
+
+    this.parametr = 'create '
+    console.log( this.parametr )
 
     let username = this.getUsername( data )
     console.log( `username: ${ username }` )
@@ -35,14 +39,20 @@ export class RoomsService {
     let codeRoom = this.generateCodeRoom()
     console.log( codeRoom )
 
-    let room = await this.createRoomInDB( username, codeRoom )
-    console.log( room )
+    let room = {
+      host: username,
+      code: codeRoom,
+      id: clientID
+    }
 
     return room
 
   }
 
   getUsername( data ) :string {
+
+    this.parametr += 'get username '
+    console.log( this.parametr )
 
     let arrCookie = data.cookie.split( '; ' )
 
@@ -69,22 +79,22 @@ export class RoomsService {
   }
 
 
-  async connect( data ){
+  // async connect( data ){
 
-    let username = this.getUsername( data )
-    let codeRoom = data.codeRoom
+  //   let username = this.getUsername( data )
+  //   let codeRoom = data.codeRoom
 
-    let room = await this.roomRepository.findOne({
-      where:{
-        code: codeRoom
-      }
-    })
-    console.log( room )
-    if ( room === null ) return null
-    room.guest = username
-    await this.roomRepository.save( room )
-    return room
+    // let room = await this.roomRepository.findOne({
+    //   where:{
+    //     code: codeRoom
+    //   }
+    // })
+    // console.log( room )
+    // if ( room === null ) return null
+    // room.guest = username
+    // await this.roomRepository.save( room )
+    // return room
 
-  }
+  // }
 
 }

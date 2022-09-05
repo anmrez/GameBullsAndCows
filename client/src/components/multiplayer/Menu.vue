@@ -41,7 +41,7 @@ export default {
       this.socket.connect();
       this.socket.emit( 'connectLobbi', { codeRoom, cookie }, ( response ) => {
 
-        // console.log( response )
+        console.log( response )
         if ( response.status !== 'not found' ) return this.$router.push( { name: 'lobbi', params: response } )
         return this.alertNotFoundRoom()
 

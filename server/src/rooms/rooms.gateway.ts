@@ -12,19 +12,21 @@ import { RoomsService } from './rooms.service';
 export class RoomGateway {
   @WebSocketServer()
   server: Server
+  rooms: {
+    codeRoom: string | undefined
+    player1: {
+      username: string | undefined,
+      id: string | undefined,
+    },
+    player2: {
+      username: string | undefined,
+      id: string | undefined,
+    },
+  }[] = []
 
   constructor (
     private roomsService: RoomsService
   ) {}
-
-  // @SubscribeMessage( 'connectInLobbi' )
-  // connectRoom(  ) {
-
-  //   console.log( `user connect` )
-  //   return 'Подключение успешно';
-
-  // }
-
 
   @SubscribeMessage( 'createLobbi' )
   async createLobbi(
@@ -33,8 +35,11 @@ export class RoomGateway {
   ){
 
     console.log( `=== create Lobbi ===` )
-    // client.emit( 'roomCreated', 'success' )
-    let room = await this.roomsService.create( data )
+
+    let room = await this.roomsService.create( data, client.id )
+    this.addRooms( room )
+    console.log( typeof this.rooms, this.rooms )
+    
     return {
       host: room.host,
       code: room.code
@@ -49,19 +54,16 @@ export class RoomGateway {
     @MessageBody() data: any
   ){
 
-    console.log( `=== find lobbi ===` )
-    let response
-    let room = await this.roomsService.connect( data )
-    if ( room === null ) return { status: 'not found' }
+    console.log( `=== connectLobbi ===` )
     
-    response = {
-      status: 'success',
-      guest: room.guest,
-      host: room.host,
-      code: room.code,
+    let guestUsername = this.roomsService.getUsername( data )
+    let codeRoom = data.codeRoom
+    let dataConnect = {
+      id: client.id,
+      guest: guestUsername
     }
-    this.server.emit( 'userConnected', response )
-    return response
+    this.connectInRooms( codeRoom, dataConnect )
+    this.server.emit( 'userConnected', this.findRoom( codeRoom ) )
     
   }
   
@@ -77,6 +79,61 @@ export class RoomGateway {
       difficulty: data.number
     }
     client.broadcast.emit( 'clickDif', response )
+
+  }
+
+
+  private addRooms( room ){
+
+    this.rooms.push({ 
+      codeRoom: room.code, 
+      player1: { 
+        username: room.host, 
+        id: room.id
+      }, 
+      player2: {
+        username: undefined, 
+        id: undefined
+      } 
+    })
+
+    console.log( `Room added:` )
+    console.log( this.rooms[ this.rooms.length - 1 ] )
+    console.log( `  ` )
+
+  }
+
+  private connectInRooms( codeRoom: any, data: any ){
+
+    this.rooms.forEach( ( item, i ) => {
+      
+      if ( item.codeRoom === codeRoom ) {
+
+        item.player2 = {
+          username: data.guest,
+          id: data.id
+        }
+        console.log( `rooms updated` )
+        console.log( item )
+        console.log( `  ` )
+
+      }
+
+    });
+
+
+  }
+
+  private findRoom( codeRoom ){
+
+    let response 
+    this.rooms.forEach( ( item, i ) => {
+      
+      if ( item.codeRoom === codeRoom ) response = item
+
+    });
+
+    return response
 
   }
 
