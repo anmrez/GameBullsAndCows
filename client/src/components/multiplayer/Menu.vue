@@ -27,9 +27,25 @@ export default {
 
     },
 
+    socketDisconnect(){
+
+      this.socket.disconnect()
+      console.log( `socket disconnect: ${ this.socket.disconnected }` )
+
+    },
+
+    socketConnect(){
+
+      this.socket.on( "connect", () => {
+        console.log( `socket conndect: ${ this.socket.connected }` )
+      })
+      this.socket.connect();
+
+    },
+
     alertNotFoundRoom(){
 
-      console.log( `null` )
+      console.log( `Комната не найдена` )
 
     },
 
@@ -38,11 +54,22 @@ export default {
       console.log( `connectIO` )
       let codeRoom = this.inputConnectValue
       let cookie = document.cookie
-      this.socket.connect();
+      // this.socket.connect();
+      this.socketConnect()
       this.socket.emit( 'connectLobbi', { codeRoom, cookie }, ( response ) => {
 
-        console.log( response )
-        if ( response.status !== 'not found' ) return this.$router.push( { name: 'lobbi', params: response } )
+        if ( response !== 'room not found' ) {
+
+          let routeRes = {
+            host: false,
+            codeRoom: response.codeRoom,
+            player1: response.player1.username,
+            player2: response.player2.username,
+          }
+          return this.$router.push( { name: 'lobbi', params: routeRes } )
+
+        } 
+        this.socketDisconnect()
         return this.alertNotFoundRoom()
 
       })
@@ -53,23 +80,25 @@ export default {
 
       let cookie = document.cookie
       console.log( cookie )
-      this.socket.connect();
+      // this.socket.connect();
+      this.socketConnect()
       this.socket.emit( 'createLobbi', { cookie }, ( response ) => {
 
-        console.log( response )
-        this.$router.push( { name: 'lobbi', params: response } )
+        // console.log( response )
+        let routeRes = {
+          host: true,
+          codeRoom: response.codeRoom,
+          player1: response.player1.username,
+          player2: '',
+        }
+        this.socketDisconnect()
+        this.$router.push( { name: 'lobbi', params: routeRes } )
 
       })
 
     }
 
   },
-
-  // mounted(){
-
-
-    
-  // },
   
   updated(){
     

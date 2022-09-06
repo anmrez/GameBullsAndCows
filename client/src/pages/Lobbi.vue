@@ -9,12 +9,17 @@ export default{
 
       // socket: this.$route.params.socket
       socket: io( 'http://localhost:3000' ),
-      codeRoom: this.$route.params.code,
+      routeParam: this.$route.params,
+      codeRoom: this.$route.params.codeRoom,
       codeRoomP1: '', // P - Part
       codeRoomP2: '',
-      nameHost: this.$route.params.host,
-      nameGuest: this.$route.params.guest,
-      UserConnect: {}
+      // nameHost: this.$route.params.host,
+      // nameGuest: this.$route.params.guest,
+      player1: this.$route.params.player1,
+      player2: this.$route.params.player2,
+      UserConnect: {},
+      host: this.$route.params.host,
+      difficulty: 3,
 
     }
 
@@ -36,12 +41,12 @@ export default{
         if ( index >= 0 ) username = item.replace( 'username=', '' )
         
       })
-      if ( username === undefined ) this.$router.push({ name: 'multiPlayer' })
+      if ( username === undefined ) this.redirectInMenu()
 
 
     },
 
-    handlerDisconnect(){
+    listenerDisconnect(){
 
       this.socket.on("connect", () => {
 
@@ -50,7 +55,7 @@ export default{
 
         console.log( reason )
         this.socket.disconnect()
-        this.$router.push( { name: 'multiPlayer' } )
+        this.redirectInMenu()
         
 
       });
@@ -85,49 +90,61 @@ export default{
       let btn = document.querySelector( `#btnDifficulty${ number }` )
       btn.classList.add( 'bg-whiteOpacity-25' )
 
-    }
+    },
 
-  },
+    redirectInMenu(){
 
-  mounted(){
+      this.$router.push({ name: 'multiPlayer' })
 
-    this.checkCookie()
-    if ( this.codeRoom ) {
+    },
+
+    listenerDifficulty(){
+
+      this.socket.on( 'clickDif', ( response ) => {
+
+        // console.log( response )
+        // let dificulty = response.difficulty
+        // this.buttfonDifficultyActive( difficulty )
+
+
+      })
+
+    },
+
+    hostListeningConnections(){
+
+      if ( this.$route.params.host )
+      this.socket.on( 'userConnected', ( response ) => {
+
+        console.log( response )
+        this.player2 = response.player2.username
+
+      })
+
+    },
+
+    checkRouteParams(){
+
+      let routeDataLength = Object.keys( this.$route.params ).length
+      if ( routeDataLength === 0 ) this.redirectInMenu()
       this.codeRoomP1 = this.codeRoom.substring( 0, 3 ),
       this.codeRoomP2 = this.codeRoom.substring( 3, 6 )
+
     }
 
+  },
+
+
+  mounted(){
     
+    this.checkCookie()
+    this.checkRouteParams()
+    this.listenerDisconnect()
+    this.listenerDifficulty()
+    this.hostListeningConnections()
     
   },
-  
-  beforeMount(){
-    
-    let routeDataLength = Object.keys( this.$route.params ).length
-    if ( routeDataLength === 0 ) this.$router.push({ name: 'multiPlayer' })
-    this.handlerDisconnect()
-    
-    // listener connect
-    this.socket.on( 'userConnected', ( response ) => {
 
-      console.log( response )
-      this.UserConnect = response.player2
-      this.nameGuest = this.UserConnect.username
-
-    })
-
-
-    // Сделать только не хосту
-    this.socket.on( 'clickDif', ( response ) => {
-
-      console.log( response )
-      let difficulty = response.difficulty
-      this.buttonDifficultyActive( difficulty )
-
-
-    })
-
-  }
 
 }
 
@@ -147,20 +164,21 @@ export default{
         </section>
         <ul>
           <li> Players: </li>
-          <li id="user1"> • {{ this.nameHost }} </li>
-          <li id="user2"> • {{ this.nameGuest }} </li>
+          <li id="user1"> • {{ this.player1 }} </li>
+          <li id="user2"> • {{ this.player2 }} </li>
         </ul>
       </section>
 
 
       <section class="flex items-center space-x-3">
         <h2 class="text-lg"> Difficulty:  </h2>
-        <ul class=" flex space-x-3 ">
+        <ul v-if="this.host === 'true'" class=" flex space-x-3 ">
           <li> <pixel-button id="btnDifficulty3" class="" @click="this.changeDifficulty( 3 )" > 3 </pixel-button> </li>
           <li> <pixel-button id="btnDifficulty4" class="" @click="this.changeDifficulty( 4 )" > 4 </pixel-button> </li>
           <li> <pixel-button id="btnDifficulty5" class="" @click="this.changeDifficulty( 5 )" > 5 </pixel-button> </li>
           <li> <pixel-button id="btnDifficulty6" class="" @click="this.changeDifficulty( 6 )" > 6 </pixel-button> </li>
         </ul>
+        <span v-else > number difficulty </span>
       </section>
     </section>
 

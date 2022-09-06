@@ -7,7 +7,7 @@ export default {
 
     return{
 
-      socketConnect: 'waiting',
+      socketConnectStatus: 'waiting',
       socket: io( 'http://localhost:3000' ),
       loginStatus: false,
 
@@ -17,32 +17,40 @@ export default {
 
   methods:{
 
-    createLocal(){
+    socketDisconnect(){
 
-      // let socketJson = JSON.stringify( io( 'http://localhost:3000' ) )
-      // console.log( socketJson )
-      // // localStorage.setItem( 'socket', socketJson )
-      // // console.log( localStorage.setItem( 'socket', JSON.stringify( this.socket ) ) )
-      // console.log( localStorage )
+      console.log( `socket diskonecter` )
+      this.socket.disconnect()
 
-    }
+    },
+
+    socketConnect(){
+
+      this.socket.connect();
+
+      this.socket.on( "connect", () => {
+
+        if ( this.socket.connected ) {
+          this.socketConnectStatus = 'success'
+          console.log( `socket conndect: ${ this.socket.connected }` )
+          setTimeout( this.socketDisconnect, 1000 )
+        }
+        // this.socket.disconnect()
+
+      });
+
+    },
 
   },
 
-  mounted(){
-
-    this.createLocal()
-  },
 
   beforeMount(){
 
     
-    this.socket.on( "connect", () => {
-      if ( this.socket.connected ) this.socketConnect = 'success'
-    });
+    this.socketConnect()
     
     this.socket.on( "connect_error", (error) => {
-      if ( error ) this.socketConnect = 'fail'
+      if ( error ) this.socketConnectStatus = 'fail'
     });
     
 
@@ -57,10 +65,10 @@ export default {
   
   <section class="h-[100vh] w-full  top-0 left-0 absolute">
 
-    <pixel-spinner v-if="this.socketConnect !== 'success'" v-bind:connection="this.socketConnect"> Server connection... </pixel-spinner>
+    <pixel-spinner v-if="this.socketConnectStatus !== 'success'" v-bind:connection="this.socketConnectStatus"> Server connection... </pixel-spinner>
 
     <multiplayer-login 
-      v-if="this.socketConnect === 'success' && this.loginStatus === false" 
+      v-if="this.socketConnectStatus === 'success' && this.loginStatus === false" 
       @LoginStatus="this.loginStatus = true"
     ></multiplayer-login>
 

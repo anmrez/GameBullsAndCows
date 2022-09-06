@@ -9,50 +9,51 @@ import { RoomGateway } from './rooms.gateway';
 @Injectable()
 export class RoomsService {
 
-  parametr: string
+  rooms: {
+    codeRoom: string | undefined,
+    difficulty: number,
+    player1: {
+      username: string | undefined,
+      id: string | undefined,
+    },
+    player2: {
+      username: string | undefined,
+      id: string | undefined,
+    },
+  }[] = []
+
   constructor(
 
     @InjectRepository( RoomModel ) private roomRepository: Repository < RoomModel >,
 
   ){ }
 
-    
-  // async createRoomInDB( username :string, codeRoom :string ){
+  getRooms(){
 
-  //   let dto: RoomsDto = {
-  //     host: username,
-  //     code: codeRoom,
-  //     guest: ''
-  //   }
-  //   return await this.roomRepository.save( dto )
+    return this.rooms
 
-  // }
+  }
 
-  async create( data: any, clientID: string ){
+  create( data: any, clientID: string ){
 
-    this.parametr = 'create '
-    console.log( this.parametr )
 
     let username = this.getUsername( data )
     console.log( `username: ${ username }` )
 
     let codeRoom = this.generateCodeRoom()
-    console.log( codeRoom )
-
+    console.log( `codeRoom: ${ codeRoom }` )
     let room = {
-      host: username,
+      username: username,
       code: codeRoom,
       id: clientID
     }
 
-    return room
+    return this.addRooms( room )
 
   }
 
   getUsername( data ) :string {
 
-    this.parametr += 'get username '
-    console.log( this.parametr )
 
     let arrCookie = data.cookie.split( '; ' )
 
@@ -79,22 +80,69 @@ export class RoomsService {
   }
 
 
-  // async connect( data ){
 
-  //   let username = this.getUsername( data )
-  //   let codeRoom = data.codeRoom
 
-    // let room = await this.roomRepository.findOne({
-    //   where:{
-    //     code: codeRoom
-    //   }
-    // })
-    // console.log( room )
-    // if ( room === null ) return null
-    // room.guest = username
-    // await this.roomRepository.save( room )
-    // return room
+  private addRooms( room ){
 
-  // }
+    this.rooms.push({ 
+      codeRoom: room.code, 
+      difficulty: 3,
+      player1: { 
+        username: room.username, 
+        id: room.id
+      }, 
+      player2: {
+        username: undefined, 
+        id: undefined
+      } 
+    })
+
+    let lastRoom = this.rooms[ this.rooms.length - 1 ]
+    console.log( `Room added:` )
+    console.log( lastRoom )
+    console.log( `  ` )
+    return lastRoom
+
+  }
+
+  connectInRooms( data: any, clientID: any ){
+
+    let username = this.getUsername( data )
+    let codeRoom = data.codeRoom
+    let response: any
+
+    this.rooms.forEach( item => {
+      
+      if ( item.codeRoom === codeRoom ) {
+
+        item.player2 = {
+          username: username,
+          id: clientID
+        }
+        console.log( `rooms updated` )
+        console.log( item )
+        console.log( `  ` )
+        response = item
+
+      }
+
+    });
+
+    return response
+
+  }
+
+  private findRoom( codeRoom ){
+
+    let response 
+    this.rooms.forEach( ( item, i ) => {
+      
+      if ( item.codeRoom === codeRoom ) response = item
+
+    });
+
+    return response
+
+  }
 
 }

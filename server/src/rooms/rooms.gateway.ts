@@ -12,38 +12,30 @@ import { RoomsService } from './rooms.service';
 export class RoomGateway {
   @WebSocketServer()
   server: Server
-  rooms: {
-    codeRoom: string | undefined
-    player1: {
-      username: string | undefined,
-      id: string | undefined,
-    },
-    player2: {
-      username: string | undefined,
-      id: string | undefined,
-    },
-  }[] = []
+  // rooms: {
+  //   codeRoom: string | undefined
+  //   player1: {
+  //     username: string | undefined,
+  //     id: string | undefined,
+  //   },
+  //   player2: {
+  //     username: string | undefined,
+  //     id: string | undefined,
+  //   },
+  // }[] = []
 
   constructor (
     private roomsService: RoomsService
   ) {}
 
   @SubscribeMessage( 'createLobbi' )
-  async createLobbi(
+  createLobbi(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: any
   ){
 
     console.log( `=== create Lobbi ===` )
-
-    let room = await this.roomsService.create( data, client.id )
-    this.addRooms( room )
-    console.log( typeof this.rooms, this.rooms )
-    
-    return {
-      host: room.host,
-      code: room.code
-    }
+    return this.roomsService.create( data, client.id )
 
   }
 
@@ -55,15 +47,25 @@ export class RoomGateway {
   ){
 
     console.log( `=== connectLobbi ===` )
-    
-    let guestUsername = this.roomsService.getUsername( data )
-    let codeRoom = data.codeRoom
-    let dataConnect = {
-      id: client.id,
-      guest: guestUsername
-    }
-    this.connectInRooms( codeRoom, dataConnect )
-    this.server.emit( 'userConnected', this.findRoom( codeRoom ) )
+    let response = this.roomsService.connectInRooms( data, client.id )
+    if ( response === undefined ) {
+      console.log( `'room not found'` )
+      return 'room not found'
+    } 
+    this.server.emit( 'userConnected', response )
+    return response
+    // let guestUsername = this.roomsService.getUsername( data )
+    // let codeRoom = data.codeRoom
+    // let dataConnect = {
+    //   id: client.id,
+    //   guest: guestUsername
+    // }
+    // let dataConnect = {
+    //   id: client.id,
+    //   guest: guestUsername
+    // }
+    // this.connectInRooms( codeRoom, dataConnect )
+    // this.server.emit( 'userConnected', this.findRoom( codeRoom ) )
     
   }
   
@@ -83,59 +85,59 @@ export class RoomGateway {
   }
 
 
-  private addRooms( room ){
+  // private addRooms( room ){
 
-    this.rooms.push({ 
-      codeRoom: room.code, 
-      player1: { 
-        username: room.host, 
-        id: room.id
-      }, 
-      player2: {
-        username: undefined, 
-        id: undefined
-      } 
-    })
+  //   this.rooms.push({ 
+  //     codeRoom: room.code, 
+  //     player1: { 
+  //       username: room.host, 
+  //       id: room.id
+  //     }, 
+  //     player2: {
+  //       username: undefined, 
+  //       id: undefined
+  //     } 
+  //   })
 
-    console.log( `Room added:` )
-    console.log( this.rooms[ this.rooms.length - 1 ] )
-    console.log( `  ` )
+  //   console.log( `Room added:` )
+  //   console.log( this.rooms[ this.rooms.length - 1 ] )
+  //   console.log( `  ` )
 
-  }
+  // }
 
-  private connectInRooms( codeRoom: any, data: any ){
+  // private connectInRooms( codeRoom: any, data: any ){
 
-    this.rooms.forEach( ( item, i ) => {
+  //   this.rooms.forEach( ( item, i ) => {
       
-      if ( item.codeRoom === codeRoom ) {
+  //     if ( item.codeRoom === codeRoom ) {
 
-        item.player2 = {
-          username: data.guest,
-          id: data.id
-        }
-        console.log( `rooms updated` )
-        console.log( item )
-        console.log( `  ` )
+  //       item.player2 = {
+  //         username: data.guest,
+  //         id: data.id
+  //       }
+  //       console.log( `rooms updated` )
+  //       console.log( item )
+  //       console.log( `  ` )
 
-      }
+  //     }
 
-    });
+  //   });
 
 
-  }
+  // }
 
-  private findRoom( codeRoom ){
+  // private findRoom( codeRoom ){
 
-    let response 
-    this.rooms.forEach( ( item, i ) => {
+  //   let response 
+  //   this.rooms.forEach( ( item, i ) => {
       
-      if ( item.codeRoom === codeRoom ) response = item
+  //     if ( item.codeRoom === codeRoom ) response = item
 
-    });
+  //   });
 
-    return response
+  //   return response
 
-  }
+  // }
 
 
 }

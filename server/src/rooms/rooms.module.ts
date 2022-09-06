@@ -6,9 +6,9 @@ import { RoomModel } from './rooms.model';
 import { RoomsService } from './rooms.service';
 
 @Module({
-  // controllers: [
-  //   RoomsController
-  // ],
+  controllers: [
+    RoomsController
+  ],
   providers: [
     RoomsService,
     RoomGateway,

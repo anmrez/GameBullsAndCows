@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Get, Headers } from '@nestjs/common';
 import { RoomsService } from './rooms.service';
 
-@Controller('rooms')
+@Controller('')
 export class RoomsController {
 
 
@@ -10,40 +10,46 @@ export class RoomsController {
   ) {}
 
 
+  @Get( 'rooms' )
+  getRooms(){
 
-  @Post( 'get' )
-  async getRooms(
-    // @Headers( 'Access-Control-Allow-Origin' ) headers: string
-  ) {
-
-    return 'room get'
-    // return this.roomsService.generateCodeRoom()
-    // let rooms = await this.roomsService.getAll()
-    // console.log( rooms )
-    // return rooms
+    return this.roomsService.getRooms()
 
   }
 
+  // @Post( 'get' )
+  // async getRooms(
+  //   // @Headers( 'Access-Control-Allow-Origin' ) headers: string
+  // ) {
 
-  @Post('create')
-  async createRoom(
-    @Body() dto,
-  ) {
+  //   return 'room get'
+  //   // return this.roomsService.generateCodeRoom()
+  //   // let rooms = await this.roomsService.getAll()
+  //   // console.log( rooms )
+  //   // return rooms
 
-    // return this.roomsService.generateCodeRoom()
-    // return this.roomsService.create( dto )
-
-  }
+  // }
 
 
-  @Post('delete')
-  async deleteRoom(
-    @Body() dto,
-  ) {
+  // @Post('create')
+  // async createRoom(
+  //   @Body() dto,
+  // ) {
 
-    // return this.roomsService.delete( dto )
+  //   // return this.roomsService.generateCodeRoom()
+  //   // return this.roomsService.create( dto )
 
-  }
+  // }
+
+
+  // @Post('delete')
+  // async deleteRoom(
+  //   @Body() dto,
+  // ) {
+
+  //   // return this.roomsService.delete( dto )
+
+  // }
 
 
 
