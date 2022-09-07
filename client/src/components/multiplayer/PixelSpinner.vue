@@ -4,6 +4,17 @@ export default{
 
   name: 'pixel-spinner',
 
+  data(){
+
+    return{
+
+      timerIDSpinner: [],
+      timerIDPointer: []
+
+    }
+
+  },
+
   props:{
 
     connection:{
@@ -25,7 +36,8 @@ export default{
       for (let index = 0; index < allSpinnerPosition.length; index++) {
         
         let spinnerPosition = allSpinnerPosition[index];
-        setTimeout( this.spinnerMove, timer, spinnerPosition, index )
+        let timerID = setTimeout( this.spinnerMove, timer, spinnerPosition, index )
+        this.timerIDSpinner.push( timerID )
         timer += 200
 
       }
@@ -46,7 +58,10 @@ export default{
         spinnerTarget.x.baseVal.value = X
         spinnerTarget.y.baseVal.value = Y
   
-        if ( index + 1 === allSpinnerPosition.length ) this.startSpinner()
+        if ( index + 1 === allSpinnerPosition.length ) {
+          this.timerIDSpinner = []
+          this.startSpinner()
+        } 
 
       } catch (error) {
         
@@ -54,13 +69,63 @@ export default{
 
       }
 
+    },
+
+    startPointAnimation(){
+
+      let timer = 700
+      for ( let i = 0; i < 4; i++ ) {
+
+        let timerID = setTimeout( this.pointAnimationMove, timer, i )
+        this.timerIDPointer.push( timerID ) 
+        timer += 700
+        
+      }
+
+    },
+
+    pointAnimationMove( index ){
+
+      let pointAnimation = document.querySelector( '#pointAnimation' )
+
+      if ( index === 0 ) pointAnimation.innerHTML = ''
+      if ( index === 1 ) pointAnimation.innerHTML = '.'
+      if ( index === 2 ) pointAnimation.innerHTML = '..'
+      if ( index === 3 ) {
+        pointAnimation.innerHTML = '...'
+        this.startPointAnimation()
+        // this.timerIDPointer = []
+      } 
+      if ( this.timerIDPointer.length > 5 ) this.timerIDPointer.shift()
+
+    },
+
+    stopAllTimer(){
+
+      // console.log( `stopAllTimer` )
+
+      this.timerIDSpinner.forEach( item => {
+        clearInterval( item )
+      });
+
+      this.timerIDPointer.forEach( item => {
+        clearInterval( item )
+      });
+
     }
 
   },
   
   mounted(){
 
+    this.startPointAnimation()
     this.startSpinner()
+
+  },
+
+  beforeUnmount() {
+
+    this.stopAllTimer()
 
   }
 
@@ -75,24 +140,24 @@ export default{
 
       <section class="w-full flex items-center justify-center">
         
-        <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="200px" height="200px" viewBox="0 0 270 270" xml:space="preserve" fill='#ffffff66' class="w-[70px] h-[70px]">
+        <svg version="1.2" baseProfile="tiny" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="86px" height="86px" viewBox="0 0 86 86" xml:space="preserve" fill='#ffffff66' class="w-[30px] h-[30px] mr-2" >
           <g id="spinnerPosition">
-            <rect x="158.1" y="79.4" width="33" height="33"/>
-            <rect x="158.1" y="118.9" width="33" height="33"/>
-            <rect x="158.1" y="158.1" width="33" height="33"/>
-    
-            <rect x="118.4" y="158.1" width="33" height="33"/>
-            <rect x="78.9" y="158.1" width="33" height="33"/>
-            <rect x="78.9" y="118.4" width="33" height="33"/>
-            <rect x="78.9" y="78.9" width="33" height="33"/>
-            <rect x="118.4" y="78.9" width="33" height="33"/>
+            <rect x="60" y="2.6" width="24.4" height="24.4"/>
+            <rect x="60" y="31.9" width="24.4" height="24.4"/>
+            <rect x="60" y="60.9" width="24.4" height="24.4"/>
+            <rect x="30.6" y="60.9" width="24.4" height="24.4"/>
+            <rect x="1.3" y="60.9" width="24.4" height="24.4"/>
+            <rect x="1.3" y="31.5" width="24.4" height="24.4"/>
+            <rect x="1.3" y="2.2" width="24.4" height="24.4"/>
+            <rect x="30.6" y="2.2" width="24.4" height="24.4"/>
           </g>
-          <rect id="spinnerTarget" x="158.1" y="79.4" fill="#ffffff" width="33" height="33"/>
+          <rect id="spinnerTarget" x="60" y="2.6" fill="#FFFFFF" width="24.4" height="24.4"/>
         </svg>
   
-        <span class="mr-[25px]"> 
-          <slot></slot>  
-        </span>
+        <section class="flex "> 
+          <p> Server connection </p>
+          <span id="pointAnimation" > ... </span>
+        </section>
     
         
       </section>

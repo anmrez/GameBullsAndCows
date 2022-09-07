@@ -48,6 +48,10 @@ export default {
         document.cookie = `username=${ username }; expires=Tue, 01 Jan 2040 00:00:00 GMT; samesite=strict`
         this.$emit( 'LoginStatus', true )
 
+      } else {
+
+        this.showAlert()
+
       }
 
     },
@@ -57,6 +61,25 @@ export default {
       let input = document.querySelector( '#inputUsername' )
       let outLength = document.querySelector( '#usernameLength' )
       outLength.innerHTML = input.value.length
+
+    },
+
+    showAlert(){
+
+      let alertInputUsername = document.querySelector( '#alertInputUsername' )
+      let usernameInstruction = document.querySelector( '#usernameInstruction' )
+
+      let left = usernameInstruction.offsetLeft
+      alertInputUsername.style.left = left - 35 + 'px'
+      // alertInputUsername.style.transform = 'scale(1)'
+      
+      let hidden = function (){
+        alertInputUsername.classList.add( 'hidden' )
+      }
+
+      let rimerID = setTimeout( hidden, 4000 )
+      alertInputUsername.classList.remove( 'hidden' )
+      
 
     }
 
@@ -77,30 +100,26 @@ export default {
 
 <template>
 
-  <!-- <section class="h-[100vh] w-full  top-0 left-0 absolute" > -->
-    <section class="space-y-5 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
+  <section class="space-y-5 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
 
-      <h1 class="text-2xl text-center"> Multiplayer </h1>
-      <h2 class="text-lg text-center"> Your username </h2>
-      <section class="block text-xs text-center">
-        <span > ( min: 4, max: 20, length: </span>  
-        <span id="usernameLength"> 0 </span>  
-        <span> ) </span>
-      </section>
-      <section> 
-        <input @input="checkLength" id="inputUsername" type="text" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white"> 
-      </section>
-  
-      <section class="flex space-x-3 justify-center" >
-        <!-- <section>
-          <router-link to="/" class="py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3" > Back to menu </router-link>
-        </section> -->
-        <back-to-menu class=""></back-to-menu>
-        <pixel-button @click="login" class="text-base" > Next </pixel-button>
-      </section>
-  
-  
+    <h1 class="text-2xl text-center"> Multiplayer </h1>
+    <h2 class="text-lg text-center"> Your username </h2>
+    <section class="flex justify-center text-xs text-center relative">
+      <span id="alertInputUsername" class="w-5 mr-5 hidden block bg-redOpacity animate-ping border border-red-500 rounded text-center duration-500 absolute"> ! </span>
+      <span id="usernameInstruction" > ( min: 4, max: 20, length: </span>  
+      <span id="usernameLength"> 0 </span>  
+      <span> ) </span>
     </section>
-  <!-- </section> -->
+    <section> 
+      <input @input="checkLength" id="inputUsername" type="text" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white"> 
+    </section>
+
+    <section class="flex space-x-3 justify-center" >
+      <back-to-menu class=""></back-to-menu>
+      <pixel-button @click="login" class="text-base" > Next </pixel-button>
+    </section>
+
+
+  </section>
 
 </template>

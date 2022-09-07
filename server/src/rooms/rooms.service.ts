@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConsoleLogger, Injectable } from '@nestjs/common';
 import { RoomsDto } from './dto/rooms.dto';
 import { SHA3 } from 'sha3';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -36,12 +36,9 @@ export class RoomsService {
 
   create( data: any, clientID: string ){
 
-
     let username = this.getUsername( data )
-    console.log( `username: ${ username }` )
-
     let codeRoom = this.generateCodeRoom()
-    console.log( `codeRoom: ${ codeRoom }` )
+
     let room = {
       username: username,
       code: codeRoom,
@@ -132,16 +129,57 @@ export class RoomsService {
 
   }
 
-  private findRoom( codeRoom ){
+  deleteRoom( data ){
 
-    let response 
+    let codeRoom = data.codeRoom
+    console.log( codeRoom )
+
     this.rooms.forEach( ( item, i ) => {
       
-      if ( item.codeRoom === codeRoom ) response = item
+      if ( item.codeRoom === codeRoom ) {
+        console.log( `room delete. code:` + item.codeRoom )
+        this.rooms.splice( i, 1 )
+
+      } 
 
     });
 
-    return response
+  }
+
+  roomEditDifficulty( data ){
+
+    let difficulty = data.difficulty
+    let codeRoom = data.codeRoom
+    let indexRoom = this.findRoom( codeRoom )
+    this.rooms[ indexRoom ].difficulty = difficulty
+    console.log( `update difficulty:` )
+    console.log( this.rooms[ indexRoom ] )
+
+  }
+
+  guestDisconnect( data ){
+
+    let codeRoom = data.codeRoom
+    let indexRoom = this.findRoom( codeRoom )
+    this.rooms[ indexRoom ].player2 = {
+      username: undefined,
+      id: undefined
+    }
+    console.log( `update player2:` )
+    console.log( this.rooms[ indexRoom ] )
+
+  }
+
+  private findRoom( codeRoom ){
+
+    let indexRoom = null
+    this.rooms.forEach( ( item, i ) => {
+      
+      if ( item.codeRoom === codeRoom ) return indexRoom = i 
+
+    });
+
+    return indexRoom
 
   }
 

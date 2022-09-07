@@ -10,6 +10,7 @@ export default {
       socketConnectStatus: 'waiting',
       socket: io( 'http://localhost:3000' ),
       loginStatus: false,
+      hostDisconnect: this.$route.params.disconnect
 
     }
 
@@ -43,11 +44,19 @@ export default {
 
   },
 
+  // mounted(){
+
+  //   console.log( this.$route.params )
+
+  // },
+
 
   beforeMount(){
 
     
     this.socketConnect()
+
+    
     
     this.socket.on( "connect_error", (error) => {
       if ( error ) this.socketConnectStatus = 'fail'
@@ -65,7 +74,7 @@ export default {
   
   <section class="h-[100vh] w-full  top-0 left-0 absolute">
 
-    <pixel-spinner v-if="this.socketConnectStatus !== 'success'" v-bind:connection="this.socketConnectStatus"> Server connection... </pixel-spinner>
+    <pixel-spinner v-if="this.socketConnectStatus !== 'success'" v-bind:connection="this.socketConnectStatus"> </pixel-spinner>
 
     <multiplayer-login 
       v-if="this.socketConnectStatus === 'success' && this.loginStatus === false" 

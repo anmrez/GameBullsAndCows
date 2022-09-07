@@ -12,21 +12,12 @@ import { RoomsService } from './rooms.service';
 export class RoomGateway {
   @WebSocketServer()
   server: Server
-  // rooms: {
-  //   codeRoom: string | undefined
-  //   player1: {
-  //     username: string | undefined,
-  //     id: string | undefined,
-  //   },
-  //   player2: {
-  //     username: string | undefined,
-  //     id: string | undefined,
-  //   },
-  // }[] = []
+
 
   constructor (
     private roomsService: RoomsService
   ) {}
+
 
   @SubscribeMessage( 'createLobbi' )
   createLobbi(
@@ -35,109 +26,96 @@ export class RoomGateway {
   ){
 
     console.log( `=== create Lobbi ===` )
-    return this.roomsService.create( data, client.id )
+    let room = this.roomsService.create( data, client.id )
+
+    let codeRoom = room.codeRoom
+    client.join( codeRoom )
+    client.in( codeRoom ).emit( 'room', "You are in room no. " + codeRoom );
+    console.log( client.rooms );
+    console.log( this.server.adapter )
+    return room
 
   }
 
 
   @SubscribeMessage( 'connectLobbi' )
-  async connectLobbi(
+  connectLobbi(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: any
   ){
-
     console.log( `=== connectLobbi ===` )
     let response = this.roomsService.connectInRooms( data, client.id )
     if ( response === undefined ) {
       console.log( `'room not found'` )
       return 'room not found'
     } 
-    this.server.emit( 'userConnected', response )
-    return response
-    // let guestUsername = this.roomsService.getUsername( data )
-    // let codeRoom = data.codeRoom
-    // let dataConnect = {
-    //   id: client.id,
-    //   guest: guestUsername
-    // }
-    // let dataConnect = {
-    //   id: client.id,
-    //   guest: guestUsername
-    // }
-    // this.connectInRooms( codeRoom, dataConnect )
-    // this.server.emit( 'userConnected', this.findRoom( codeRoom ) )
     
+    this.server.emit( 'userConnected', response )
+    let codeRoom = response.codeRoom
+    client.join( codeRoom )
+    console.log( client.rooms );
+    // this.server.to( codeRoom ).emit( 'room', { room: 'aRoom' } );
+    client.in( codeRoom ).emit( 'room', "You are in room no. " + codeRoom );
+
+    return response
   }
   
+
   @SubscribeMessage( 'changeDifficulty' )
   changeDifficulty(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: any
   ){
-    
+
     console.log( `=== changeDifficulty ===` )
     console.log( data )
+    
+    this.roomsService.roomEditDifficulty( data )
+    
     let response = {
-      difficulty: data.number
+      difficulty: data.difficulty
     }
-    client.broadcast.emit( 'clickDif', response )
+    console.log( `response:` )
+    console.log( response )
+
+    client.broadcast.emit( 'listenerDifficulty', response )
 
   }
 
 
-  // private addRooms( room ){
+  @SubscribeMessage( 'disconnectHost' )
+  disconnectHost(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any
+  ){
+    console.log( `=== disconnectHost ===` )
+    console.log( data )
+    
+    let response = {
+      disconnect: 'host'
+    }
+    this.roomsService.deleteRoom( data )
+    client.broadcast.emit( 'listenerDisconnect', response )
 
-  //   this.rooms.push({ 
-  //     codeRoom: room.code, 
-  //     player1: { 
-  //       username: room.host, 
-  //       id: room.id
-  //     }, 
-  //     player2: {
-  //       username: undefined, 
-  //       id: undefined
-  //     } 
-  //   })
-
-  //   console.log( `Room added:` )
-  //   console.log( this.rooms[ this.rooms.length - 1 ] )
-  //   console.log( `  ` )
-
-  // }
-
-  // private connectInRooms( codeRoom: any, data: any ){
-
-  //   this.rooms.forEach( ( item, i ) => {
-      
-  //     if ( item.codeRoom === codeRoom ) {
-
-  //       item.player2 = {
-  //         username: data.guest,
-  //         id: data.id
-  //       }
-  //       console.log( `rooms updated` )
-  //       console.log( item )
-  //       console.log( `  ` )
-
-  //     }
-
-  //   });
+  }
 
 
-  // }
+  @SubscribeMessage( 'disconnectGuest' )
+  disconnectGuest(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: any,
+  ){
+    console.log( `=== disconnectGuest ===` )
+    console.log( data )
 
-  // private findRoom( codeRoom ){
+    this.roomsService.guestDisconnect( data )
 
-  //   let response 
-  //   this.rooms.forEach( ( item, i ) => {
-      
-  //     if ( item.codeRoom === codeRoom ) response = item
+    let response = {
+      disconnect: 'guest'
+    }
+    client.broadcast.emit( 'listenerDisconnect', response )
 
-  //   });
-
-  //   return response
-
-  // }
+  }
 
 
 }
