@@ -1,5 +1,4 @@
 <script>
-import { io } from 'socket.io-client'
 
 export default {
 
@@ -8,61 +7,63 @@ export default {
     return{
 
       socketConnectStatus: 'waiting',
-      socket: io( 'http://localhost:3000' ),
       loginStatus: false,
-      hostDisconnect: this.$route.params.disconnect
-
+      hostDisconnect: this.$route.params.disconnect,
+      
     }
 
   },
 
   methods:{
 
-    socketDisconnect(){
+    checkSocketConnsect(){
 
-      console.log( `socket diskonecter` )
-      this.socket.disconnect()
+      if ( this.$socket.connected ) {
+
+        this.socketConnectStatus = 'success'
+
+      } else {
+
+        this.socketConnect()
+
+      }
 
     },
 
     socketConnect(){
 
-      this.socket.connect();
+      this.$socket.connect();
 
-      this.socket.on( "connect", () => {
+      this.$socket.on( "connect", () => {
 
-        if ( this.socket.connected ) {
+        if ( this.$socket.connected ) {
           this.socketConnectStatus = 'success'
-          console.log( `socket conndect: ${ this.socket.connected }` )
-          setTimeout( this.socketDisconnect, 1000 )
+          console.log( `socket conndect: ${ this.$socket.connected }` )
+          // setTimeout( this.socketDisconnect, 1000 )
         }
-        // this.socket.disconnect()
 
+      });
+
+    },
+
+    checkSocketError(){
+
+      this.$socket.on( "connect_error", (error) => {
+        if ( error ) {
+          this.socketConnectStatus = 'fail'
+          console.log( `socket error` )
+        } 
       });
 
     },
 
   },
 
-  // mounted(){
-
-  //   console.log( this.$route.params )
-
-  // },
-
-
   beforeMount(){
 
+    this.checkSocketConnsect()
+    this.checkSocketError()
     
-    this.socketConnect()
-
-    
-    
-    this.socket.on( "connect_error", (error) => {
-      if ( error ) this.socketConnectStatus = 'fail'
-    });
-    
-
   }
   
 }

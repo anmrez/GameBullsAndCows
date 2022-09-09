@@ -1,5 +1,4 @@
 <script>
-import { io } from 'socket.io-client'
 
 export default{
 
@@ -7,17 +6,12 @@ export default{
 
     return{
 
-      // socket: this.$route.params.socket
-      socket: io( 'http://localhost:3000' ),
-
       routeParam: this.$route.params,
       codeRoom: this.$route.params.codeRoom,
       codeRoomP1: '', // P - Part
       codeRoomP2: '',
       player1: this.$route.params.player1,
       player2: this.$route.params.player2,
-      
-      // UserConnect: {},
       host: this.$route.params.host,
       difficulty: this.$route.params.difficulty,
 
@@ -46,30 +40,13 @@ export default{
 
     },
 
-    listenerDisconnect(){
+    listenerDisconnect( data ){
 
       console.log( `listenerDisconnect` )
-      this.socket.on( "listenerDisconnect", ( response ) => {
-
-        console.log( response )
-        if ( response.disconnect === 'host' ) this.$router.push({ name: 'multiPlayer', params: response })
-        if ( response.disconnect === 'guest' ) this.player2 = ''
-
-      })
-
-      this.socket.on("connect", () => {
-
-        const engine = this.socket.io.engine;
-        engine.on("close", ( reason ) => {
-
-          console.log( reason )
-          this.socket.disconnect()
-          this.redirectInMenu()
-          
-
-        });
-
-      });
+      let player = data.disconnect
+      console.log( player )
+      if ( player === 'host' ) this.socketDisconnectAndRedirect()
+      if ( player === 'guest' ) this.player2 = ''
 
     },
 
@@ -114,13 +91,13 @@ export default{
 
       }
 
-      this.socketDisconnect()
+      this.socketDisconnectAndRedirect()
 
     },
 
     socketEmit( event, data ){
 
-      this.socket.emit( event, data, ( response ) => {
+      this.$socket.emit( event, data, ( response ) => {
 
         return response
 
@@ -128,42 +105,37 @@ export default{
 
     },
 
-    socketDisconnect(){
+    socketDisconnectAndRedirect(){
 
-      this.socket.disconnect()
-      console.log( `socket disconnect: ${ this.socket.disconnected }` )
-
-    },
-
-    addPopstateListener(){
-
-      console.log( `addPopstateListener` )
-      window.addEventListener( "popstate", this.socketDisconnect )
+      this.$socket.disconnect()
+      console.log( `socket disconnect: ${ this.$socket.disconnected }` )
+      this.redirectInMenu()
 
     },
 
-    destroyPopstateListener(){
+    listenerRoom(){
 
-      console.log( `destroyPopstateListener` )
-      window.removeEventListener( "popstate", this.socketDisconnect )
+      this.$socket.on( 'room', ( response ) => {
+
+        console.log( response )
+        let param = response.param
+        if ( response.event === 'listenerDisconnect' ) this.listenerDisconnect( param )
+        if ( !this.host && response.event === 'listenerDifficulty' ) this.listenerDifficulty( param )
+
+      })
 
     },
-
-
 
     // ====
     // player 2
     // ====
 
 
-    listenerDifficulty(){
+    listenerDifficulty( data ){
 
-      this.socket.on( 'listenerDifficulty', ( response ) => {
-
-        // console.log( response )
-        this.difficulty = response.difficulty
-
-      })
+      console.log( data )
+      let difficulty = data.difficulty
+      this.difficulty = difficulty
 
     },
 
@@ -207,10 +179,8 @@ export default{
 
     hostListeningConnections(){
 
-
-
       if ( this.$route.params.host )
-        this.socket.on( 'userConnected', ( response ) => {
+        this.$socket.on( 'userConnected', ( response ) => {
 
           console.log( response )
           this.player2 = response.player2.username
@@ -220,41 +190,19 @@ export default{
     },
 
   },
-
+  // beforeMount
   beforeMount(){
-
-    console.log( this.socket.rooms )
-    this.socket.on( 'room', ( response ) => {
-
-      console.log( response )
-
-    })
-
-  },
-
-  mounted(){
   
     // common 
+    this.listenerRoom()
     this.checkCookie()
     this.checkRouteParams()
-    this.listenerDisconnect()
-    this.addPopstateListener()
     this.host = this.host === 'true'
     
-    // player 2
-    this.listenerDifficulty()
-    
     // host
-    this.hostListeningConnections()
+    if ( this.host ) this.hostListeningConnections()
     
   },
-
-  beforeUnmount(){
-
-    this.destroyPopstateListener()
-
-  }
-
 
 }
 

@@ -1,10 +1,5 @@
-import { ConsoleLogger, Injectable } from '@nestjs/common';
-import { RoomsDto } from './dto/rooms.dto';
-import { SHA3 } from 'sha3';
-import { InjectRepository } from '@nestjs/typeorm';
-import { RoomModel } from './rooms.model';
-import { Repository } from 'typeorm';
-import { RoomGateway } from './rooms.gateway';
+import { Injectable } from '@nestjs/common';
+
 
 @Injectable()
 export class RoomsService {
@@ -21,12 +16,6 @@ export class RoomsService {
       id: string | undefined,
     },
   }[] = []
-
-  constructor(
-
-    @InjectRepository( RoomModel ) private roomRepository: Repository < RoomModel >,
-
-  ){ }
 
   getRooms(){
 
@@ -102,7 +91,7 @@ export class RoomsService {
 
   }
 
-  connectInRooms( data: any, clientID: any ){
+  connectInRooms( data: { codeRoom:string, cookie: string }, clientID: any ){
 
     let username = this.getUsername( data )
     let codeRoom = data.codeRoom
@@ -146,7 +135,7 @@ export class RoomsService {
 
   }
 
-  roomEditDifficulty( data ){
+  roomEditDifficulty( data: { codeRoom: string, difficulty: number } ){
 
     let difficulty = data.difficulty
     let codeRoom = data.codeRoom
@@ -157,7 +146,7 @@ export class RoomsService {
 
   }
 
-  guestDisconnect( data ){
+  guestDisconnect( data: { codeRoom: string } ){
 
     let codeRoom = data.codeRoom
     let indexRoom = this.findRoom( codeRoom )

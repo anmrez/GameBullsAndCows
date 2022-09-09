@@ -30,7 +30,7 @@ export class RoomGateway {
 
     let codeRoom = room.codeRoom
     client.join( codeRoom )
-    client.in( codeRoom ).emit( 'room', "You are in room no. " + codeRoom );
+    client.in( codeRoom ).emit( 'room', `Room ${ codeRoom } cinnected ${ client.id }` );
     console.log( client.rooms );
     console.log( this.server.adapter )
     return room
@@ -55,7 +55,7 @@ export class RoomGateway {
     client.join( codeRoom )
     console.log( client.rooms );
     // this.server.to( codeRoom ).emit( 'room', { room: 'aRoom' } );
-    client.in( codeRoom ).emit( 'room', "You are in room no. " + codeRoom );
+    client.broadcast.in( codeRoom ).emit( 'room', `Room ${ codeRoom } cinnected ${ client.id }` );
 
     return response
   }
@@ -64,7 +64,7 @@ export class RoomGateway {
   @SubscribeMessage( 'changeDifficulty' )
   changeDifficulty(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any
+    @MessageBody() data: { codeRoom: string, difficulty: number }
   ){
 
     console.log( `=== changeDifficulty ===` )
@@ -72,13 +72,11 @@ export class RoomGateway {
     
     this.roomsService.roomEditDifficulty( data )
     
+    let codeRoom = data.codeRoom
     let response = {
       difficulty: data.difficulty
     }
-    console.log( `response:` )
-    console.log( response )
-
-    client.broadcast.emit( 'listenerDifficulty', response )
+    this.sendResponseInRoom( codeRoom, client, 'listenerDifficulty', response )
 
   }
 
@@ -86,16 +84,20 @@ export class RoomGateway {
   @SubscribeMessage( 'disconnectHost' )
   disconnectHost(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any
+    @MessageBody() data: { codeRoom: string }
   ){
+
     console.log( `=== disconnectHost ===` )
     console.log( data )
-    
-    let response = {
-      disconnect: 'host'
-    }
+
     this.roomsService.deleteRoom( data )
-    client.broadcast.emit( 'listenerDisconnect', response )
+    
+    let codeRoom = data.codeRoom
+    let response = { disconnect: 'host' }
+    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
+
+    client.leave( codeRoom )
+    this.server.in( codeRoom ).disconnectSockets( true );
 
   }
 
@@ -103,17 +105,31 @@ export class RoomGateway {
   @SubscribeMessage( 'disconnectGuest' )
   disconnectGuest(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any,
+    @MessageBody() data: { codeRoom: string },
   ){
     console.log( `=== disconnectGuest ===` )
     console.log( data )
 
     this.roomsService.guestDisconnect( data )
+    
+    let codeRoom = data.codeRoom
+    let response = { disconnect: 'guest' }
+    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
+    
+    client.leave( codeRoom )
 
-    let response = {
-      disconnect: 'guest'
+  }
+
+  private sendResponseInRoom( codeRoom: string, client: Socket, event: string, response: any ){
+
+    let data = {
+      event: event,
+      param: response
     }
-    client.broadcast.emit( 'listenerDisconnect', response )
+    console.log( `send message in rom ( client: ${ client.broadcast } )` )
+    console.log( client.broadcast )
+    client.broadcast.to( codeRoom ).emit( 'room', data );
+
 
   }
 

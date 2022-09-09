@@ -1,5 +1,4 @@
 <script>
-import { io } from 'socket.io-client'
 export default {
 
   name: 'multiplayer-menu',
@@ -8,7 +7,6 @@ export default {
     return{
 
       connect: false,
-      socket: io( 'http://localhost:3000', { autoConnect: false } ),
       inputConnectValue: ''
 
     }
@@ -27,22 +25,6 @@ export default {
 
     },
 
-    socketDisconnect(){
-
-      this.socket.disconnect()
-      console.log( `socket disconnect: ${ this.socket.disconnected }` )
-
-    },
-
-    socketConnect(){
-
-      this.socket.on( "connect", () => {
-        console.log( `socket conndect: ${ this.socket.connected }` )
-      })
-      this.socket.connect();
-
-    },
-
     alertNotFoundRoom(){
 
       let alertRoom = document.querySelector( '#alertRoom' )
@@ -56,9 +38,8 @@ export default {
       console.log( `connectIO` )
       let codeRoom = this.inputConnectValue
       let cookie = document.cookie
-      // this.socket.connect();
-      this.socketConnect()
-      this.socket.emit( 'connectLobbi', { codeRoom, cookie }, ( response ) => {
+
+      this.$socket.emit( 'connectLobbi', { codeRoom, cookie }, ( response ) => {
 
         if ( response !== 'room not found' ) {
 
@@ -73,7 +54,6 @@ export default {
           return this.$router.push( { name: 'lobbi', params: routeRes } )
 
         } 
-        this.socketDisconnect()
         return this.alertNotFoundRoom()
 
       })
@@ -84,9 +64,8 @@ export default {
 
       let cookie = document.cookie
       console.log( cookie )
-      // this.socket.connect();
-      this.socketConnect()
-      this.socket.emit( 'createLobbi', { cookie }, ( response ) => {
+
+      this.$socket.emit( 'createLobbi', { cookie }, ( response ) => {
 
         // console.log( response )
         let routeRes = {
@@ -95,7 +74,6 @@ export default {
           player1: response.player1.username,
           player2: '',
         }
-        this.socketDisconnect()
         this.$router.push( { name: 'lobbi', params: routeRes } )
 
       })
