@@ -71,13 +71,12 @@ export default {
 
       let left = usernameInstruction.offsetLeft
       alertInputUsername.style.left = left - 35 + 'px'
-      // alertInputUsername.style.transform = 'scale(1)'
       
-      let hidden = function (){
-        alertInputUsername.classList.add( 'hidden' )
-      }
+      // let hidden = function (){
+      //   alertInputUsername.classList.add( 'hidden' )
+      // }
 
-      let rimerID = setTimeout( hidden, 4000 )
+      // let rimerID = setTimeout( hidden, 4000 )
       alertInputUsername.classList.remove( 'hidden' )
       
 

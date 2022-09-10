@@ -60,6 +60,13 @@ export class RoomsService {
     let length = 6
     let random = Math.random() * 1_000_000
     random = Math.floor( random )
+
+    let room = this.findRoom( String( random ) )
+    if ( room !== null ) {
+      console.log( `Комната ${ random } уже существует. Генерация нового номера` )
+      return this.generateCodeRoom()
+    } 
+
     if ( String( random ).length !== length ) return this.generateCodeRoom()
     return String( random )
 
@@ -68,7 +75,7 @@ export class RoomsService {
 
 
 
-  private addRooms( room ){
+  private addRooms( room: any ){
 
     this.rooms.push({ 
       codeRoom: room.code, 
@@ -159,7 +166,7 @@ export class RoomsService {
 
   }
 
-  private findRoom( codeRoom ){
+  private findRoom( codeRoom: string ){
 
     let indexRoom = null
     this.rooms.forEach( ( item, i ) => {

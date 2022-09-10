@@ -22,18 +22,17 @@ export class RoomGateway {
   @SubscribeMessage( 'createLobbi' )
   createLobbi(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any
+    @MessageBody() data: { cookie: string }
   ){
 
     console.log( `=== create Lobbi ===` )
-    let room = this.roomsService.create( data, client.id )
+    console.log( data )
 
-    let codeRoom = room.codeRoom
+    let response = this.roomsService.create( data, client.id )
+    let codeRoom = response.codeRoom
     client.join( codeRoom )
-    client.in( codeRoom ).emit( 'room', `Room ${ codeRoom } cinnected ${ client.id }` );
-    console.log( client.rooms );
-    console.log( this.server.adapter )
-    return room
+
+    return response
 
   }
 
@@ -41,23 +40,20 @@ export class RoomGateway {
   @SubscribeMessage( 'connectLobbi' )
   connectLobbi(
     @ConnectedSocket() client: Socket,
-    @MessageBody() data: any
+    @MessageBody() data: { codeRoom: string, cookie: string }
   ){
+
     console.log( `=== connectLobbi ===` )
+    console.log( data )
+
     let response = this.roomsService.connectInRooms( data, client.id )
-    if ( response === undefined ) {
-      console.log( `'room not found'` )
-      return 'room not found'
-    } 
+    if ( response === undefined ) return 'room not found' 
     
-    this.server.emit( 'userConnected', response )
     let codeRoom = response.codeRoom
     client.join( codeRoom )
-    console.log( client.rooms );
-    // this.server.to( codeRoom ).emit( 'room', { room: 'aRoom' } );
-    client.broadcast.in( codeRoom ).emit( 'room', `Room ${ codeRoom } cinnected ${ client.id }` );
-
+    this.sendResponseInRoom( codeRoom, client, 'userConnected', response )
     return response
+
   }
   
 
@@ -126,10 +122,8 @@ export class RoomGateway {
       event: event,
       param: response
     }
-    console.log( `send message in rom ( client: ${ client.broadcast } )` )
-    console.log( client.broadcast )
-    client.broadcast.to( codeRoom ).emit( 'room', data );
 
+    client.broadcast.to( codeRoom ).emit( 'room', data );
 
   }
 

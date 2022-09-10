@@ -31,8 +31,16 @@ export default{
       arrCookie.forEach( item => {
         
         let index = item.indexOf( 'username=' )
-        if ( username !== undefined && index >= 0 ) console.log( `дублирование никнеймов` )
-        if ( index >= 0 ) username = item.replace( 'username=', '' )
+        if ( username !== undefined && index >= 0 ){
+          console.log( `дублирование никнеймов` )
+          console.log( `index: ${ index }; item: ${ item }` )
+          document.cookie = 'username=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+
+
+        } 
+        if ( index >= 0 ) {
+          username = item.replace( 'username=', '' )
+        } 
         
       })
       if ( username === undefined ) this.redirectInMenu()
@@ -119,8 +127,17 @@ export default{
 
         console.log( response )
         let param = response.param
+
+        if ( this.host ) {
+          if ( response.event === 'userConnected' ) this.hostListeningConnections( param )
+        }
+        
+        if ( !this.host ) {
+          if ( response.event === 'listenerDifficulty' ) this.listenerDifficulty( param )
+        }
+
+        // all
         if ( response.event === 'listenerDisconnect' ) this.listenerDisconnect( param )
-        if ( !this.host && response.event === 'listenerDifficulty' ) this.listenerDifficulty( param )
 
       })
 
@@ -177,20 +194,16 @@ export default{
 
     },
 
-    hostListeningConnections(){
+    hostListeningConnections( data ){
 
-      if ( this.$route.params.host )
-        this.$socket.on( 'userConnected', ( response ) => {
-
-          console.log( response )
-          this.player2 = response.player2.username
-
-        })
+      console.log( data )
+      let player2 = data.player2.username
+      this.player2 = player2
 
     },
 
   },
-  // beforeMount
+  
   beforeMount(){
   
     // common 
@@ -198,9 +211,6 @@ export default{
     this.checkCookie()
     this.checkRouteParams()
     this.host = this.host === 'true'
-    
-    // host
-    if ( this.host ) this.hostListeningConnections()
     
   },
 
@@ -218,7 +228,15 @@ export default{
       <section class="flex justify-between text-lg ">
         <section>
           <h2 id="codeRoomEl" class="text-center"> CodeRoom: </h2>
-          <h2 class="text-center"> {{ this.codeRoomP1 }} {{ this.codeRoomP2 }} </h2>
+          <h2 class="text-center">
+            <span>
+              {{ this.codeRoomP1 }} 
+            </span>
+            <span class="ml-2">
+              {{ this.codeRoomP2 }}
+            </span>
+          </h2>
+              
         </section>
         <ul>
           <li> Players: </li>
