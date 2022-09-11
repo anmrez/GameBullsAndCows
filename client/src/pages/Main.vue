@@ -6,7 +6,8 @@
       return{
 
         timerAlertId: 0,
-        typeModalWindow: ''
+        typeModalWindow: '',
+        screen: {}
 
       }
 
@@ -14,74 +15,12 @@
 
     methods: {
 
-      // showRulesGame() {
+      showModelWindow( typeModal ){
 
-      //   let rulesGame = document.querySelector( '#rulesGame' )
-      //   rulesGame.classList.remove( 'hidden' )
-        
-      //   let rulesGameModal = document.querySelector( '#rulesGameModal' )
-      //   let ruleHeight = rulesGameModal.clientHeight
-      //   console.log( ruleHeight )
-      //   rulesGameModal.style.height = '0%'
-      //   rulesGameModal.style.overflow = 'hidden'
-      //   rulesGameModal.style.overflowY = 'scroll'
-      //   // rulesGameModal.style.transition = '0.2s'
-      //   setTimeout ( () => {
-      //     // rulesGameModal.style.height = ruleHeight + 10 + 'px'
-      //     rulesGameModal.style.height = '100%'
-      //   }, 0 )
-
-      // },
-
-
-      // showSupportDev(){
-
-      //   let supportDev = document.querySelector( '#supportDev' )
-      //   supportDev.classList.remove( 'hidden' )
-        
-      //   let supportDevModal = document.querySelector( '#supportDevModal' )
-      //   let ruleHeight = supportDevModal.clientHeight
-      //   console.log( ruleHeight )
-      //   supportDevModal.style.height = '0%'
-      //   supportDevModal.style.overflow = 'hidden'
-      //   supportDevModal.style.overflowY = 'scroll'
-      //   setTimeout ( () => {
-      //     supportDevModal.style.height = '100%'
-      //   }, 0 )
-
-      // },
-
-      showRulesGame() {
-
-        this.typeModalWindow = 'Rules'
+        this.typeModalWindow = typeModal
         this.showModalWindow()
-
 
       },
-
-      showSupportDev(){
-
-        this.typeModalWindow = 'Support'
-        this.showModalWindow()
-
-
-      },
-
-      showTraining(){
-
-        this.typeModalWindow = 'Training'
-        this.showModalWindow()
-
-
-      }, 
-
-      showAppMobile(){
-
-        this.typeModalWindow = 'AppMobile'
-        this.showModalWindow()
-
-      },  
-
 
 
       hiddenalertFullScreen( e ){
@@ -91,14 +30,13 @@
 
       },
 
+
       showModalWindow(){
 
         let modalWindowMain = document.querySelector( '#modalWindowMain' )
         modalWindowMain.classList.remove( 'hidden' )
         
         let modalWindow = document.querySelector( '#modalWindow' )
-        // let ruleHeight = modalWindow.clientHeight
-        // console.log( ruleHeight )
         modalWindow.style.height = '0%'
         modalWindow.style.overflow = 'hidden'
         modalWindow.style.overflowY = 'scroll'
@@ -106,14 +44,54 @@
           modalWindow.style.height = '100%'
         }, 0 )
 
-      }
+      },
 
+      socketDisconnect(){
+
+        this.$socket.off( "disconnect" );
+        this.$socket.disconnect()
+
+      },
 
     },
 
     mounted() {
-
+ 
+      this.socketDisconnect()
       this.timerAlertId = setTimeout( this.hiddenalertFullScreen, 5500 )
+
+
+      // addEventListener( 'resize', function( e ){
+      
+      //   // console.log( e )
+      //   let oldScreen = this.screen
+      //   this.screen = {
+      //     height: document.body.clientHeight,
+      //     width: document.body.clientWidth,
+      //   }
+
+      //   if ( this.screen.height === oldScreen.width && this.screen.width === oldScreen.height ) {
+
+      //     if ( this.screen.height < this.screen.width ){
+      //       document.documentElement.style.transform = 'rotate(270deg)'
+      //     } else {
+      //       document.documentElement.style.transform = 'rotate(0deg)'
+      //     }
+
+      //   }
+      //   console.log( this.screen )
+
+      // })
+
+      // addEventListener( 'DOMContentLoaded', function(){
+
+      //   this.screen = {
+      //     height: document.body.clientHeight,
+      //     width: document.body.clientWidth,
+      //   }
+
+      // })
+
 
     },
 
@@ -165,14 +143,14 @@
           </p>
         </router-link> -->
 
-        <button @click="showRulesGame" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
+        <button @click="this.showModelWindow( 'Rules' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/rule.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             Rules of the game
           </p>
         </button>
 
-        <button @click="showTraining" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
+        <button @click="this.showModelWindow( 'Training' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/training.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             interface guide
@@ -186,7 +164,7 @@
           </p>
         </button> -->
 
-        <button @click="showSupportDev" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
+        <button @click="this.showModelWindow( 'Support' )"  type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/coin.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             Support the developer

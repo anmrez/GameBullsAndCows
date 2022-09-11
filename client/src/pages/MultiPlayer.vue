@@ -9,6 +9,7 @@ export default {
       socketConnectStatus: 'waiting',
       loginStatus: false,
       hostDisconnect: this.$route.params.disconnect,
+      listenerSocketEvent: false,
       
     }
 
@@ -20,7 +21,7 @@ export default {
 
       if ( this.$socket.connected ) {
 
-        this.socketConnectStatus = 'success'
+        this.socketConnectStatus = "success"
 
       } else {
 
@@ -34,12 +35,13 @@ export default {
 
       this.$socket.connect();
 
-      this.$socket.on( "connect", () => {
+      this.$socket.once( "connect", ( ) => {
 
         if ( this.$socket.connected ) {
-          this.socketConnectStatus = 'success'
-          console.log( `socket conndect: ${ this.$socket.connected }` )
-          // setTimeout( this.socketDisconnect, 1000 )
+
+          this.socketConnectStatus = "success"
+          console.log( `socket connect: ${ this.$socket.connected }` )
+
         }
 
       });
@@ -48,21 +50,32 @@ export default {
 
     checkSocketError(){
 
-      this.$socket.on( "connect_error", (error) => {
+      this.$socket.off( "connect_error" );
+      this.$socket.once( "connect_error", (error) => {
         if ( error ) {
+
           this.socketConnectStatus = 'fail'
           console.log( `socket error` )
+
         } 
       });
 
     },
 
+    socketListenerDisconnect(){
+
+      this.$socket.off( "disconnect" );
+      this.$socket.once( "disconnect", (  ) => { this.$router.push({ name: 'multiPlayer' }) });
+
+    }
+
   },
 
   beforeMount(){
 
-    this.checkSocketConnsect()
     this.checkSocketError()
+    this.checkSocketConnsect()
+    this.socketListenerDisconnect()
     
   }
   

@@ -7,7 +7,7 @@ import { io } from 'socket.io-client'
 
 const app = createApp(App)
 
-app.config.globalProperties.$socket = io( 'http://localhost:3000' ,{
+app.config.globalProperties.$socket = io( 'http://192.168.0.2:3000' ,{
   autoConnect: false
 })
 

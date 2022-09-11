@@ -5,7 +5,6 @@ import Alert from '@/components/ui/Alert.vue'
 import MobileKey from '@/components/ui/MobileKey.vue'
 import WindowWin from '@/components/ui/WindowWin.vue'
 import Backgraund from '@/components/ui/Backgraund.vue'
-import MenuBar from '@/components/ui/MenuBar.vue'
 
 // • ui
 import PixelButton from '@/components/ui/Pixel-button.vue'
@@ -22,8 +21,6 @@ import PixelSpinner from '@/components/multiplayer/PixelSpinner.vue'
 
 
 // • main menu
-// import RulesGame from '@/components/mainMenu/RulesGame.vue'
-// import HelpDev from '@/components/mainMenu/HelpDev.vue'
 import info from '@/components/mainMenu/info.vue'
 import AlertScreen from '@/components/mainMenu/AlertScreen.vue'
 import modalWindow from '@/components/mainMenu/modalWindow.vue'
@@ -44,7 +41,6 @@ export default [
   MobileKey,
   WindowWin,
   Backgraund,
-  MenuBar,
 
   // • ui
   PixelButton,

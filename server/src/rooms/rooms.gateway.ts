@@ -19,38 +19,44 @@ export class RoomGateway {
   ) {}
 
 
-  @SubscribeMessage( 'createLobbi' )
-  createLobbi(
+  @SubscribeMessage( 'createLobby' )
+  createLobby(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { cookie: string }
   ){
 
-    console.log( `=== create Lobbi ===` )
+    console.log( `=== create Lobby ===` )
     console.log( data )
 
     let response = this.roomsService.create( data, client.id )
     let codeRoom = response.codeRoom
     client.join( codeRoom )
+    this.listenerDisconnect( codeRoom, client )
+
 
     return response
 
   }
 
 
-  @SubscribeMessage( 'connectLobbi' )
-  connectLobbi(
+  @SubscribeMessage( 'connectLobby' )
+  connectLobby(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { codeRoom: string, cookie: string }
   ){
 
-    console.log( `=== connectLobbi ===` )
+    console.log( `=== connectLobby ===` )
     console.log( data )
 
     let response = this.roomsService.connectInRooms( data, client.id )
-    if ( response === undefined ) return 'room not found' 
+    if ( response === 'room not found'  ) return 'room not found' 
+    if ( response === 'The lobby is full' ) return 'The lobby is full'
+    // console.log( response )
     
-    let codeRoom = response.codeRoom
+    let codeRoom = data.codeRoom
     client.join( codeRoom )
+    this.listenerDisconnect( codeRoom, client )
+
     this.sendResponseInRoom( codeRoom, client, 'userConnected', response )
     return response
 
@@ -78,7 +84,7 @@ export class RoomGateway {
 
 
   @SubscribeMessage( 'disconnectHost' )
-  disconnectHost(
+  disconnectHostSocket(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { codeRoom: string }
   ){
@@ -86,33 +92,25 @@ export class RoomGateway {
     console.log( `=== disconnectHost ===` )
     console.log( data )
 
-    this.roomsService.deleteRoom( data )
-    
     let codeRoom = data.codeRoom
-    let response = { disconnect: 'host' }
-    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
-
-    client.leave( codeRoom )
-    this.server.in( codeRoom ).disconnectSockets( true );
+    this.disconnectHost( codeRoom, client )
 
   }
 
 
   @SubscribeMessage( 'disconnectGuest' )
-  disconnectGuest(
+  disconnectGuestSocket(
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { codeRoom: string },
   ){
     console.log( `=== disconnectGuest ===` )
     console.log( data )
 
-    this.roomsService.guestDisconnect( data )
     
     let codeRoom = data.codeRoom
-    let response = { disconnect: 'guest' }
-    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
+    this.roomsService.guestDisconnect( codeRoom )
     
-    client.leave( codeRoom )
+    this.disconnectGuest( codeRoom, client )
 
   }
 
@@ -124,6 +122,46 @@ export class RoomGateway {
     }
 
     client.broadcast.to( codeRoom ).emit( 'room', data );
+
+  }
+
+  private listenerDisconnect( codeRoom: string, client: Socket ){
+    
+    console.log( `client ${ client.id } add listener 'disconnect'` )
+    client.on( "disconnecting", (  ) => {
+
+      console.log( `=== disconnecting ===` )
+
+      type personT = 'host' | 'guest' | null
+      let person: personT = this.roomsService.definitionPerson( client.id, codeRoom )
+      
+      if ( person === null ) return
+      if ( person === 'host' ) this.disconnectHost( codeRoom, client )
+      if ( person === 'guest' ) this.disconnectGuest( codeRoom, client )
+
+    });
+
+  }
+
+
+  private disconnectHost( codeRoom: string, client: Socket ){
+
+    this.roomsService.deleteRoom( codeRoom )
+    let response = { disconnect: 'host' }
+    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
+
+    client.leave( codeRoom )
+    this.server.in( codeRoom ).disconnectSockets( true );
+
+  }
+
+
+  private disconnectGuest( codeRoom: string, client: Socket ){
+
+    let response = { disconnect: 'guest' }
+    this.sendResponseInRoom( codeRoom, client, 'listenerDisconnect', response )
+    client.leave( codeRoom )
+    this.roomsService.guestDisconnect( codeRoom )
 
   }
 

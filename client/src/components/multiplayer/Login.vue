@@ -66,19 +66,18 @@ export default {
 
     showAlert(){
 
+      console.log( `showAlert` )
       let alertInputUsername = document.querySelector( '#alertInputUsername' )
-      let usernameInstruction = document.querySelector( '#usernameInstruction' )
 
-      let left = usernameInstruction.offsetLeft
-      alertInputUsername.style.left = left - 35 + 'px'
-      
-      // let hidden = function (){
-      //   alertInputUsername.classList.add( 'hidden' )
-      // }
-
-      // let rimerID = setTimeout( hidden, 4000 )
-      alertInputUsername.classList.remove( 'hidden' )
-      
+      let clasess = [
+        'bg-redOpacity',
+        'border',
+        'border-red-500',
+        'rounded',
+      ]
+      clasess.forEach( item => {
+        alertInputUsername.classList.add( item )
+      })
 
     }
 
@@ -99,23 +98,22 @@ export default {
 
 <template>
 
-  <section class="space-y-5 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
+  <section class="w-[90%] md:w-auto space-y-5 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
 
     <h1 class="text-2xl text-center"> Multiplayer </h1>
     <h2 class="text-lg text-center"> Your username </h2>
-    <section class="flex justify-center text-xs text-center relative">
-      <span id="alertInputUsername" class="w-5 mr-5 hidden block bg-redOpacity animate-ping border border-red-500 rounded text-center duration-500 absolute"> ! </span>
-      <span id="usernameInstruction" > ( min: 4, max: 20, length: </span>  
-      <span id="usernameLength"> 0 </span>  
-      <span> ) </span>
+    <section id="alertInputUsername" class="p-2 flex justify-center text-xs text-center relative ">
+      <span id="usernameInstruction" > ( min: 4, max: 20, length:  </span>  
+      <span id="usernameLength" class="ml-2" > 0 </span>  
+      <span class="ml-2" > ) </span>
     </section>
     <section> 
       <input @input="checkLength" id="inputUsername" type="text" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white"> 
     </section>
 
-    <section class="flex space-x-3 justify-center" >
-      <back-to-menu class=""></back-to-menu>
-      <pixel-button @click="login" class="text-base" > Next </pixel-button>
+    <section class="w-full md:w-auto flex flex-col md:flex-row space-y-4 md:space-y-0 space-x-0 md:space-x-3 justify-center" >
+      <back-to-menu class="md:w-1/2"></back-to-menu>
+      <pixel-button @click="login" class="md:w-1/2 text-base" > Next </pixel-button>
     </section>
 
 

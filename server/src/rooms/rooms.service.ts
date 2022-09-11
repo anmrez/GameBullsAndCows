@@ -55,6 +55,7 @@ export class RoomsService {
 
   }
 
+
   generateCodeRoom(){
 
     let length = 6
@@ -73,6 +74,19 @@ export class RoomsService {
   }
 
 
+  definitionPerson( clientID: string, codeRoom: string ){
+
+    console.log( `=== definitionPerson ===` )
+    console.log( clientID, codeRoom )
+
+    let roomIndex = this.findRoom( codeRoom )
+    if ( roomIndex === null ) return null
+    let room = this.rooms[ roomIndex ]
+    // console.log( room )
+    if ( room.player1.id === clientID ) return 'host'
+    if ( room.player2.id === clientID ) return 'guest'
+
+  }
 
 
   private addRooms( room: any ){
@@ -102,32 +116,25 @@ export class RoomsService {
 
     let username = this.getUsername( data )
     let codeRoom = data.codeRoom
-    let response: any
 
-    this.rooms.forEach( item => {
-      
-      if ( item.codeRoom === codeRoom ) {
+    let roomIndex = this.findRoom( codeRoom )
+    let room = this.rooms[ roomIndex ]
 
-        item.player2 = {
-          username: username,
-          id: clientID
-        }
-        console.log( `rooms updated` )
-        console.log( item )
-        console.log( `  ` )
-        response = item
+    if ( roomIndex === null ) return 'room not found'
+    if ( room.player2.id !== undefined ) return 'The lobby is full'
 
-      }
+    room.player2 = {
+      username: username,
+      id: clientID
+    }
 
-    });
-
-    return response
+    return room
 
   }
 
-  deleteRoom( data ){
+  deleteRoom( codeRoom: string ){
 
-    let codeRoom = data.codeRoom
+    // let codeRoom = data.codeRoom
     console.log( codeRoom )
 
     this.rooms.forEach( ( item, i ) => {
@@ -153,9 +160,9 @@ export class RoomsService {
 
   }
 
-  guestDisconnect( data: { codeRoom: string } ){
+  guestDisconnect( codeRoom: string ){
 
-    let codeRoom = data.codeRoom
+    // let codeRoom = data.codeRoom
     let indexRoom = this.findRoom( codeRoom )
     this.rooms[ indexRoom ].player2 = {
       username: undefined,

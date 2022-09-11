@@ -301,7 +301,7 @@ export default {
 
   <section class="flex w-full" >
 
-    <menu-bar></menu-bar>
+    <!-- <menu-bar></menu-bar> -->
 
     <modal-win v-bind:difficulty="this.difficulty" v-bind:turn="this.amountTurns" v-bind:time="this.amountTime" ></modal-win>
   
@@ -317,7 +317,7 @@ export default {
             <input id="inputMove" autocomplete="off" type="tel" @blur="blurInputGame" @focus="focusInputGame" @input="checkInputGame( $event.target )" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
             <ul class="absolute flex mt-2">
               <li>
-                <alert-red id="alertRepeat"> Digit repeats </alert-red>
+                <alert-red id="alertRepeat" class="mr-3"> Digit repeats </alert-red>
               </li>
               <li>
                 <alert-red id="alertInput"> Not enough digit </alert-red>

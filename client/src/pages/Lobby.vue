@@ -53,13 +53,16 @@ export default{
       console.log( `listenerDisconnect` )
       let player = data.disconnect
       console.log( player )
-      if ( player === 'host' ) this.socketDisconnectAndRedirect()
+      // if ( player === 'host' ) this.socketRedirect()
+      if ( player === 'host' ) this.redirectInMenu()
       if ( player === 'guest' ) this.player2 = ''
 
     },
 
     redirectInMenu(){
 
+      // this.$router.push({ name: 'multiPlayer', params: { statusSocket: 'redirect' } })
+      console.log( `=== redirectInMenu ===` )
       this.$router.push({ name: 'multiPlayer' })
 
     },
@@ -80,7 +83,7 @@ export default{
 
     },
 
-    disconnectFromLobbi(){
+    disconnectFromLobby(){
 
       let data = {
         codeRoom: this.codeRoom
@@ -99,7 +102,9 @@ export default{
 
       }
 
-      this.socketDisconnectAndRedirect()
+      // this.socketRedirect()
+      this.redirectInMenu()
+      
 
     },
 
@@ -110,14 +115,6 @@ export default{
         return response
 
       })
-
-    },
-
-    socketDisconnectAndRedirect(){
-
-      this.$socket.disconnect()
-      console.log( `socket disconnect: ${ this.$socket.disconnected }` )
-      this.redirectInMenu()
 
     },
 
@@ -211,6 +208,12 @@ export default{
     this.checkCookie()
     this.checkRouteParams()
     this.host = this.host === 'true'
+
+    addEventListener( 'popstate', ( event ) => { 
+      console.log( event )
+      // user disconnect
+
+    });
     
   },
 
@@ -221,13 +224,13 @@ export default{
 <template>
   
   <section class="min-w-[340px] space-y-8 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
-    <h1 class="text-2xl text-center"> Lobbi </h1>
+    <h1 class="text-2xl text-center"> Lobby </h1>
 
     <section class="flex flex-col space-y-5">
 
       <section class="flex justify-between text-lg ">
         <section>
-          <h2 id="codeRoomEl" class="text-center"> CodeRoom: </h2>
+          <h2 id="codeRoomEl" class="text-center"> Room code: </h2>
           <h2 class="text-center">
             <span>
               {{ this.codeRoomP1 }} 
@@ -259,8 +262,8 @@ export default{
     </section>
 
     <section class="space-y-3">
-      <pixel-button class="w-full text-base" > Start game </pixel-button>
-      <pixel-button @click="this.disconnectFromLobbi()" class="w-full text-base" > Disconnect </pixel-button>
+      <pixel-button v-if="this.host" class="w-full text-base" > Start game </pixel-button>
+      <pixel-button @click="this.disconnectFromLobby()" class="w-full text-base" > Disconnect </pixel-button>
     </section>
   </section>
 

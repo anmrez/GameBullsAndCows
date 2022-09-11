@@ -18,18 +18,20 @@ export default {
     handlerInput(){
 
       let inputConnect = document.querySelector( '#inputConnect' )
+     
+      let validationInput = inputConnect.value.replace( /\D/g, '' )
+      validationInput = validationInput.substring( 0, 6 )
+      inputConnect.value = validationInput
+      
       this.inputConnectValue = inputConnect.value
-      console.log( this.inputConnectValue )
-
-      // check input!!!!
 
     },
 
-    alertNotFoundRoom(){
+    alertNotFoundRoom( textError ){
 
-      let alertRoom = document.querySelector( '#alertRoom' )
-      alertRoom.classList.remove( 'hidden' )
-      // console.log( `Комната не найдена` )
+      let alertConnectInRoom = document.querySelector( '#alertConnectInRoom' )
+      alertConnectInRoom.innerHTML = '! ' + textError
+      alertConnectInRoom.classList.remove( 'hidden' )
 
     },
 
@@ -39,42 +41,39 @@ export default {
       let codeRoom = this.inputConnectValue
       let cookie = document.cookie
 
-      this.$socket.emit( 'connectLobbi', { codeRoom, cookie }, ( response ) => {
+      this.$socket.emit( 'connectLobby', { codeRoom, cookie }, ( response ) => {
 
-        if ( response !== 'room not found' ) {
+        if ( response === 'room not found' ) return this.alertNotFoundRoom( response )
+        if ( response === 'The lobby is full' ) return this.alertNotFoundRoom( response )
 
-          console.log( response )
-          let routeRes = {
-            host: false,
-            codeRoom: response.codeRoom,
-            player1: response.player1.username,
-            player2: response.player2.username,
-            difficulty: response.difficulty,
-          }
-          return this.$router.push( { name: 'lobbi', params: routeRes } )
-
-        } 
-        return this.alertNotFoundRoom()
+        let routeRes = {
+          host: false,
+          codeRoom: response.codeRoom,
+          player1: response.player1.username,
+          player2: response.player2.username,
+          difficulty: response.difficulty,
+        }
+        return this.$router.push( { name: 'lobby', params: routeRes } )
 
       })
 
     },
 
-    createLobbi(){
+    createLobby(){
 
       let cookie = document.cookie
       console.log( cookie )
 
-      this.$socket.emit( 'createLobbi', { cookie }, ( response ) => {
+      this.$socket.emit( 'createLobby', { cookie }, ( response ) => {
 
-        // console.log( response )
         let routeRes = {
           host: true,
           codeRoom: response.codeRoom,
           player1: response.player1.username,
           player2: '',
         }
-        this.$router.push( { name: 'lobbi', params: routeRes } )
+        console.log( routeRes )
+        this.$router.push( { name: 'lobby', params: routeRes } )
 
       })
 
@@ -95,24 +94,23 @@ export default {
 
 <template>
   
-  <section class=" translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
+  <section class="w-[90%] md:w-auto translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
 
     <section v-show="connect === false" class="space-y-5">
 
-      <pixel-button class="w-full text-base" @click="this.connect = true" > Connect to the lobbi </pixel-button>
-      <pixel-button class="w-full text-base" @click="this.createLobbi()" > Create the lobbi </pixel-button>
+      <pixel-button class="w-full text-base" @click="this.connect = true" > Connect to the Lobby </pixel-button>
+      <pixel-button class="w-full text-base" @click="this.createLobby()" > Create the Lobby </pixel-button>
       <back-to-menu class=""></back-to-menu>
 
     </section >
 
     <section class="text-center space-y-3 " v-show="connect === true">
     
-      <h2> Connect to the lobbi </h2>
+      <h2> Connect to the Lobby </h2>
       <p> Input code room ( 6 digits ) </p>
-      <section id="alertRoom" class="hidden bg-redOpacity border border-red-500 rounded" >
-        ! room not found
-      </section>
-      <input id="inputConnect" type="text" @input="handlerInput" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
+      <section id="alertConnectInRoom" class="hidden bg-redOpacity border border-red-500 rounded" ></section>
+      
+      <input id="inputConnect" type="tel" @input="handlerInput" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white">
       <pixel-button class="w-full text-base" @click="this.connectIO()" > Connect </pixel-button>
       <pixel-button class="w-full text-base" @click="this.connect = false" > Back </pixel-button>
 
