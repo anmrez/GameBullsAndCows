@@ -18,6 +18,7 @@ import ContextMenu from '@/components/game/ContextMenu.vue'
 import Login from '@/components/multiplayer/Login.vue'
 import MultiplayerMenu from '@/components/multiplayer/Menu.vue'
 import PixelSpinner from '@/components/multiplayer/PixelSpinner.vue'
+import CreateNumber from '@/components/multiplayer/CreateNumber.vue'
 
 
 // • main menu
@@ -53,6 +54,8 @@ export default [
   Login,
   MultiplayerMenu,
   PixelSpinner,
+  CreateNumber,
+
 
   // • main menu
   // RulesGame,

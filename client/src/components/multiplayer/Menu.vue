@@ -77,16 +77,43 @@ export default {
 
       })
 
+    },
+
+    listenerKeyEnter( e ){
+
+      if (e.key === 'Enter') this.connectIO()
+
+    },
+
+    inputConnectFocus(){
+
+      let inputConnect = document.querySelector( '#inputConnect' )
+      inputConnect.focus()
+
     }
 
   },
   
   updated(){
     
-    let inputConnect = document.querySelector( '#inputConnect' )
-    inputConnect.focus()
+    this.inputConnectFocus()
+    if ( this.connect ) document.addEventListener( 'keypress', this.listenerKeyEnter );
+    if ( !this.connect ) {
 
-  }
+      document.removeEventListener( 'keypress', this.listenerKeyEnter );
+      
+      let alertConnectInRoom = document.querySelector( '#alertConnectInRoom' )
+      alertConnectInRoom.classList.add( 'hidden' )
+    
+    } 
+
+  },
+  
+  beforeUnmount(){
+
+    document.removeEventListener( 'keypress', this.listenerKeyEnter );
+
+  },
 
 }
 

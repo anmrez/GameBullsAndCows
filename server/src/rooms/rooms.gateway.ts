@@ -114,6 +114,62 @@ export class RoomGateway {
 
   }
 
+
+  @SubscribeMessage( 'checkPlayer2' )
+  checkPlayers(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { codeRoom: string },
+  ){
+
+    console.log( `=== checkPlayer2 ===` )
+    console.log( data )
+
+    let codeRoom = data.codeRoom
+    let response = this.roomsService.checkPlayer2( codeRoom )
+
+    return response
+
+  }
+
+
+  @SubscribeMessage( 'startGame' )
+  startGame(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { codeRoom: string },
+  ){
+
+    console.log( `=== startGame ===` )
+    console.log( data )
+
+    let codeRoom = data.codeRoom
+
+    let dataResponse = {
+      event: 'startGame',
+    }
+    client.in( codeRoom ).emit( 'room', dataResponse );
+
+  }
+
+
+  @SubscribeMessage( 'generateNumber' )
+  generateNumber(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() difficulty: number 
+  ){
+
+    console.log( `=== generateNumber ===` )
+    console.log( difficulty )
+
+    let response = this.roomsService.generateNumber( difficulty )
+    return response
+
+  }
+
+
+  // =======
+  // private
+  // =======
+
   private sendResponseInRoom( codeRoom: string, client: Socket, event: string, response: any ){
 
     let data = {

@@ -187,6 +187,9 @@ export default {
 
           let alert = document.querySelector( '#alertRepeat' )
           this.alert( alert )
+          
+          alert = document.querySelector( '#alertRepeatMobile' )
+          this.alert( alert )
 
         } 
 
@@ -242,6 +245,10 @@ export default {
 
         let alert = document.querySelector( '#alertInput' )
         this.alert( alert )
+        
+        alert = document.querySelector( '#alertInputMobile' )
+        this.alert( alert )
+
         return false
 
       } else {
@@ -355,6 +362,12 @@ export default {
 
 #totalMove::-webkit-scrollbar {
   display: none; /* for Chrome, Safari, and Opera */
+  scrollbar-width: none;
+}
+
+#totalMove{
+  -ms-overflow-style: none;
+  overflow: -moz-scrollbars-none;
   scrollbar-width: none;
 }
 

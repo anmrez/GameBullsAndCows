@@ -5,11 +5,48 @@ import './assets/css/output.css'
 import App from './App.vue'
 import { io } from 'socket.io-client'
 
-const app = createApp(App)
+const app = createApp( App )
 
 app.config.globalProperties.$socket = io( 'http://192.168.0.2:3000' ,{
   autoConnect: false
 })
+
+app.config.globalProperties.$generateNumber = function( difficulty ){
+
+  let number = ''
+  let generateDigit = function(){
+
+    let digit = Math.random() * 10
+    digit = Math.round( digit )
+    
+    if ( digit > 9 ) return generateDigit()
+    return digit
+
+  }
+
+  for ( let index = 0; index < difficulty; index++ ) {
+  
+    let digit = generateDigit()
+    let reg = new RegExp( digit )
+
+    if ( reg.test( number ) ) {
+
+      index--
+
+    } else {
+
+      number += digit.toString()
+
+    }
+      
+  }
+
+  // console.log( `hidden number: `, number )
+  return number
+
+}
+
+
 
 components.forEach( item => {
   // console.log( item )

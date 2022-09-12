@@ -31,15 +31,15 @@ export default {
 
     },
 
+    // login(){
+
+    //   // let input = document.querySelector( '#inputUsername' )
+    //   // let username = input.value
+    //   this.checkLengthUsername()
+
+    // },
+
     login(){
-
-      let input = document.querySelector( '#inputUsername' )
-      // let username = input.value
-      this.checkLengthUsername()
-
-    },
-
-    checkLengthUsername(){
 
       let input = document.querySelector( '#inputUsername' )
       let username = input.value
@@ -79,18 +79,36 @@ export default {
         alertInputUsername.classList.add( item )
       })
 
+    },
+
+    listenerKeyEnter( e ){
+
+      if (e.key === 'Enter') this.login()
+
+    },
+
+    autoFocusOnWindows(){
+
+      let agent = navigator.userAgent 
+      if ( /Windows/.test( agent ) ) inputUsername.focus()
+
     }
 
   },
   mounted(){
 
     this.checkUsername()
+    this.autoFocusOnWindows()
 
-    let inputUsername = document.querySelector( '#inputUsername' )
-    inputUsername.focus()
+    document.addEventListener( 'keypress', this.listenerKeyEnter );
 
-  }
+  },
 
+  beforeUnmount(){
+
+    document.removeEventListener( 'keypress', this.listenerKeyEnter );
+
+  },
 
 }
 

@@ -53,45 +53,21 @@
 
       },
 
+      scrollPageDown(){
+
+        setTimeout( function() { 
+          window.scrollTo( 0, document.body.clientHeight )
+        }, 10 );
+
+      },
+
     },
 
     mounted() {
  
       this.socketDisconnect()
       this.timerAlertId = setTimeout( this.hiddenalertFullScreen, 5500 )
-
-
-      // addEventListener( 'resize', function( e ){
-      
-      //   // console.log( e )
-      //   let oldScreen = this.screen
-      //   this.screen = {
-      //     height: document.body.clientHeight,
-      //     width: document.body.clientWidth,
-      //   }
-
-      //   if ( this.screen.height === oldScreen.width && this.screen.width === oldScreen.height ) {
-
-      //     if ( this.screen.height < this.screen.width ){
-      //       document.documentElement.style.transform = 'rotate(270deg)'
-      //     } else {
-      //       document.documentElement.style.transform = 'rotate(0deg)'
-      //     }
-
-      //   }
-      //   console.log( this.screen )
-
-      // })
-
-      // addEventListener( 'DOMContentLoaded', function(){
-
-      //   this.screen = {
-      //     height: document.body.clientHeight,
-      //     width: document.body.clientWidth,
-      //   }
-
-      // })
-
+      this.scrollPageDown()
 
     },
 

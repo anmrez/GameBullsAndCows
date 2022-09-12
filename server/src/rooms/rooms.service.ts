@@ -10,10 +10,12 @@ export class RoomsService {
     player1: {
       username: string | undefined,
       id: string | undefined,
+      number: undefined,
     },
     player2: {
       username: string | undefined,
       id: string | undefined,
+      number: undefined,
     },
   }[] = []
 
@@ -96,11 +98,13 @@ export class RoomsService {
       difficulty: 3,
       player1: { 
         username: room.username, 
-        id: room.id
+        id: room.id,
+        number: undefined,
       }, 
       player2: {
         username: undefined, 
-        id: undefined
+        id: undefined,
+        number: undefined,
       } 
     })
 
@@ -125,7 +129,8 @@ export class RoomsService {
 
     room.player2 = {
       username: username,
-      id: clientID
+      id: clientID,
+      number: undefined,
     }
 
     return room
@@ -166,12 +171,53 @@ export class RoomsService {
     let indexRoom = this.findRoom( codeRoom )
     this.rooms[ indexRoom ].player2 = {
       username: undefined,
-      id: undefined
+      id: undefined,
+      number: undefined,
     }
     console.log( `update player2:` )
     console.log( this.rooms[ indexRoom ] )
 
   }
+
+
+  generateNumber( difficulty: number ){
+
+    let random = Math.random() * 1_000_000
+    random = Math.floor( random )
+
+    let randomStr = String( random )
+    randomStr = randomStr.substring( 0, difficulty )
+
+    for ( let i = 0; i < randomStr.length; i++ ) {
+
+      let digit = randomStr[i]
+      let reg = '/' + digit + '/g' 
+      console.log( reg )
+      let digitLength = randomStr.match( reg ).length
+      console.log( `${ i }: ${ digit }` )
+      
+    }
+
+
+    console.log( randomStr )
+    return randomStr
+
+  }
+
+
+  checkPlayer2( codeRoom: string ){
+
+    let roomIndex = this.findRoom( codeRoom )
+    let room = this.rooms[ roomIndex ]
+    console.log( room )
+
+    let player2ID = room.player2.id
+    let player2Name = room.player2.id
+    if ( player2ID !== undefined && player2Name !== undefined ) return 'success'
+    return 'fail'
+
+  }
+
 
   private findRoom( codeRoom: string ){
 

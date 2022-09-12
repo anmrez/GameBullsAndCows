@@ -16,76 +16,12 @@
 
     methods: {
 
-      // difficultyGame( e ){
-
-      //   let value = e.target.value
-      //   if ( value.length > 1 ) e.target.value = value.substring( value.length -1, value.length )
-      //   if ( /\D/.test( e.target.value ) ) e.target.value = 2
-      //   value = Number( e.target.value )
-      //   if ( Number( value ) > 7 ) e.target.value = 7
-      //   if ( Number( value ) < 2 ) e.target.value = 2
-
-      //   this.difficulty = e.target.value
-
-      // },
-
-      // startGame( ){
-      
-      //   this.hiddenNumber = this.generateNumber()
-      //   this.game = true
-      //   let response = {
-      //     game: this.game,
-      //     difficulty: this.difficulty,
-      //     hiddenNumber: this.hiddenNumber
-      //   }
-      //   this.$emit( 'startGameParam', response )
-      
-      
-      // },
-
-      generateNumber(){
-
-        let number = ''
-
-        // let numberLength = number.toString().length
-
-        for ( let index = 0; index < this.difficulty; index++ ) {
-        
-          let digit = this.generateDigit()
-          let reg = new RegExp( digit )
-
-          if ( reg.test( number ) ) {
-
-            index--
-
-          } else {
-
-            number += digit.toString()
-
-          }
-
-            
-        }
-
-        console.log( `hidden number: `, number )
-        return number
-
-      },
-
-      generateDigit(){
-
-        let digit = Math.random() * 10
-        digit = Math.round( digit )
-        
-        if ( digit > 9 ) return this.generateDigit()
-        return digit
-
-      },
-
       NewstartGame( difficulty ){
 
         this.difficulty = difficulty
-        this.hiddenNumber = this.generateNumber()
+        this.hiddenNumber = this.$generateNumber( difficulty )
+        console.log( `hidden number: ${ this.hiddenNumber }` )
+        
         this.game = true
         let response = {
           game: this.game,

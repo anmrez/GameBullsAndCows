@@ -3,6 +3,8 @@ import NotFound from '@/pages/NotFound.vue'
 import singlePlayer from '@/pages/Single.vue'
 import multiPlayer from '@/pages/MultiPlayer.vue'
 import Lobby from '@/pages/Lobby.vue'
+import Dev from '@/pages/Dev.vue'
+import MultiplayerGame from '@/pages/MultiplayerGame.vue'
 import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 
 
@@ -26,6 +28,16 @@ const routes = [
           path: '/multiplayer/lobby',
           name: 'lobby',
           component: Lobby
+     },
+     {
+          path: '/multiplayer/game',
+          name: 'MultiplayerGame',
+          component: MultiplayerGame
+     },
+     {
+          path: '/dev',
+          name: 'Dev',
+          component: Dev
      },
      // { path: '/404', component: NotFound },
      // { path: '/:catchAll(.*)', redirect: '/404' },

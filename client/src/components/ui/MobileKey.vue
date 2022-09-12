@@ -120,9 +120,9 @@
 
 
   <section class="w-full px-1 pb-1 bottom-0 block md:hidden fixed space-y-1">
-    <section>
-      <alert-red id="alertRepeat"> Digit repeats </alert-red>
-      <alert-red id="alertInput"> Not enough digit </alert-red>
+    <section class="space-y-2">
+      <alert-red id="alertRepeatMobile"> Digit repeats </alert-red>
+      <alert-red id="alertInputMobile"> Not enough digit </alert-red>
     </section>
 
     <section id="mobileKeyboardInput" class="flex justify-between space-x-1 w-full">

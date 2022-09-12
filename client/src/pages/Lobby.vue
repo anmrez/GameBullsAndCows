@@ -50,10 +50,10 @@ export default{
 
     listenerDisconnect( data ){
 
-      console.log( `listenerDisconnect` )
+      console.log( `=== listenerDisconnect ===` )
       let player = data.disconnect
       console.log( player )
-      // if ( player === 'host' ) this.socketRedirect()
+
       if ( player === 'host' ) this.redirectInMenu()
       if ( player === 'guest' ) this.player2 = ''
 
@@ -61,8 +61,6 @@ export default{
 
     redirectInMenu(){
 
-      // this.$router.push({ name: 'multiPlayer', params: { statusSocket: 'redirect' } })
-      console.log( `=== redirectInMenu ===` )
       this.$router.push({ name: 'multiPlayer' })
 
     },
@@ -102,9 +100,7 @@ export default{
 
       }
 
-      // this.socketRedirect()
       this.redirectInMenu()
-      
 
     },
 
@@ -135,8 +131,20 @@ export default{
 
         // all
         if ( response.event === 'listenerDisconnect' ) this.listenerDisconnect( param )
+        if ( response.event === 'startGame' ) this.redirectInGame()
 
       })
+
+    },
+
+    redirectInGame(){
+
+      let param = {
+        codeRoom: this.codeRoom,
+        player1: this.player1,
+        player2: this.player2,
+      }
+      this.$router.push({ name: 'MultiplayerGame', params: param })
 
     },
 
@@ -199,6 +207,38 @@ export default{
 
     },
 
+    checkPlayer2(){
+
+      let data = {
+        codeRoom: this.codeRoom
+      }
+
+      this.$socket.emit( 'checkPlayer2', data, async ( response ) => {
+
+        // if ( response === 'fail' ) this.showAlertStartGame()
+        // if ( response === 'success' ) this.startGame()
+        this.startGame()
+
+      })
+
+    },
+
+    showAlertStartGame(){
+
+      let alertStartGame = document.querySelector( '#alertStartGame' )
+      alertStartGame.classList.remove( 'hidden' )
+
+    },
+
+    startGame(){
+
+      let data = {
+        codeRoom: this.codeRoom
+      }
+      this.socketEmit( 'startGame', data )
+
+    },
+
   },
   
   beforeMount(){
@@ -208,12 +248,6 @@ export default{
     this.checkCookie()
     this.checkRouteParams()
     this.host = this.host === 'true'
-
-    addEventListener( 'popstate', ( event ) => { 
-      console.log( event )
-      // user disconnect
-
-    });
     
   },
 
@@ -262,7 +296,8 @@ export default{
     </section>
 
     <section class="space-y-3">
-      <pixel-button v-if="this.host" class="w-full text-base" > Start game </pixel-button>
+      <section id="alertStartGame" class="text-center hidden bg-redOpacity border border-red-500 rounded" > Player is absent </section>
+      <pixel-button v-if="this.host" @click="this.checkPlayer2()" class="w-full text-base" > Start game </pixel-button>
       <pixel-button @click="this.disconnectFromLobby()" class="w-full text-base" > Disconnect </pixel-button>
     </section>
   </section>
