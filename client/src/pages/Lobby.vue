@@ -141,9 +141,11 @@ export default{
 
       let param = {
         codeRoom: this.codeRoom,
+        difficulty: this.difficulty,
         player1: this.player1,
         player2: this.player2,
       }
+      this.$socket.off( 'room' );
       this.$router.push({ name: 'MultiplayerGame', params: param })
 
     },
@@ -236,7 +238,7 @@ export default{
         codeRoom: this.codeRoom
       }
       this.socketEmit( 'startGame', data )
-
+      
     },
 
   },

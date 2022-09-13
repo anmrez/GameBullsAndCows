@@ -19,6 +19,7 @@ import Login from '@/components/multiplayer/Login.vue'
 import MultiplayerMenu from '@/components/multiplayer/Menu.vue'
 import PixelSpinner from '@/components/multiplayer/PixelSpinner.vue'
 import CreateNumber from '@/components/multiplayer/CreateNumber.vue'
+import MultiPlayerGame from '@/components/multiplayer/Game.vue'
 
 
 // • main menu
@@ -55,6 +56,7 @@ export default [
   MultiplayerMenu,
   PixelSpinner,
   CreateNumber,
+  MultiPlayerGame,
 
 
   // • main menu

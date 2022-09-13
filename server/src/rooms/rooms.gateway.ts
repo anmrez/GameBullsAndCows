@@ -142,33 +142,66 @@ export class RoomGateway {
     console.log( data )
 
     let codeRoom = data.codeRoom
+    this.roomsService.startGame( codeRoom )
 
     let dataResponse = {
       event: 'startGame',
     }
-    client.in( codeRoom ).emit( 'room', dataResponse );
+
+    this.server.to( codeRoom ).emit( 'room', dataResponse );
 
   }
 
 
-  @SubscribeMessage( 'generateNumber' )
-  generateNumber(
+  @SubscribeMessage( 'setNumber' )
+  setNumber(
     @ConnectedSocket() client: Socket,
-    @MessageBody() difficulty: number 
+    @MessageBody() data: { codeRoom: string, number: string } 
   ){
 
-    console.log( `=== generateNumber ===` )
-    console.log( difficulty )
+    console.log( `=== setNumber ===` )
+    console.log( data )
 
-    let response = this.roomsService.generateNumber( difficulty )
+    let codeRoom = data.codeRoom
+    let response = this.roomsService.setNumber( data, client.id )
+
+    this.sendResponseAllInRoom( codeRoom, 'ready', response )
+
+  }
+
+
+  @SubscribeMessage( 'getBullsAndCows' )
+  getBullsAndCows(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { codeRoom: string, number: string } 
+  ){
+
+    console.log( `=== getBullsAndCows ===` )
+    console.log( data )
+
+    let response = this.roomsService.getBullsAndCows( data, client.id )
+
+    console.log( `response:` )
+    console.log( response )
     return response
 
   }
-
+  
 
   // =======
   // private
   // =======
+
+  private sendResponseAllInRoom( codeRoom: string, event: string, response: any ){
+
+    let data = {
+      event: event,
+      param: response
+    }
+
+    this.server.to( codeRoom ).emit( 'room', data );
+
+  }
 
   private sendResponseInRoom( codeRoom: string, client: Socket, event: string, response: any ){
 

@@ -7,15 +7,16 @@ export class RoomsService {
   rooms: {
     codeRoom: string | undefined,
     difficulty: number,
+    game: string,
     player1: {
       username: string | undefined,
       id: string | undefined,
-      number: undefined,
+      number: string | undefined,
     },
     player2: {
       username: string | undefined,
       id: string | undefined,
-      number: undefined,
+      number: string | undefined,
     },
   }[] = []
 
@@ -96,6 +97,7 @@ export class RoomsService {
     this.rooms.push({ 
       codeRoom: room.code, 
       difficulty: 3,
+      game: 'waiting',
       player1: { 
         username: room.username, 
         id: room.id,
@@ -180,35 +182,44 @@ export class RoomsService {
   }
 
 
-  generateNumber( difficulty: number ){
+  startGame( codeRoom: string ){
 
-    let random = Math.random() * 1_000_000
-    random = Math.floor( random )
-
-    let randomStr = String( random )
-    randomStr = randomStr.substring( 0, difficulty )
-
-    for ( let i = 0; i < randomStr.length; i++ ) {
-
-      let digit = randomStr[i]
-      let reg = '/' + digit + '/g' 
-      console.log( reg )
-      let digitLength = randomStr.match( reg ).length
-      console.log( `${ i }: ${ digit }` )
-      
-    }
-
-
-    console.log( randomStr )
-    return randomStr
+    let room = this.getRoom( codeRoom )
+    room.game = 'started'
 
   }
 
 
+  // generateNumber( difficulty: number ){
+
+  //   let random = Math.random() * 1_000_000
+  //   random = Math.floor( random )
+
+  //   let randomStr = String( random )
+  //   randomStr = randomStr.substring( 0, difficulty )
+
+  //   for ( let i = 0; i < randomStr.length; i++ ) {
+
+  //     let digit = randomStr[i]
+  //     let reg = '/' + digit + '/g' 
+  //     console.log( reg )
+  //     let digitLength = randomStr.match( reg ).length
+  //     console.log( `${ i }: ${ digit }` )
+      
+  //   }
+
+
+  //   console.log( randomStr )
+  //   return randomStr
+
+  // }
+
+
   checkPlayer2( codeRoom: string ){
 
-    let roomIndex = this.findRoom( codeRoom )
-    let room = this.rooms[ roomIndex ]
+    // let roomIndex = this.findRoom( codeRoom )
+    // let room = this.rooms[ roomIndex ]
+    let room = this.getRoom( codeRoom )
     console.log( room )
 
     let player2ID = room.player2.id
@@ -218,6 +229,95 @@ export class RoomsService {
 
   }
 
+  setNumber( data: { codeRoom: string, number: string }, clientID: string ){
+
+    let room = this.getRoom( data.codeRoom )
+    if ( room === null ) return null
+
+    if ( room.player1.id === clientID ) {
+      if ( room.player2.number === undefined ) {
+
+        room.player2.number = data.number
+        if ( room.player1.number !== undefined && room.player2.number !== undefined ) return 'all ready'
+        return 'player1 ready'
+
+      } else {
+
+        console.log( 'число уже ведено' ) 
+
+      }
+
+    } 
+    if ( room.player2.id === clientID ) {
+
+      if ( room.player1.number === undefined ) {
+      
+        room.player1.number = data.number
+        if ( room.player1.number !== undefined && room.player2.number !== undefined ) return 'all ready'
+        return 'player2 ready'
+      
+      } else {
+
+        console.log( 'число уже ведено' ) 
+
+      }
+
+    } 
+
+
+  },
+
+
+  getBullsAndCows( data: { codeRoom: string, number: string }, clientID: string ){
+
+    let codeRoom = data.codeRoom
+    let clientNumber = data.number
+
+    let room = this.getRoom( codeRoom )
+    if ( room === null ) return null
+
+    let roomNumber: string
+    if ( room.player1.id === clientID ) roomNumber = room.player1.number
+    if ( room.player2.id === clientID ) roomNumber = room.player2.number
+    console.log( `roomNumber: ${ roomNumber }` )
+
+    let countBulls: number = 0
+    let countCows: number = 0
+
+
+    for (let i = 0; i < roomNumber.length; i++) {
+            
+      let roomDigit = roomNumber[i];
+
+      for (let k = 0; k < clientNumber.length; k++) {
+
+        let clientDigit = clientNumber[k]
+
+        if ( roomDigit === clientDigit && i === k ) countBulls++
+        if ( roomDigit === clientDigit && i !== k ) countCows++
+        
+      }
+
+    }
+
+    return {
+      bulls: countBulls,
+      cows: countCows
+    }
+
+
+  }
+
+
+  private getRoom ( codeRoom: string ){
+
+    let roomIndex = this.findRoom( codeRoom )
+    if ( roomIndex === null ) return null
+
+    let room = this.rooms[ roomIndex ]
+    return room
+
+  }
 
   private findRoom( codeRoom: string ){
 

@@ -7,20 +7,53 @@
 
       difficulty:{
         require: true
-      }
+      },
+      codeRoom:{
+        require: true
+      },
+      player1:{
+        require: true
+      },
+      player2:{
+        require: true
+      },
 
     },
     data(){
 
       return{
 
-
+        checkRepeateDigitResult: true
 
       }
 
     },
 
     methods:{
+      
+      listenerRoom(){
+
+        this.$socket.on( 'room', ( response ) => {
+
+          console.log( response )
+          let param = response.param
+
+          if ( response.event === 'ready' ) {
+            if ( param === 'player1 ready' ) this.editPlayerStatus( 1 )
+            if ( param === 'player2 ready' ) this.editPlayerStatus( 2 )
+            if ( param === 'all ready' ) this.start()
+          }
+
+
+        })
+
+      },
+
+      start(){
+
+        this.$emit( 'start' )
+
+      },
 
       generateNumber(){
 
@@ -33,8 +66,37 @@
 
       sendNumber(){
 
-        this.checkLengthNumber()
+        let validNumber = this.checkNumber()
+        if ( validNumber === false ) return
+
+
+        let inputCreateNumber = document.querySelector( '#inputCreateNumber' )
+        let value = inputCreateNumber.value
+
+        let data = {
+          codeRoom: this.codeRoom,
+          number: value
+        }
+        console.log( data )
+        this.$socket.emit( 'setNumber', data )
+
+      },
+
+      editPlayerStatus( numberPlayer ){
+
+        let player = document.querySelector( `#statusPL${ numberPlayer }` )
+        
+        player.classList.add( 'bg-greenOpacity' )
+
+      },
+
+      checkNumber(){
+
+        let checkLengthNumberResult = this.checkLengthNumber()
         this.checkRepeateDigit()
+
+        if ( checkLengthNumberResult === this.checkRepeateDigitResult ) return true
+        return false
 
       },
 
@@ -58,7 +120,11 @@
             difficultyGame.classList.add( item )
           })
 
+          return false
+
         }
+
+        return true
 
       },
 
@@ -67,6 +133,7 @@
         let inputCreateNumber = document.querySelector( '#inputCreateNumber' )
         let value = inputCreateNumber.value
         let digitRepeat = []
+        this.checkRepeateDigitResult = true
 
         for ( let i = 0; i < value.length; i++ ) digitRepeat.push( value.indexOf( value[i] ) )
 
@@ -74,7 +141,11 @@
 
           for ( let k = i + 1; k < digitRepeat.length; k++ ) {
 
-            if ( item === digitRepeat[ k ] ) this.showAlertRepeat()
+            if ( item === digitRepeat[ k ] ) {
+              this.showAlertRepeat()
+              this.checkRepeateDigitResult = false
+              return
+            } 
 
           }
 
@@ -105,11 +176,15 @@
       let inputCreateNumber = document.querySelector( '#inputCreateNumber' )
       inputCreateNumber.addEventListener( 'input', this.listenerInput )
 
+      this.listenerRoom()
+
     },
 
     beforeUnmount(){
 
-      inputCreateNumber.removeListener( 'input', this.listenerInput )
+      inputCreateNumber.removeEventListener( 'input', this.listenerInput )
+      
+      this.$socket.off( 'room' );
 
     }
 
@@ -120,11 +195,22 @@
 
 <template>
   
-  <section>
+  <section class="w-[90%] md:w-auto space-y-5 translate-y-[-50%] top-[50%] translate-x-[-50%] left-[50%] absolute ">
 
 
 
     <h1 class="mb-5 text-center text-xl" > multiplayer game </h1>
+
+    <section class="mb-3">
+      <section class="flex justify-center space-x-3 ">
+        <span> players: </span>
+        <ul class="space-y-3">
+          <li id="statusPL1" class="p-1 rounded " > • {{ this.player1 }} </li>
+          <li id="statusPL2" class="p-1 rounded " > • {{ this.player2 }} </li>
+        </ul>
+      </section>
+    </section>
+
     <p class="text-center" >Come up with a number for the opponent </p>
 
     <section class="space-y-3">
