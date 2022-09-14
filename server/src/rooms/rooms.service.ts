@@ -8,17 +8,54 @@ export class RoomsService {
     codeRoom: string | undefined,
     difficulty: number,
     game: string,
+    beginningGame: number | undefined,
     player1: {
       username: string | undefined,
       id: string | undefined,
       number: string | undefined,
+      turns: number | undefined,
+      completed: boolean,
+      endTime: number | undefined
     },
     player2: {
       username: string | undefined,
       id: string | undefined,
       number: string | undefined,
+      turns: number | undefined,
+      completed: boolean,
+      endTime: number | undefined
     },
   }[] = []
+
+
+  constructor(){
+
+    let testRoom = {
+      codeRoom: '123456',
+      difficulty: 3,
+      game: 'start',
+      beginningGame: new Date().getTime(),
+      player1: {
+        username: 'anmrez',
+        id: 'idAnmrez',
+        number: '1356',
+        turns: 0,
+        completed: false,
+        endTime: undefined
+      },
+      player2: {
+        username: 'reaalt',
+        id: 'idReaalt',
+        number: '9753',
+        turns: 0,
+        completed: false,
+        endTime: undefined
+      },
+    }
+    this.rooms.push( testRoom )
+
+  }
+
 
   getRooms(){
 
@@ -41,7 +78,7 @@ export class RoomsService {
 
   }
 
-  getUsername( data ) :string {
+  getUsername( data: any ) :string {
 
 
     let arrCookie = data.cookie.split( '; ' )
@@ -57,6 +94,31 @@ export class RoomsService {
     return username
 
   }
+
+  getUsernameAndTurnsFromRoom( codeRoom: string, clientID: string ){
+
+    let room = this.getRoom( codeRoom )
+    if ( room === null ) return null
+    
+    if ( room.player1.id === clientID ) return {
+
+      username: room.player1.username,
+      turns: room.player1.turns,
+    
+    } 
+      
+    if ( room.player2.id === clientID ) return {
+
+      username: room.player2.username,
+      turns: room.player2.turns,
+    
+    } 
+
+    return null
+
+  }
+
+
 
 
   generateCodeRoom(){
@@ -98,15 +160,22 @@ export class RoomsService {
       codeRoom: room.code, 
       difficulty: 3,
       game: 'waiting',
+      beginningGame: undefined,
       player1: { 
         username: room.username, 
         id: room.id,
         number: undefined,
+        turns: 0,
+        completed: false,
+        endTime: undefined
       }, 
       player2: {
         username: undefined, 
         id: undefined,
         number: undefined,
+        turns: 0,
+        completed: false,
+        endTime: undefined
       } 
     })
 
@@ -133,6 +202,9 @@ export class RoomsService {
       username: username,
       id: clientID,
       number: undefined,
+      turns: 0,
+      completed: false,
+      endTime: undefined
     }
 
     return room
@@ -175,6 +247,9 @@ export class RoomsService {
       username: undefined,
       id: undefined,
       number: undefined,
+      turns: undefined,
+      completed: false,
+      endTime: undefined
     }
     console.log( `update player2:` )
     console.log( this.rooms[ indexRoom ] )
@@ -186,39 +261,13 @@ export class RoomsService {
 
     let room = this.getRoom( codeRoom )
     room.game = 'started'
+    room.beginningGame = new Date().getTime()
 
   }
 
 
-  // generateNumber( difficulty: number ){
-
-  //   let random = Math.random() * 1_000_000
-  //   random = Math.floor( random )
-
-  //   let randomStr = String( random )
-  //   randomStr = randomStr.substring( 0, difficulty )
-
-  //   for ( let i = 0; i < randomStr.length; i++ ) {
-
-  //     let digit = randomStr[i]
-  //     let reg = '/' + digit + '/g' 
-  //     console.log( reg )
-  //     let digitLength = randomStr.match( reg ).length
-  //     console.log( `${ i }: ${ digit }` )
-      
-  //   }
-
-
-  //   console.log( randomStr )
-  //   return randomStr
-
-  // }
-
-
   checkPlayer2( codeRoom: string ){
 
-    // let roomIndex = this.findRoom( codeRoom )
-    // let room = this.rooms[ roomIndex ]
     let room = this.getRoom( codeRoom )
     console.log( room )
 
@@ -229,12 +278,14 @@ export class RoomsService {
 
   }
 
+
   setNumber( data: { codeRoom: string, number: string }, clientID: string ){
 
     let room = this.getRoom( data.codeRoom )
     if ( room === null ) return null
 
     if ( room.player1.id === clientID ) {
+
       if ( room.player2.number === undefined ) {
 
         room.player2.number = data.number
@@ -248,6 +299,7 @@ export class RoomsService {
       }
 
     } 
+
     if ( room.player2.id === clientID ) {
 
       if ( room.player1.number === undefined ) {
@@ -265,7 +317,7 @@ export class RoomsService {
     } 
 
 
-  },
+  }
 
 
   getBullsAndCows( data: { codeRoom: string, number: string }, clientID: string ){
@@ -277,19 +329,30 @@ export class RoomsService {
     if ( room === null ) return null
 
     let roomNumber: string
-    if ( room.player1.id === clientID ) roomNumber = room.player1.number
-    if ( room.player2.id === clientID ) roomNumber = room.player2.number
-    console.log( `roomNumber: ${ roomNumber }` )
+
+    if ( room.player1.id === clientID ) {
+
+      roomNumber = room.player1.number
+      room.player1.turns++
+
+    }
+
+    if ( room.player2.id === clientID ) {
+
+      roomNumber = room.player2.number
+      room.player2.turns++
+
+    }
 
     let countBulls: number = 0
     let countCows: number = 0
 
 
-    for (let i = 0; i < roomNumber.length; i++) {
+    for ( let i = 0; i < roomNumber.length; i++ ) {
             
       let roomDigit = roomNumber[i];
 
-      for (let k = 0; k < clientNumber.length; k++) {
+      for ( let k = 0; k < clientNumber.length; k++ ) {
 
         let clientDigit = clientNumber[k]
 
@@ -300,13 +363,54 @@ export class RoomsService {
 
     }
 
-    return {
+    let response = {
       bulls: countBulls,
-      cows: countCows
+      cows: countCows,
+      complited: false
     }
 
+    if ( roomNumber.length === countBulls ) {
+
+      console.log( `complited` )
+      if ( room.player1.id === clientID ) {
+        room.player1.completed = true
+        room.player1.endTime = new Date().getTime()
+      } 
+      if ( room.player2.id === clientID ) {
+        room.player2.completed = true
+        room.player2.endTime = new Date().getTime()
+      } 
+
+      response.complited = true
+
+    }
+
+    return response
 
   }
+
+
+  getStatistics( codeRoom: string ){
+
+    let room = this.getRoom( codeRoom )
+    if ( room === null ) return null
+
+    let response = {
+      player1: room.player1.username,
+      player2: room.player2.username,
+      turns1: room.player1.turns,
+      turns2: room.player2.turns,
+      beginningGame: room.beginningGame,
+      endTime1: room.player1.endTime,
+      endTime2: room.player2.endTime,
+    }
+
+    return response
+
+  }
+
+
+  // PRIVATE
 
 
   private getRoom ( codeRoom: string ){
@@ -318,6 +422,7 @@ export class RoomsService {
     return room
 
   }
+
 
   private findRoom( codeRoom: string ){
 

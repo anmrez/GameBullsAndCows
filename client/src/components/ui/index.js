@@ -20,6 +20,8 @@ import MultiplayerMenu from '@/components/multiplayer/Menu.vue'
 import PixelSpinner from '@/components/multiplayer/PixelSpinner.vue'
 import CreateNumber from '@/components/multiplayer/CreateNumber.vue'
 import MultiPlayerGame from '@/components/multiplayer/Game.vue'
+import AlertComplite from '@/components/multiplayer/AlertComplite.vue'
+import WindowWinMP from '@/components/multiplayer/WindowWin.vue'
 
 
 // • main menu
@@ -57,11 +59,11 @@ export default [
   PixelSpinner,
   CreateNumber,
   MultiPlayerGame,
+  AlertComplite,
+  WindowWinMP,
 
 
   // • main menu
-  // RulesGame,
-  // HelpDev,
   info,
   AlertScreen,
   modalWindow,

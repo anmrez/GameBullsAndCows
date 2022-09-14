@@ -6,12 +6,17 @@
 
       return{
 
-        difficulty: this.$route.params.difficulty,
-        codeRoom: this.$route.params.codeRoom,
-        player1: this.$route.params.player1,
-        player2: this.$route.params.player2,
-        game: false
-
+        // difficulty: this.$route.params.difficulty,
+        // codeRoom: this.$route.params.codeRoom,
+        // player1: this.$route.params.player1,
+        // player2: this.$route.params.player2,
+        // game: false
+        
+        difficulty: 3,
+        codeRoom: '123456',
+        player1: 'anmrez',
+        player2: 'reaalt',
+        game: true
       }
 
     },
@@ -51,8 +56,7 @@
       @start="this.startGame()"
     ></crate-number-mp>
 
-    <section v-if=" game ">
-      <!-- <SinglePlayerGame v-bind:difficulty="difficulty" v-bind:hiddenNumber="hiddenNumber"> </SinglePlayerGame> -->
+    <section v-if="game">
       <MultiPlayerGame 
         v-bind:codeRoom="this.codeRoom" 
         v-bind:difficulty="this.difficulty" 

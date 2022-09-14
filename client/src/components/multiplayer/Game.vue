@@ -18,13 +18,15 @@
 
       return{
 
-        // difficulty: 3, // DELETE
-
         arrayMove: [],
         arrayBulls: [],
         arrayCows: [],
         lastMove: '',
+        showAlertComplite: false,
 
+        complitedUsername: '',
+        complitedTurns: '',
+        complitedShow: false,
 
       }
 
@@ -182,17 +184,15 @@
         console.log( `=== makeMove ===` )
         let inputMove = document.querySelector( '#inputMove' )
         if ( inputMove.value === '' ) inputMove = document.querySelector( '#inputMobileMove' )
+
         let value = inputMove.value
         let result = this.checkInput( value )
         if ( result ) {
 
-          this.arrayMove.push( value )
           this.findBullsAndCows( value )
           inputMove.value = ''
           this.lastMove = value
-          // this.checkStatusNumverMoveTable( value )
-          this.amountTurns++
-
+          
 
         }
 
@@ -230,34 +230,23 @@
           number: number
         }
 
-        console.log( data )
-        console.log( this.$socket )
-
         this.$socket.emit( 'getBullsAndCows', data, ( response ) => {
 
           console.log( response )
+          let countBulls = response.bulls
+          let countCows = response.cows
+
+          this.arrayBulls.push( countBulls )
+          this.arrayCows.push( countCows )
+
+          this.arrayMove.push( number )
+
+          if ( response.complited ) this.showWinsowWin()
+
+          this.$socket.emit( 'updateStatistics', this.codeRoom )
 
         })
 
-        // let countBulls = 0
-        // let countCows = 0
-
-        // let hiddenNumber = this.hiddenNumber
-
-        // for (let hIndex = 0; hIndex < hiddenNumber.length; hIndex++) {
-          
-        //   let hDigit = hiddenNumber[hIndex];
-
-        //   for (let nIndex = 0; nIndex < number.length; nIndex++) {
-
-        //     let nDigit = number[nIndex]
-
-        //     if ( hDigit === nDigit && hIndex === nIndex ) countBulls++
-        //     if ( hDigit === nDigit && hIndex !== nIndex ) countCows++
-            
-        //   }
-
-        // }
 
         // if ( hiddenNumber.length === countBulls ) {
           
@@ -272,6 +261,54 @@
 
       },
 
+      showWinsowWin(){
+
+        let modalWindowWin = document.querySelector( '#modalWindowWin' )
+        modalWindowWin.classList.remove( 'hidden' )
+
+      },
+
+      listenerRoom(){
+
+        this.$socket.on( 'room', ( response ) => {
+
+          // console.log( response )
+          let param = response.param
+
+          if ( response.event === 'listenerComplited' ) this.showAlertPlayerComplited( param )
+
+        })
+
+      },
+
+      showAlertPlayerComplited( data ){
+
+        console.log( data )
+        this.complitedUsername = data.username
+        this.complitedTurns = data.turns
+        let complited = data.complited
+
+        if ( complited ) {
+
+          if ( this.complitedShow ) return
+    
+          this.complitedShow = true
+          let alertComplite = document.querySelector( '#alertComplite' )
+          alertComplite.style.top = '0px'
+    
+          setTimeout( this.hiddenAlertPlayerComplited, 3000 )
+
+        }
+        
+      },
+
+      hiddenAlertPlayerComplited(){
+
+        let alertComplite = document.querySelector( '#alertComplite' )
+        alertComplite.style.top = '-100px'
+        this.complitedShow = false
+
+      }
 
 
     },
@@ -280,18 +317,20 @@
 
       this.windowResize
 
-    },
-
-    created() {
       window.addEventListener( "resize", this.windowResize );
       document.addEventListener( "click", this.onDOMClick );
       document.addEventListener( "touchstart", this.onDOMClick );
+      
+      this.listenerRoom()
+
     },
 
-    destroyed() {
+    beforeUnmount() {
+
       window.removeEventListener( "resize", this.windowResize );
       document.removeEventListener( "click", this.onDOMClick );
       document.removeEventListener( "touchstart", this.onDOMClick );
+
     },
 
 
@@ -300,7 +339,31 @@
 </script>
 
 <template>
+
   <section class="">
+
+    <modal-win-multiplayer
+      v-bind:difficulty="this.difficulty"
+    ></modal-win-multiplayer>
+
+
+    <section id="alertComplite" class="w-[95%] md:w-auto px-6 py-2 bg-blackOpacity-75 border-x-2 border-b-2 border-white rounded  ease-in-out delay-100 duration-500  translate-x-[-50%] left-[50%] top-[-100px] absolute" >
+      <section class="py-6 text-center">
+    
+        <span id="complitedUsername" class="p-2 border border-white rounded" > {{ this.complitedUsername }} </span>
+        <span class=""> completed the game in </span>
+        <span id="complitedTurns" class="" > {{ this.complitedTurns }} </span>
+        <span class=" "> turns </span>
+    
+      </section>
+    </section>
+
+    <!-- <alert-complite
+      ref="child"
+      v-bin
+      v-bind:username="this.showAlertComplite"
+      v-bind:turns="this.showAlertComplite"
+    ></alert-complite> -->
 
     <section class="md:flex space-x-0 md:space-x-7 w-full z-[1]">
 
@@ -326,11 +389,9 @@
       <section id="totalMove" class="pb-5 md:pb-0 md:px-0 px-5 md:px-0 mt-5 md:mt-10 w-full md:w-1/2 text-sm md:text-base space-y-0 max-h-[90vh] overflow-scroll">
         <move-table 
           v-bind:arrayMove="this.arrayMove"
-          v-bind:hiddenNumber="this.hiddenNumber"
           v-bind:arrayBulls="this.arrayBulls"
           v-bind:arrayCows="this.arrayCows"
           v-bind:checkStatusNumverMoveTable="this.checkStatusNumverMoveTable"
-  
         ></move-table>
       </section>
 

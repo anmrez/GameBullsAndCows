@@ -179,11 +179,36 @@ export class RoomGateway {
     console.log( `=== getBullsAndCows ===` )
     console.log( data )
 
-    let response = this.roomsService.getBullsAndCows( data, client.id )
+    let response: any = this.roomsService.getBullsAndCows( data, client.id )
+
+    if ( response.complited ) {
+
+      let codeRoom = data.codeRoom
+      let dataResponse = this.roomsService.getUsernameAndTurnsFromRoom( codeRoom, client.id )
+      response.turns = dataResponse.turns
+
+      this.sendResponseInRoom( codeRoom, client, 'listenerComplited', dataResponse )
+
+    }
 
     console.log( `response:` )
     console.log( response )
     return response
+
+  }
+
+  @SubscribeMessage( 'updateStatistics' )
+  updateStatistics(
+    // @ConnectedSocket() client: Socket,
+    @MessageBody() codeRoom: string 
+  ){
+
+    console.log( `=== updateStatistics ===` )
+    console.log( codeRoom )
+
+    let response = this.roomsService.getStatistics( codeRoom )
+
+    this.sendResponseAllInRoom( codeRoom, 'statistics', response )
 
   }
   
