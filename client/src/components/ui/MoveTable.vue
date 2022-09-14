@@ -89,9 +89,9 @@ export default {
     getDigit( number ){
 
       let response = []
-      for (let index = 0; index < number.length; index++) {
+      for ( let i = 0; i < number.length; i++ ) {
 
-        response[index] = number[index];
+        response[i] = number[i];
         
       }
       
@@ -115,7 +115,7 @@ export default {
       }
 
     },
-    unhoverDigit( event ){
+    unhoverDigit( ){
 
       let tableMove = document.querySelector( '#moveTableBody' )
       let allDigit = tableMove.querySelectorAll( '[data-moveTableDigit]' )
@@ -210,24 +210,24 @@ export default {
 
     <tbody id="moveTableBody" class="" >
       
-      <tr v-for="(number, index) in arrayMove" class="table-row h-[60px] border-b border-whiteOpacity-10 hover:bg-whiteOpacity-10">
-        <td class="text-center"> {{ index + 1 }} </td>
+      <tr v-for="(number, i) in arrayMove" class="table-row h-[60px] border-b border-whiteOpacity-10 hover:bg-whiteOpacity-10">
+        <td class="text-center"> {{ i + 1 }} </td>
 
-        <td class="flex justify-center" :data-moveTableNumber="index"  >
+        <td class="flex justify-center" :data-moveTableNumber="i"  >
           <div 
           @contextmenu="this.rbmDigit( $event )"
           @mouseover="this.hoverDigit( $event )" 
           @mouseleave="this.unhoverDigit( $event )"
-          v-for="(digit, digitIn) in getDigit( number )" 
+          v-for="(digit, digitIndex) in getDigit( number )" 
           data-moveTableDigit
           class="p-4 rounded"
           >
-            <span class="border-b-2 border-white p-2 select-none cursor-default" :data-rowsMove = digitIn> {{ digit }}  </span>
+            <span class="border-b-2  p-2 select-none cursor-default" :data-rowsMove = digitIndex> {{ digit }}  </span>
           </div>
         </td>
 
-        <td class="text-center" > {{ arrayBulls[index] }} </td>
-        <td class="text-center" > {{ arrayCows[index] }} </td>
+        <td class="text-center" > {{ arrayBulls[i] }} </td>
+        <td class="text-center" > {{ arrayCows[i] }} </td>
 
       </tr>
 

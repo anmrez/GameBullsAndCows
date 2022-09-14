@@ -66,7 +66,7 @@ export default {
 
     showAlert(){
 
-      console.log( `showAlert` )
+      // console.log( `showAlert` )
       let alertInputUsername = document.querySelector( '#alertInputUsername' )
 
       let clasess = [

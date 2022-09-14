@@ -37,7 +37,7 @@ export default {
 
     connectIO(){
 
-      console.log( `connectIO` )
+      // console.log( `connectIO` )
       let codeRoom = this.inputConnectValue
       let cookie = document.cookie
 
@@ -62,7 +62,7 @@ export default {
     createLobby(){
 
       let cookie = document.cookie
-      console.log( cookie )
+      // console.log( cookie )
 
       this.$socket.emit( 'createLobby', { cookie }, ( response ) => {
 
@@ -72,7 +72,7 @@ export default {
           player1: response.player1.username,
           player2: '',
         }
-        console.log( routeRes )
+        // console.log( routeRes )
         this.$router.push( { name: 'lobby', params: routeRes } )
 
       })

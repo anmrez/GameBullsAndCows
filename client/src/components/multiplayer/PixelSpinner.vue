@@ -164,7 +164,7 @@ export default{
       
       <section v-show="this.connection === 'fail'" class="pt-2 bg-redOpacity border border-red-500 rounded" >
         <!-- <span class="block w-full mb-3 text-center" > Connect fail </span> -->
-        <span class="block w-full mb-3 text-center " > Perhaps you have connection problems or the server is unavailable </span>
+        <span class="px-4 block w-full mb-3 text-center " > Perhaps you have connection problems or the server is unavailable </span>
       </section>
   
       <back-to-menu class=""></back-to-menu>

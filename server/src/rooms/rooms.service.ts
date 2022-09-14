@@ -141,13 +141,9 @@ export class RoomsService {
 
   definitionPerson( clientID: string, codeRoom: string ){
 
-    console.log( `=== definitionPerson ===` )
-    console.log( clientID, codeRoom )
-
     let roomIndex = this.findRoom( codeRoom )
     if ( roomIndex === null ) return null
     let room = this.rooms[ roomIndex ]
-    // console.log( room )
     if ( room.player1.id === clientID ) return 'host'
     if ( room.player2.id === clientID ) return 'guest'
 
@@ -180,9 +176,9 @@ export class RoomsService {
     })
 
     let lastRoom = this.rooms[ this.rooms.length - 1 ]
-    console.log( `Room added:` )
-    console.log( lastRoom )
-    console.log( `  ` )
+    // console.log( `Room added:` )
+    // console.log( lastRoom )
+    // console.log( `  ` )
     return lastRoom
 
   }
@@ -213,13 +209,12 @@ export class RoomsService {
 
   deleteRoom( codeRoom: string ){
 
-    // let codeRoom = data.codeRoom
-    console.log( codeRoom )
+    // console.log( codeRoom )
 
     this.rooms.forEach( ( item, i ) => {
       
       if ( item.codeRoom === codeRoom ) {
-        console.log( `room delete. code:` + item.codeRoom )
+        // console.log( `room delete. code:` + item.codeRoom )
         this.rooms.splice( i, 1 )
 
       } 
@@ -234,8 +229,8 @@ export class RoomsService {
     let codeRoom = data.codeRoom
     let indexRoom = this.findRoom( codeRoom )
     this.rooms[ indexRoom ].difficulty = difficulty
-    console.log( `update difficulty:` )
-    console.log( this.rooms[ indexRoom ] )
+    // console.log( `update difficulty:` )
+    // console.log( this.rooms[ indexRoom ] )
 
   }
 
@@ -251,8 +246,8 @@ export class RoomsService {
       completed: false,
       endTime: undefined
     }
-    console.log( `update player2:` )
-    console.log( this.rooms[ indexRoom ] )
+    // console.log( `update player2:` )
+    // console.log( this.rooms[ indexRoom ] )
 
   }
 
@@ -269,7 +264,7 @@ export class RoomsService {
   checkPlayer2( codeRoom: string ){
 
     let room = this.getRoom( codeRoom )
-    console.log( room )
+    // console.log( room )
 
     let player2ID = room.player2.id
     let player2Name = room.player2.id
@@ -294,7 +289,7 @@ export class RoomsService {
 
       } else {
 
-        console.log( 'число уже ведено' ) 
+        // console.log( 'число уже ведено' ) 
 
       }
 
@@ -310,7 +305,7 @@ export class RoomsService {
       
       } else {
 
-        console.log( 'число уже ведено' ) 
+        // console.log( 'число уже ведено' ) 
 
       }
 
@@ -327,6 +322,7 @@ export class RoomsService {
 
     let room = this.getRoom( codeRoom )
     if ( room === null ) return null
+    // console.log( room )
 
     let roomNumber: string
 
@@ -371,7 +367,7 @@ export class RoomsService {
 
     if ( roomNumber.length === countBulls ) {
 
-      console.log( `complited` )
+      // console.log( `complited` )
       if ( room.player1.id === clientID ) {
         room.player1.completed = true
         room.player1.endTime = new Date().getTime()
@@ -385,6 +381,8 @@ export class RoomsService {
 
     }
 
+    // console.log( room )
+
     return response
 
   }
@@ -395,6 +393,8 @@ export class RoomsService {
     let room = this.getRoom( codeRoom )
     if ( room === null ) return null
 
+    // console.log( room )
+
     let response = {
       player1: room.player1.username,
       player2: room.player2.username,
@@ -403,6 +403,15 @@ export class RoomsService {
       beginningGame: room.beginningGame,
       endTime1: room.player1.endTime,
       endTime2: room.player2.endTime,
+      winner: ''
+    }
+
+    if ( room.player1.completed && room.player2.completed ) {
+
+      if ( response.turns1 < response.turns2 ) response.winner = 'player1'
+      if ( response.turns1 > response.turns2 ) response.winner = 'player2'
+      if ( response.turns1 === response.turns2 ) response.winner = 'draw'
+
     }
 
     return response

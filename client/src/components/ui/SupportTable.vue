@@ -18,9 +18,9 @@
         let digitButton = targetButton.outerText
         let buttonCount = targetButton.dataset.count
 
-        for (let index = 0; index < allNumbers.length; index++) {
+        for (let i = 0; i < allNumbers.length; i++) {
           
-          let columnInMove = allNumbers[index].children[column]
+          let columnInMove = allNumbers[i].children[column]
           let columtItem = columnInMove.children[0]
           let digitItem = columtItem.outerText
 

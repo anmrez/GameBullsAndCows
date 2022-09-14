@@ -181,7 +181,7 @@
 
       makeMove( ){
 
-        console.log( `=== makeMove ===` )
+        // console.log( `=== makeMove ===` )
         let inputMove = document.querySelector( '#inputMove' )
         if ( inputMove.value === '' ) inputMove = document.querySelector( '#inputMobileMove' )
 
@@ -223,7 +223,7 @@
       findBullsAndCows( number ){
 
         // GEt from SERVER
-        console.log( `=== findBullsAndCows ===` )
+        // console.log( `=== findBullsAndCows ===` )
 
         let data = {
           codeRoom: this.codeRoom,
@@ -232,7 +232,7 @@
 
         this.$socket.emit( 'getBullsAndCows', data, ( response ) => {
 
-          console.log( response )
+          // console.log( response )
           let countBulls = response.bulls
           let countCows = response.cows
 
@@ -296,7 +296,7 @@
           let alertComplite = document.querySelector( '#alertComplite' )
           alertComplite.style.top = '0px'
     
-          setTimeout( this.hiddenAlertPlayerComplited, 3000 )
+          setTimeout( this.hiddenAlertPlayerComplited, 6500 )
 
         }
         
@@ -305,7 +305,7 @@
       hiddenAlertPlayerComplited(){
 
         let alertComplite = document.querySelector( '#alertComplite' )
-        alertComplite.style.top = '-100px'
+        alertComplite.style.top = '-8em'
         this.complitedShow = false
 
       }
@@ -322,6 +322,8 @@
       document.addEventListener( "touchstart", this.onDOMClick );
       
       this.listenerRoom()
+
+      // setTimeout( this.showAlertPlayerComplited, 1000, { username: '123', turns: 99, complited: true } )
 
     },
 
@@ -347,23 +349,17 @@
     ></modal-win-multiplayer>
 
 
-    <section id="alertComplite" class="w-[95%] md:w-auto px-6 py-2 bg-blackOpacity-75 border-x-2 border-b-2 border-white rounded  ease-in-out delay-100 duration-500  translate-x-[-50%] left-[50%] top-[-100px] absolute" >
+    <section id="alertComplite" class="w-[95%] md:w-auto px-6 py-2 bg-blackOpacity-75 border-x-2 border-b-2 border-white rounded  ease-in-out delay-100 duration-500  translate-x-[-50%] left-[50%] top-[-8em] absolute" >
       <section class="py-6 text-center">
     
-        <span id="complitedUsername" class="p-2 border border-white rounded" > {{ this.complitedUsername }} </span>
+        <span class=""> player: </span>
+        <span id="complitedUsername" class="p-2 border-b-2 border-white" > {{ this.complitedUsername }} </span>
         <span class=""> completed the game in </span>
-        <span id="complitedTurns" class="" > {{ this.complitedTurns }} </span>
+        <span id="complitedTurns" class="p-2 border-b-2 border-white" > {{ this.complitedTurns }} </span>
         <span class=" "> turns </span>
     
       </section>
     </section>
-
-    <!-- <alert-complite
-      ref="child"
-      v-bin
-      v-bind:username="this.showAlertComplite"
-      v-bind:turns="this.showAlertComplite"
-    ></alert-complite> -->
 
     <section class="md:flex space-x-0 md:space-x-7 w-full z-[1]">
 
@@ -396,6 +392,8 @@
       </section>
 
     </section>
+
+    <mobile-keyboard id="mobileKeyboard" v-bind:windowResize="this.windowResize" v-bind:difficulty="this.difficulty" @clickMove="makeMove( )" @checkMobileInput="checkInputGame" class="" ></mobile-keyboard>
 
 
 

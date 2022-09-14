@@ -20,7 +20,7 @@
 
         this.difficulty = difficulty
         this.hiddenNumber = this.$generateNumber( difficulty )
-        console.log( `hidden number: ${ this.hiddenNumber }` )
+        // console.log( `hidden number: ${ this.hiddenNumber }` )
         
         this.game = true
         let response = {

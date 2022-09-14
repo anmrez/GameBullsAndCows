@@ -25,8 +25,8 @@ export class RoomGateway {
     @MessageBody() data: { cookie: string }
   ){
 
-    console.log( `=== create Lobby ===` )
-    console.log( data )
+    // console.log( `=== create Lobby ===` )
+    // console.log( data )
 
     let response = this.roomsService.create( data, client.id )
     let codeRoom = response.codeRoom
@@ -45,8 +45,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string, cookie: string }
   ){
 
-    console.log( `=== connectLobby ===` )
-    console.log( data )
+    // console.log( `=== connectLobby ===` )
+    // console.log( data )
 
     let response = this.roomsService.connectInRooms( data, client.id )
     if ( response === 'room not found'  ) return 'room not found' 
@@ -69,8 +69,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string, difficulty: number }
   ){
 
-    console.log( `=== changeDifficulty ===` )
-    console.log( data )
+    // console.log( `=== changeDifficulty ===` )
+    // console.log( data )
     
     this.roomsService.roomEditDifficulty( data )
     
@@ -89,8 +89,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string }
   ){
 
-    console.log( `=== disconnectHost ===` )
-    console.log( data )
+    // console.log( `=== disconnectHost ===` )
+    // console.log( data )
 
     let codeRoom = data.codeRoom
     this.disconnectHost( codeRoom, client )
@@ -103,8 +103,8 @@ export class RoomGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody() data: { codeRoom: string },
   ){
-    console.log( `=== disconnectGuest ===` )
-    console.log( data )
+    // console.log( `=== disconnectGuest ===` )
+    // console.log( data )
 
     
     let codeRoom = data.codeRoom
@@ -121,8 +121,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string },
   ){
 
-    console.log( `=== checkPlayer2 ===` )
-    console.log( data )
+    // console.log( `=== checkPlayer2 ===` )
+    // console.log( data )
 
     let codeRoom = data.codeRoom
     let response = this.roomsService.checkPlayer2( codeRoom )
@@ -138,8 +138,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string },
   ){
 
-    console.log( `=== startGame ===` )
-    console.log( data )
+    // console.log( `=== startGame ===` )
+    // console.log( data )
 
     let codeRoom = data.codeRoom
     this.roomsService.startGame( codeRoom )
@@ -159,8 +159,8 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string, number: string } 
   ){
 
-    console.log( `=== setNumber ===` )
-    console.log( data )
+    // console.log( `=== setNumber ===` )
+    // console.log( data )
 
     let codeRoom = data.codeRoom
     let response = this.roomsService.setNumber( data, client.id )
@@ -176,23 +176,24 @@ export class RoomGateway {
     @MessageBody() data: { codeRoom: string, number: string } 
   ){
 
-    console.log( `=== getBullsAndCows ===` )
-    console.log( data )
+    // console.log( `=== getBullsAndCows ===` )
+    // console.log( data )
 
     let response: any = this.roomsService.getBullsAndCows( data, client.id )
 
     if ( response.complited ) {
 
       let codeRoom = data.codeRoom
-      let dataResponse = this.roomsService.getUsernameAndTurnsFromRoom( codeRoom, client.id )
+      let dataResponse: any = this.roomsService.getUsernameAndTurnsFromRoom( codeRoom, client.id )
+      dataResponse.complited = true
       response.turns = dataResponse.turns
 
       this.sendResponseInRoom( codeRoom, client, 'listenerComplited', dataResponse )
 
     }
 
-    console.log( `response:` )
-    console.log( response )
+    // console.log( `response:` )
+    // console.log( response )
     return response
 
   }
@@ -203,8 +204,8 @@ export class RoomGateway {
     @MessageBody() codeRoom: string 
   ){
 
-    console.log( `=== updateStatistics ===` )
-    console.log( codeRoom )
+    // console.log( `=== updateStatistics ===` )
+    // console.log( codeRoom )
 
     let response = this.roomsService.getStatistics( codeRoom )
 
@@ -241,10 +242,10 @@ export class RoomGateway {
 
   private listenerDisconnect( codeRoom: string, client: Socket ){
     
-    console.log( `client ${ client.id } add listener 'disconnect'` )
+    // console.log( `client ${ client.id } add listener 'disconnect'` )
     client.on( "disconnecting", (  ) => {
 
-      console.log( `=== disconnecting ===` )
+      // console.log( `=== disconnecting ===` )
 
       type personT = 'host' | 'guest' | null
       let person: personT = this.roomsService.definitionPerson( client.id, codeRoom )

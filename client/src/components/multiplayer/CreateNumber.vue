@@ -35,7 +35,7 @@
 
         this.$socket.on( 'room', ( response ) => {
 
-          console.log( response )
+          // console.log( response )
           let param = response.param
 
           if ( response.event === 'ready' ) {
@@ -77,7 +77,7 @@
           codeRoom: this.codeRoom,
           number: value
         }
-        console.log( data )
+        // console.log( data )
         this.$socket.emit( 'setNumber', data )
 
       },
@@ -160,13 +160,12 @@
 
       },
 
-      listenerInput( e ){
+      // listenerInput( e ){
 
-        let value = e.target.value
-        console.log( value )
-        
+      //   let value = e.target.value
+      //   // console.log( value )
 
-      }
+      // }
 
 
     },
@@ -174,7 +173,7 @@
     mounted(){
 
       let inputCreateNumber = document.querySelector( '#inputCreateNumber' )
-      inputCreateNumber.addEventListener( 'input', this.listenerInput )
+      // inputCreateNumber.addEventListener( 'input', this.listenerInput )
 
       this.listenerRoom()
 
@@ -182,7 +181,7 @@
 
     beforeUnmount(){
 
-      inputCreateNumber.removeEventListener( 'input', this.listenerInput )
+      // inputCreateNumber.removeEventListener( 'input', this.listenerInput )
       
       this.$socket.off( 'room' );
 
@@ -201,7 +200,7 @@
 
     <h1 class="mb-5 text-center text-xl" > multiplayer game </h1>
 
-    <section class="mb-3">
+    <section class="mb-3 text-sm md:text-base">
       <section class="flex justify-center space-x-3 ">
         <span> players: </span>
         <ul class="space-y-3">
@@ -211,7 +210,7 @@
       </section>
     </section>
 
-    <p class="text-center" >Come up with a number for the opponent </p>
+    <p class="text-center text-sm md:text-base" >Come up with a number for the opponent </p>
 
     <section class="space-y-3">
 
@@ -228,7 +227,7 @@
       
       <input @input="checkLength" id="inputCreateNumber" type="text" class="w-full h-full bg-whiteOpacity-10 text-4xl text-center rounded outline outline-2 outline-transparent outline-offset-1 focus:outline-white"> 
 
-      <section class="flex space-x-3">
+      <section class="flex flex-col md:flex-row space-y-3 md:space-y-0 md:space-x-3">
         <pixel-button @click="this.generateNumber()" class="md:w-1/2 text-base" > Generate </pixel-button>
         <pixel-button @click="this.sendNumber()" class="md:w-1/2 text-base" > Ready </pixel-button>
       </section>

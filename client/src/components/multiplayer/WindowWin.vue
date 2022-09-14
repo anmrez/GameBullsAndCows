@@ -26,6 +26,8 @@
         plTime1: 'Nan',
         plTime2: 'Nan',
 
+        winner: '',
+
 
       }
 
@@ -38,7 +40,7 @@
 
         this.$socket.on( 'room', ( response ) => {
 
-          console.log( response )
+          // console.log( response )
           let param = response.param
 
           if ( response.event === 'statistics' ) this.setStatistics( param )
@@ -57,6 +59,10 @@
         this.plTime2 = ( this.endTime2 - this.beginningGame ) / 1000
         this.plTime2 = Math.ceil( this.plTime2 )
 
+        this.checkWinner()
+
+
+
       },
 
       setParams( param ){
@@ -68,6 +74,62 @@
         this.beginningGame = param.beginningGame
         this.endTime1 = param.endTime1
         this.endTime2 = param.endTime2
+        this.winner = param.winner
+
+      },
+
+      checkWinner(){
+        
+        let player1 = document.querySelector( '#player1Status' )
+        let player2 = document.querySelector( '#player2Status' )
+
+        if ( this.winner === 'player1' ) {
+
+          this.setWin( player1 )
+          this.setLose( player2 )
+          return
+
+        }
+        
+        if ( this.winner === 'player2' ) {
+
+          this.setWin( player2 )
+          this.setLose( player1 )
+          return
+
+        }
+
+        if ( this.winner === 'draw' ) {
+
+          this.setDraw( player1 )
+          this.setDraw( player2 )
+          return
+
+        }
+
+      },
+
+      setWin( DOMItem ){
+
+        DOMItem.classList.remove( 'text-yellowOpacity' )
+        DOMItem.classList.add( 'text-greenOpacity' )
+        DOMItem.innerHTML = 'Winner'
+
+      },
+
+      setLose( DOMItem ){
+
+        DOMItem.classList.remove( 'text-yellowOpacity' )
+        DOMItem.classList.add( 'text-redOpacity' )
+        DOMItem.innerHTML = 'Loser'
+
+      },
+
+      setDraw( DOMItem ){
+
+        // DOMItem.classList.remove( 'text-yellowOpacity' )
+        // DOMItem.classList.add( 'text-redOpacity' )
+        DOMItem.innerHTML = 'Draw'
 
       }
 
@@ -97,7 +159,7 @@
             <!-- title -->
             <li>
               <!-- <h1 class="text-center text-xl text-greenOpacity" > Win </h1> -->
-              <h1 class="text-center text-xl text-yellowOpacity" > ... </h1>
+              <h1 id="player1Status" class="text-center text-xl text-yellowOpacity" > ... </h1>
               <h3 class="text-center" > {{ player1 }} </h3>
             </li>
 
@@ -130,7 +192,7 @@
             <!-- title -->
             <li>
               <!-- <h1 class="text-center text-xl text-redOpacity" > Lose </h1> -->
-              <h1 class="text-center text-xl text-yellowOpacity" > ... </h1>
+              <h1 id="player2Status" class="text-center text-xl text-yellowOpacity" > ... </h1>
               <h3 class="text-center" > {{ player2 }} </h3>
             </li>
 

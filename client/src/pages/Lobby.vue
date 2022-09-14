@@ -13,7 +13,8 @@ export default{
       player1: this.$route.params.player1,
       player2: this.$route.params.player2,
       host: this.$route.params.host,
-      difficulty: this.$route.params.difficulty,
+      // difficulty: this.$route.params.difficulty,
+      difficulty: 3
 
     }
 
@@ -32,8 +33,8 @@ export default{
         
         let index = item.indexOf( 'username=' )
         if ( username !== undefined && index >= 0 ){
-          console.log( `дублирование никнеймов` )
-          console.log( `index: ${ index }; item: ${ item }` )
+          // console.log( `дублирование никнеймов` )
+          // console.log( `index: ${ index }; item: ${ item }` )
           document.cookie = 'username=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
 
 
@@ -50,9 +51,9 @@ export default{
 
     listenerDisconnect( data ){
 
-      console.log( `=== listenerDisconnect ===` )
+      // console.log( `=== listenerDisconnect ===` )
       let player = data.disconnect
-      console.log( player )
+      // console.log( player )
 
       if ( player === 'host' ) this.redirectInMenu()
       if ( player === 'guest' ) this.player2 = ''
@@ -90,13 +91,10 @@ export default{
       if ( this.host ){
         
         this.socketEmit( 'disconnectHost', data )
-        console.log( `Отключение хоста (удалить комнату и всех отключить)` )
-
 
       } else {
 
         this.socketEmit( 'disconnectGuest', data )
-        console.log( `Отключение pl2 ` )
 
       }
 
@@ -118,16 +116,11 @@ export default{
 
       this.$socket.on( 'room', ( response ) => {
 
-        console.log( response )
         let param = response.param
 
-        if ( this.host ) {
-          if ( response.event === 'userConnected' ) this.hostListeningConnections( param )
-        }
+        if ( this.host && response.event === 'userConnected' ) this.hostListeningConnections( param )
         
-        if ( !this.host ) {
-          if ( response.event === 'listenerDifficulty' ) this.listenerDifficulty( param )
-        }
+        if ( !this.host && response.event === 'listenerDifficulty' ) this.listenerDifficulty( param )
 
         // all
         if ( response.event === 'listenerDisconnect' ) this.listenerDisconnect( param )
@@ -157,7 +150,7 @@ export default{
 
     listenerDifficulty( data ){
 
-      console.log( data )
+      // console.log( data )
       let difficulty = data.difficulty
       this.difficulty = difficulty
 
@@ -171,7 +164,7 @@ export default{
 
     changeDifficulty( number ){
 
-      console.log( `=== changeDifficulty ===` )
+      // console.log( `=== changeDifficulty ===` )
 
       if ( this.difficulty === number ) return
 
@@ -203,7 +196,7 @@ export default{
 
     hostListeningConnections( data ){
 
-      console.log( data )
+      // console.log( data )
       let player2 = data.player2.username
       this.player2 = player2
 
@@ -217,9 +210,9 @@ export default{
 
       this.$socket.emit( 'checkPlayer2', data, async ( response ) => {
 
-        // if ( response === 'fail' ) this.showAlertStartGame()
-        // if ( response === 'success' ) this.startGame()
-        this.startGame()
+        if ( response === 'fail' ) this.showAlertStartGame()
+        if ( response === 'success' ) this.startGame()
+        // this.startGame()
 
       })
 
@@ -241,10 +234,35 @@ export default{
       
     },
 
+    copyCode(){
+
+      let copyStatus = document.querySelector( '#copyStatus' )
+
+      navigator.clipboard.writeText( this.codeRoom ).then( function(){
+        console.log( `success` )
+        copyStatus.innerHTML = 'copied'
+        setTimeout( function(){
+          copyStatus.innerHTML = 'copy'
+        }, 2000 )
+      },
+      function( err ){
+        console.log( err )
+        copyStatus.innerHTML = 'failed'
+      } )
+
+    },
+
+  },
+
+  mounted(){
+
+    let copyCodeRoom = document.querySelector( '#copyCodeRoom' )
+    copyCodeRoom.addEventListener( 'click', this.copyCode )
+
   },
   
   beforeMount(){
-  
+    
     // common 
     this.listenerRoom()
     this.checkCookie()
@@ -252,6 +270,14 @@ export default{
     this.host = this.host === 'true'
     
   },
+
+  beforeUnmount(){
+
+    let copyCodeRoom = document.querySelector( '#copyCodeRoom' )
+    copyCodeRoom.removeEventListener( 'click', this.copyCode )
+
+  },
+
 
 }
 
@@ -265,15 +291,18 @@ export default{
     <section class="flex flex-col space-y-5">
 
       <section class="flex justify-between text-lg ">
-        <section>
+        <section id="copyCodeRoom" class="p-2 cursor-pointer rounded hover:bg-whiteOpacity-10">
           <h2 id="codeRoomEl" class="text-center"> Room code: </h2>
           <h2 class="text-center">
-            <span>
-              {{ this.codeRoomP1 }} 
-            </span>
-            <span class="ml-2">
-              {{ this.codeRoomP2 }}
-            </span>
+            <section>
+              <span>
+                {{ this.codeRoomP1 }} 
+              </span>
+              <span class="ml-2">
+                {{ this.codeRoomP2 }}
+              </span>
+            </section>
+            <span id="copyStatus" class="text-whiteOpacity-50 text-xs"> copy </span>
           </h2>
               
         </section>

@@ -6,17 +6,12 @@
 
       return{
 
-        // difficulty: this.$route.params.difficulty,
-        // codeRoom: this.$route.params.codeRoom,
-        // player1: this.$route.params.player1,
-        // player2: this.$route.params.player2,
-        // game: false
+        difficulty: this.$route.params.difficulty,
+        codeRoom: this.$route.params.codeRoom,
+        player1: this.$route.params.player1,
+        player2: this.$route.params.player2,
+        game: false
         
-        difficulty: 3,
-        codeRoom: '123456',
-        player1: 'anmrez',
-        player2: 'reaalt',
-        game: true
       }
 
     },
@@ -25,17 +20,9 @@
 
       startGame(){
 
-        console.log( `начать игру` )
         this.game = true
 
       }
-
-
-    },
-
-
-    mounted(){
-
 
     },
 
