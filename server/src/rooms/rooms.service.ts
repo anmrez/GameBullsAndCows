@@ -27,36 +27,6 @@ export class RoomsService {
     },
   }[] = []
 
-
-  constructor(){
-
-    let testRoom = {
-      codeRoom: '123456',
-      difficulty: 3,
-      game: 'start',
-      beginningGame: new Date().getTime(),
-      player1: {
-        username: 'anmrez',
-        id: 'idAnmrez',
-        number: '1356',
-        turns: 0,
-        completed: false,
-        endTime: undefined
-      },
-      player2: {
-        username: 'reaalt',
-        id: 'idReaalt',
-        number: '9753',
-        turns: 0,
-        completed: false,
-        endTime: undefined
-      },
-    }
-    this.rooms.push( testRoom )
-
-  }
-
-
   getRooms(){
 
     return this.rooms
