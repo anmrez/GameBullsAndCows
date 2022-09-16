@@ -18,6 +18,10 @@
       showModelWindow( typeModal ){
 
         this.typeModalWindow = typeModal
+        if ( typeModal === 'Rules' ) window.location.hash = 'Rules'
+        if ( typeModal === 'Support' ) window.location.hash = 'Support'
+        if ( typeModal === 'Training' ) window.location.hash = 'Training'
+        if ( typeModal === 'AppMobile' ) window.location.hash = 'AppMobile'
         this.showModalWindow()
 
       },
@@ -61,6 +65,25 @@
 
       },
 
+      hashchangeHiddenModal( e ){
+
+        if ( window.location.hash === '' ) this.hiddenModalWindow()
+
+      },
+
+      hiddenModalWindow( ){
+
+        let modalWindow = document.querySelector( '#modalWindow' )
+        modalWindow.style.height = '0px'
+          
+        let modalWindowMain = document.querySelector( '#modalWindowMain' )
+        setTimeout ( () => {
+          modalWindowMain.classList.add( 'hidden' )
+          modalWindow.style.height = 'auto'
+        }, 150 )
+
+      }
+
     },
 
     mounted() {
@@ -69,11 +92,18 @@
       this.timerAlertId = setTimeout( this.hiddenalertFullScreen, 5500 )
       this.scrollPageDown()
 
+      window.location.hash = ''
+      window.addEventListener( 'hashchange', this.hashchangeHiddenModal );
+
+      
+      
     },
-
+    
     beforeUnmount(){
-
+      
       clearInterval( this.timerAlertId )
+      console.log( `unmou` )
+      window.removeEventListener('hashchange', this.hashchangeHiddenModal );
 
     }
 
@@ -151,7 +181,7 @@
   
     </section>
   
-    <modal-window v-bind:modalType="this.typeModalWindow" ></modal-window>
+    <modal-window ref="modalWindow" v-bind:modalType="this.typeModalWindow" ></modal-window>
     <!-- <modal-rules ></modal-rules> -->
     <!-- <modal-helpDev></modal-helpDev> -->
 

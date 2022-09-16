@@ -81,9 +81,7 @@
 
             }
             
-            
           }
-
           
         }
 
@@ -102,7 +100,6 @@
           if( count === '3' ) moveItemColumn.classList.add( 'border-green-500' )
 
         }
-
 
       },
 
@@ -181,7 +178,6 @@
 
       makeMove( ){
 
-        // console.log( `=== makeMove ===` )
         let inputMove = document.querySelector( '#inputMove' )
         if ( inputMove.value === '' ) inputMove = document.querySelector( '#inputMobileMove' )
 
@@ -192,7 +188,6 @@
           this.findBullsAndCows( value )
           inputMove.value = ''
           this.lastMove = value
-          
 
         }
 
@@ -222,9 +217,6 @@
 
       findBullsAndCows( number ){
 
-        // GEt from SERVER
-        // console.log( `=== findBullsAndCows ===` )
-
         let data = {
           codeRoom: this.codeRoom,
           number: number
@@ -232,7 +224,6 @@
 
         this.$socket.emit( 'getBullsAndCows', data, ( response ) => {
 
-          // console.log( response )
           let countBulls = response.bulls
           let countCows = response.cows
 
@@ -247,18 +238,6 @@
 
         })
 
-
-        // if ( hiddenNumber.length === countBulls ) {
-          
-        //   let modalWindowWin = document.querySelector( '#modalWindowWin' )
-        //   modalWindowWin.classList.remove( 'hidden' )
-        //   clearInterval( this.timerId )
-
-        // }
-
-        // this.arrayBulls.push( countBulls )
-        // this.arrayCows.push( countCows )
-
       },
 
       showWinsowWin(){
@@ -272,9 +251,7 @@
 
         this.$socket.on( 'room', ( response ) => {
 
-          // console.log( response )
           let param = response.param
-
           if ( response.event === 'listenerComplited' ) this.showAlertPlayerComplited( param )
 
         })
@@ -323,8 +300,6 @@
       
       this.listenerRoom()
 
-      // setTimeout( this.showAlertPlayerComplited, 1000, { username: '123', turns: 99, complited: true } )
-
     },
 
     beforeUnmount() {
@@ -353,9 +328,9 @@
       <section class="py-6 text-center">
     
         <span class=""> player: </span>
-        <span id="complitedUsername" class="p-2 border-b-2 border-white" > {{ this.complitedUsername }} </span>
+        <span id="complitedUsername" class="text-yellowOpacity" > {{ this.complitedUsername }} </span>
         <span class=""> completed the game in </span>
-        <span id="complitedTurns" class="p-2 border-b-2 border-white" > {{ this.complitedTurns }} </span>
+        <span id="complitedTurns" class="text-yellowOpacity" > {{ this.complitedTurns }} </span>
         <span class=" "> turns </span>
     
       </section>

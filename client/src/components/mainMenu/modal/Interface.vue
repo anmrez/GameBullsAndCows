@@ -38,8 +38,8 @@ export default {
     <p>
       • You can also color the entire column or row
     </p>
-    <video src="/gif/row.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
     <video src="/gif/column.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/row.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
     <p>

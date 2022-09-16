@@ -5,7 +5,7 @@ import multiPlayer from '@/pages/MultiPlayer.vue'
 import Lobby from '@/pages/Lobby.vue'
 import Dev from '@/pages/Dev.vue'
 import MultiplayerGame from '@/pages/MultiplayerGame.vue'
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 
 const routes = [
@@ -39,15 +39,12 @@ const routes = [
           name: 'Dev',
           component: Dev
      },
-     // { path: '/404', component: NotFound },
-     // { path: '/:catchAll(.*)', redirect: '/404' },
      { path: '/:catchAll(.*)', component: NotFound },
 
 ]
 
 const router = createRouter({
 
-     // history: createWebHashHistory( ),
      history: createWebHistory(),
      routes,
 

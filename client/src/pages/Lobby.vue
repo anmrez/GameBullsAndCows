@@ -236,19 +236,19 @@ export default{
 
     copyCode(){
 
+      
+      let input = this.$refs.inputCodeRoom
+      input.select()
+      this.$refs.inputCodeRoom.focus()
+      document.execCommand('copy');
+      
       let copyStatus = document.querySelector( '#copyStatus' )
+      copyStatus.innerHTML = 'copied'
+      setTimeout( function(){
+        copyStatus.innerHTML = 'copy'
+      }, 2000 )
 
-      navigator.clipboard.writeText( this.codeRoom ).then( function(){
-        console.log( `success` )
-        copyStatus.innerHTML = 'copied'
-        setTimeout( function(){
-          copyStatus.innerHTML = 'copy'
-        }, 2000 )
-      },
-      function( err ){
-        console.log( err )
-        copyStatus.innerHTML = 'failed'
-      } )
+
 
     },
 
@@ -301,6 +301,7 @@ export default{
               <span class="ml-2">
                 {{ this.codeRoomP2 }}
               </span>
+              <input ref="inputCodeRoom" class="absolute left-[-999%]" type="text" :value=" this.codeRoom " readonly>
             </section>
             <span id="copyStatus" class="text-whiteOpacity-50 text-xs"> copy </span>
           </h2>

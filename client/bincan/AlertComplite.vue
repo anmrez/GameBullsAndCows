@@ -50,9 +50,9 @@
   <section id="alertComplite" class="w-[95%] md:w-auto px-6 py-2 bg-blackOpacity-75 border-x-2 border-b-2 border-white rounded  ease-in-out delay-100 duration-500  translate-x-[-50%] left-[50%] top-[-100px] absolute" >
     <section class="py-6 text-center">
   
-      <span id="complitedUsername" class="p-2 border border-white rounded" > {{ username }} </span>
+      <span id="complitedUsername" class="text-yellowOpacity" > {{ username }} </span>
       <span class=""> completed the game in </span>
-      <span id="complitedTurns" class="" > {{ turns }} </span>
+      <span id="complitedTurns" class="text-yellowOpacity" > {{ turns }} </span>
       <span class=" "> turns </span>
   
     </section>

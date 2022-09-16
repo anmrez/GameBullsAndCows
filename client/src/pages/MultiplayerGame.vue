@@ -26,6 +26,12 @@
 
     },
 
+    mounted(){
+
+      if ( this.$route.params.difficulty === undefined ) this.$router.push({ name: 'multiPlayer' })
+
+    }
+
   }
 
 </script>

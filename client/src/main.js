@@ -7,7 +7,8 @@ import { io } from 'socket.io-client'
 
 const app = createApp( App )
 
-app.config.globalProperties.$socket = io( 'http://79.132.136.197:5005' ,{
+// app.config.globalProperties.$socket = io( 'http://79.132.136.197:5005' ,{
+app.config.globalProperties.$socket = io( 'http://192.168.0.2:5005' ,{
   autoConnect: false
 })
 

@@ -25,6 +25,8 @@
             modalWindowMain.classList.add( 'hidden' )
             modalWindow.style.height = 'auto'
           }, 150 )
+
+          window.location.hash = ''
   
         }
   

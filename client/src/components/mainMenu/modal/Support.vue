@@ -22,6 +22,11 @@ export default {
             My patreon
           </a>
         </li>
+        <li class="flex justify-center"> 
+          <a href="https://www.youtube.com/channel/UCB9DSZs7L30FA9zjyz4TTaQ" target="_blank" class="max-w-[90%] w-full text-center py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10">
+            My YouTube
+          </a>
+        </li>
       </ul>
   </section>
 
