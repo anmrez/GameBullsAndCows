@@ -3,8 +3,7 @@ import { AppModule } from './app.module';
 
 async function start() {
 
-  const PORT = process.env.PORT || 3001
-
+  const PORT = 5005
   const app = await NestFactory.create( AppModule );
 
   await app.listen( PORT, () => console.log( `[App] - server started on ${ PORT } port` ) );

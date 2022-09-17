@@ -2,6 +2,7 @@
 **/dist
 *.spec.ts
 server/test
+server/mobileApp
 send_server
 apk
 TODO

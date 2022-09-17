@@ -31,14 +31,6 @@ export default {
 
     },
 
-    // login(){
-
-    //   // let input = document.querySelector( '#inputUsername' )
-    //   // let username = input.value
-    //   this.checkLengthUsername()
-
-    // },
-
     login(){
 
       let input = document.querySelector( '#inputUsername' )
@@ -66,7 +58,6 @@ export default {
 
     showAlert(){
 
-      // console.log( `showAlert` )
       let alertInputUsername = document.querySelector( '#alertInputUsername' )
 
       let clasess = [

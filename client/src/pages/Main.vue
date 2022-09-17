@@ -7,7 +7,8 @@
 
         timerAlertId: 0,
         typeModalWindow: '',
-        screen: {}
+        screen: {},
+        appsMobile: []
 
       }
 
@@ -21,11 +22,28 @@
         if ( typeModal === 'Rules' ) window.location.hash = 'Rules'
         if ( typeModal === 'Support' ) window.location.hash = 'Support'
         if ( typeModal === 'Training' ) window.location.hash = 'Training'
-        if ( typeModal === 'AppMobile' ) window.location.hash = 'AppMobile'
+        if ( typeModal === 'AppMobile' ) {
+          window.location.hash = 'AppMobile'
+          this.getAppFromServer()
+        } 
         this.showModalWindow()
 
       },
 
+      getAppFromServer(){
+
+        this.$socket.connect()
+        this.$socket.emit( 'getAppMobileList', ( response ) =>{
+
+          console.log( response )
+          console.log( typeof response )
+          if ( typeof response === 'object' ) this.appsMobile = response
+          this.socketDisconnect()
+
+        })
+
+
+      },
 
       hiddenalertFullScreen( e ){
 
@@ -54,6 +72,7 @@
 
         this.$socket.off( "disconnect" );
         this.$socket.disconnect()
+        console.log( `disconnect` )
 
       },
 
@@ -82,6 +101,46 @@
           modalWindow.style.height = 'auto'
         }, 150 )
 
+      },
+
+      addListenerMuted(){
+
+        let audioMuted = document.querySelector( '#audioMuted' )
+        if ( !audioMuted.classList.contains( 'render' ) )
+          audioMuted.addEventListener( 'click', this.listenerMuted, audioMuted )
+        audioMuted.classList.add( 'render' )
+
+      },
+
+      listenerMuted(  ){
+
+        let audio = document.querySelector( '#audio' )
+        if ( audio.muted ) {
+          audio.muted = false
+          this.mutedOn()
+        } else {
+          audio.muted = true
+          this.mutedOff()
+        }
+
+      },
+
+      mutedOn(){
+
+        audioMuted.classList.remove( 'border-whiteOpacity-50' )
+        audioMuted.classList.remove( 'fill-whiteOpacity-50' )
+        audioMuted.classList.add( 'fill-white' )
+        audioMuted.classList.add( 'border-white' )
+
+      },
+
+      mutedOff(){
+
+        audioMuted.classList.add( 'border-whiteOpacity-50' )
+        audioMuted.classList.add( 'fill-whiteOpacity-50' )
+        audioMuted.classList.remove( 'fill-white' )
+        audioMuted.classList.remove( 'border-white' )
+
       }
 
     },
@@ -91,18 +150,16 @@
       this.socketDisconnect()
       this.timerAlertId = setTimeout( this.hiddenalertFullScreen, 5500 )
       this.scrollPageDown()
+      this.addListenerMuted()
 
       window.location.hash = ''
       window.addEventListener( 'hashchange', this.hashchangeHiddenModal );
-
-      
       
     },
     
     beforeUnmount(){
       
       clearInterval( this.timerAlertId )
-      console.log( `unmou` )
       window.removeEventListener('hashchange', this.hashchangeHiddenModal );
 
     }
@@ -159,16 +216,16 @@
         <button @click="this.showModelWindow( 'Training' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/training.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
-            interface guide
+            Interface guide
           </p>
         </button>
 
-        <!-- <button @click="showAppMobile" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
+        <button @click="this.showModelWindow( 'AppMobile' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/rule.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
-            download app on android
+            Download app on android
           </p>
-        </button> -->
+        </button>
 
         <button @click="this.showModelWindow( 'Support' )"  type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/coin.svg" alt="coin" class="w-[25px]">
@@ -176,12 +233,18 @@
             Support the developer
           </p>
         </button>
+
+
   
       </section>
   
     </section>
   
-    <modal-window ref="modalWindow" v-bind:modalType="this.typeModalWindow" ></modal-window>
+    <modal-window 
+      ref="modalWindow" 
+      v-bind:modalType="this.typeModalWindow" 
+      v-bind:appsMobile="this.appsMobile" 
+    ></modal-window>
     <!-- <modal-rules ></modal-rules> -->
     <!-- <modal-helpDev></modal-helpDev> -->
 

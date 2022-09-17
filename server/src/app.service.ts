@@ -1,12 +1,24 @@
 import { Injectable } from '@nestjs/common';
+const mobileAppFolder = './mobileApp'
+const fs = require('fs');
 
 @Injectable()
 export class AppService {
-
   
-  getHello(): string {
-    console.log( 'get hello' )
-    return 'Hello World!';
+  getAll()  {
+
+    return fs.readdirSync( mobileAppFolder );
+
   }
 
+  removeFile( pathFile ){
+
+    fs.unlink( pathFile, function( err ) {
+
+      if ( err ) return console.log( err )
+
+    })
+
+  }
+ 
 }

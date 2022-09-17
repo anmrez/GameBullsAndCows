@@ -6,6 +6,9 @@
     props:{
       modalType:{
         require: true
+      },
+      appsMobile:{
+        require: true
       }
   
     },
@@ -27,6 +30,7 @@
           }, 150 )
 
           window.location.hash = ''
+          this.$socket.disconnect()
   
         }
   
@@ -56,7 +60,10 @@
 
           <support-developer v-if="modalType === 'Support'">  </support-developer>
           <rules-game v-show="modalType === 'Rules'">  </rules-game>
-          <download-app v-show="modalType === 'AppMobile'" >  </download-app>
+          <download-app 
+            v-show="modalType === 'AppMobile'" 
+            v-bind:appsMobile="this.appsMobile"
+          >  </download-app>
           <interface-training v-if="modalType === 'Training'" >  </interface-training>
 
     

@@ -1,17 +1,81 @@
-import { Controller, Get, Render } from '@nestjs/common';
+import { Controller, Get, Param, StreamableFile, UploadedFile, UseInterceptors, Res, Header, Post, Body } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { AppService } from './app.service';
+import * as path from 'path'
+const fs = require('fs');
 
 @Controller( )
 export class AppController {
   constructor( private readonly appService: AppService ) {}
 
-  @Get( )
-  // @Render('index')
-  getHello() {
 
-    // this.appService.getHello()
+  @Get( 'getMobileApp' )
+  getMobileApp(
+  ) {
 
-    return 'home page'
+    return this.appService.getAll()
 
   }
+
+  @Post( 'deleteMobileApp' )
+  deleteMobileApp(
+    @Body() file,
+  ){
+
+    console.log( `=== deleteMobileApp ===` )
+    let nameFile = file.nameFile
+    let pathFile = path.join( __dirname, '..', 'mobileApp', nameFile )
+    this.appService.removeFile( pathFile )
+
+  }
+
+  @Header('Content-Type', 'text/html')
+  @Get( '123123123123' )
+  getUploadHTML(
+  ) {
+
+    const html = path.join( __dirname, '..', 'client', 'index.html');
+    const htmlStream = fs.createReadStream( html, 'utf8' );
+    return new StreamableFile( htmlStream );
+
+  }
+
+  @UseInterceptors( FileInterceptor( 'file' ) )
+  @Post( '123123123123' )
+  async upload(
+    @UploadedFile() file,
+    @Res() res
+  ){
+
+    
+    console.log( file )
+    
+    let ext = path.extname( file.originalname )
+    console.log( `ext: ${ ext }` )
+    if ( ext !== '.apk' ) return
+
+    let pathFile = path.join( __dirname, '..', 'mobileApp', file.originalname )
+
+    await fs.writeFile( pathFile, file.buffer, function( err ) {
+
+      if ( err ) return console.log( err )
+
+    });
+
+    return res.redirect('123123123123');
+
+  }
+
+  @Get( '/download/:file' )
+  download( 
+    @Param('file') file,
+  ){
+
+    let href = path.join( __dirname, '..', 'mobileApp', file)
+    console.log( href )
+    let responseFile = fs.createReadStream( href )
+    return new StreamableFile( responseFile )
+
+  }
+
 }

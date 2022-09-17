@@ -8,7 +8,8 @@ import { io } from 'socket.io-client'
 const app = createApp( App )
 
 // app.config.globalProperties.$socket = io( 'http://79.132.136.197:5005' ,{
-app.config.globalProperties.$socket = io( 'http://192.168.0.2:5005' ,{
+// app.config.globalProperties.$socket = io( 'http://192.168.0.2:5005' ,{
+app.config.globalProperties.$socket = io( `http://${ import.meta.env.VITE_APP_SERVER_IP }` ,{
   autoConnect: false
 })
 
@@ -42,7 +43,6 @@ app.config.globalProperties.$generateNumber = function( difficulty ){
       
   }
 
-  // console.log( `hidden number: `, number )
   return number
 
 }
@@ -50,7 +50,6 @@ app.config.globalProperties.$generateNumber = function( difficulty ){
 
 
 components.forEach( item => {
-  // console.log( item )
   app.component( item.name, item )
 
 });
