@@ -27,6 +27,11 @@ export default {
             My YouTube
           </a>
         </li>
+        <li class="flex justify-center"> 
+          <a href="https://github.com/anmrez" target="_blank" class="max-w-[90%] w-full text-center py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10">
+            My GitHub
+          </a>
+        </li>
       </ul>
   </section>
 

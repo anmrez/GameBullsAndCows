@@ -1,5 +1,6 @@
 <script>
-
+  
+  // import { App } from '@capacitor/app';
   export default{
 
     methods:{
@@ -9,7 +10,7 @@
 
 
         let agent = navigator.userAgent 
-        console.log( /Windows/.test( agent ) )
+        // console.log( /Windows/.test( agent ) )
 
         let userAgent = document.querySelector( '#userAgent' )
         userAgent.innerHTML = agent
@@ -27,16 +28,24 @@
 
       },
 
+      // listenerBackButton(){
+
+      //   // window.history.back()
+      //   this.$router.push({ path: window.history.state.back }) 
+
+      // }
+
     },
+
 
     mounted(){
 
       this.getUserAgent()
       this.scrollListener()
-
-
-
-    }
+      // App.addListener( 'backButton', this.listenerBackButton )
+      
+    },
+    
 
 
   }
@@ -46,7 +55,9 @@
 
 <template>
 
+  
   <section id="devpage" class="w-full bg-blackOpacity-75 z-10">
+    <!-- <button @click="this.listenerBackButton"> back </button> -->
     <ul class="mt-[10%] space-y-3">
       <li class="flex flex-col text-center">
         <span> User agent: </span>

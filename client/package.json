@@ -12,8 +12,10 @@
   },
   "dependencies": {
     "@capacitor/android": "^4.1.0",
+    "@capacitor/app": "^4.0.1",
     "@capacitor/cli": "^4.1.0",
     "@capacitor/core": "^4.1.0",
+    "@capacitor/network": "^4.0.1",
     "axios": "^0.27.2",
     "serve": "^14.0.1",
     "socket.io-client": "^4.5.1",

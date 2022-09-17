@@ -55,7 +55,8 @@ export default {
         if ( error ) {
 
           this.socketConnectStatus = 'fail'
-          console.log( `socket error` )
+          console.log( `connection error:` )
+          console.log( error )
 
         } 
       });

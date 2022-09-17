@@ -30,7 +30,7 @@ export class AppController {
   }
 
   @Header('Content-Type', 'text/html')
-  @Get( '123123123123' )
+  @Get( '1029384756' )
   getUploadHTML(
   ) {
 
@@ -41,7 +41,7 @@ export class AppController {
   }
 
   @UseInterceptors( FileInterceptor( 'file' ) )
-  @Post( '123123123123' )
+  @Post( '1029384756' )
   async upload(
     @UploadedFile() file,
     @Res() res
@@ -62,7 +62,7 @@ export class AppController {
 
     });
 
-    return res.redirect('123123123123');
+    return res.redirect('1029384756');
 
   }
 

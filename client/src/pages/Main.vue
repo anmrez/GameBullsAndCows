@@ -103,46 +103,6 @@
 
       },
 
-      addListenerMuted(){
-
-        let audioMuted = document.querySelector( '#audioMuted' )
-        if ( !audioMuted.classList.contains( 'render' ) )
-          audioMuted.addEventListener( 'click', this.listenerMuted, audioMuted )
-        audioMuted.classList.add( 'render' )
-
-      },
-
-      listenerMuted(  ){
-
-        let audio = document.querySelector( '#audio' )
-        if ( audio.muted ) {
-          audio.muted = false
-          this.mutedOn()
-        } else {
-          audio.muted = true
-          this.mutedOff()
-        }
-
-      },
-
-      mutedOn(){
-
-        audioMuted.classList.remove( 'border-whiteOpacity-50' )
-        audioMuted.classList.remove( 'fill-whiteOpacity-50' )
-        audioMuted.classList.add( 'fill-white' )
-        audioMuted.classList.add( 'border-white' )
-
-      },
-
-      mutedOff(){
-
-        audioMuted.classList.add( 'border-whiteOpacity-50' )
-        audioMuted.classList.add( 'fill-whiteOpacity-50' )
-        audioMuted.classList.remove( 'fill-white' )
-        audioMuted.classList.remove( 'border-white' )
-
-      }
-
     },
 
     mounted() {
@@ -150,7 +110,6 @@
       this.socketDisconnect()
       this.timerAlertId = setTimeout( this.hiddenalertFullScreen, 5500 )
       this.scrollPageDown()
-      this.addListenerMuted()
 
       window.location.hash = ''
       window.addEventListener( 'hashchange', this.hashchangeHiddenModal );
@@ -199,13 +158,6 @@
           </p>
         </router-link>
 
-        <!-- <router-link to="/multiplayer" class='flex justify-center content-center text-xl text-whiteOpacity-75 py-2 px-4 border-2 border-whiteOpacity-75 rounded bg-blackOpacity-75 cursor-default pointer-events-none flex justify-center space-x-3'>
-          <img src="/multiplayer.svg" alt="coin" class="w-[25px]">
-          <p class="pt-1">
-            multiplayer
-          </p>
-        </router-link> -->
-
         <button @click="this.showModelWindow( 'Rules' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
           <img src="/rule.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
@@ -221,7 +173,7 @@
         </button>
 
         <button @click="this.showModelWindow( 'AppMobile' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
-          <img src="/rule.svg" alt="coin" class="w-[25px]">
+          <img src="/android.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             Download app on android
           </p>
@@ -245,8 +197,7 @@
       v-bind:modalType="this.typeModalWindow" 
       v-bind:appsMobile="this.appsMobile" 
     ></modal-window>
-    <!-- <modal-rules ></modal-rules> -->
-    <!-- <modal-helpDev></modal-helpDev> -->
+
 
     <information-game></information-game>
 

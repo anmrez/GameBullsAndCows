@@ -26,26 +26,26 @@ export default {
     <p>
       • Left mouse button: - change the color 
     </p>
-    <video src="/gif/LBM.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/LBM.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
     <p>
       • Right mouse button: - clear the color 
     </p>
-    <video src="/gif/RBM.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/RBM.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
     <p>
       • You can also color the entire column or row
     </p>
-    <video src="/gif/column.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
-    <video src="/gif/row.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/column.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/row.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
     <p>
       • You can also clear all colors in the table
     </p>
-    <video src="/gif/clearAll.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/clearAll.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
     <br>
@@ -61,7 +61,7 @@ export default {
     <p>
       • context menu: - change color
     </p>
-    <video src="/gif/contextMenu.mp4" autoplay loop class="m-auto border-4 border-white rounded" ></video>
+    <video src="/gif/contextMenu.webm" autoplay loop class="m-auto border-4 border-white rounded" ></video>
 
     <br>
   </section>

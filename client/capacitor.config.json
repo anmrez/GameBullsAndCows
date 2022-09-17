@@ -2,5 +2,10 @@
   "appId": "bullsAndCows.myapp",
   "appName": "Bulls and cows",
   "webDir": "dist",
-  "bundledWebRuntime": false
+  "bundledWebRuntime": true,
+  "plugins": {
+    "CapacitorHttp": {
+      "enabled": true
+    }
+  }
 }
