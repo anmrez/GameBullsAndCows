@@ -221,7 +221,7 @@
         </button>
 
         <button @click="this.showModelWindow( 'AppMobile' )" type="button" name="button" class='text-xl py-2 px-4 border-2 border-white rounded hover:bg-whiteOpacity-10 flex justify-center space-x-3 '>
-          <img src="/rule.svg" alt="coin" class="w-[25px]">
+          <img src="/android.svg" alt="coin" class="w-[25px]">
           <p class="pt-1">
             Download app on android
           </p>
