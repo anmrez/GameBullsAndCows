@@ -1,4 +1,4 @@
-import { Controller, Get, Param, StreamableFile, UploadedFile, UseInterceptors, Res, Header, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, StreamableFile, UploadedFile, UseInterceptors, Req, Res, Post, Body, NotFoundException } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AppService } from './app.service';
 import * as path from 'path'
@@ -6,6 +6,7 @@ const fs = require('fs');
 
 @Controller( )
 export class AppController {
+
   constructor( private readonly appService: AppService ) {}
 
 
@@ -29,19 +30,30 @@ export class AppController {
 
   }
 
-  @Header('Content-Type', 'text/html')
-  @Get( '1029384756' )
+  @Get( '' )
   getUploadHTML(
+    @Req() req,
+    @Res() res
   ) {
 
+    let showErr = this.appService.checkCode( req )
+
+    if ( showErr ) {
+      
+      res.header( 'Content-Type', 'application/json' )
+      throw new NotFoundException( 'Cannot GET /' );
+      
+    } 
+    
+    res.header( 'Content-Type', 'text/html' )
     const html = path.join( __dirname, '..', 'client', 'index.html');
     const htmlStream = fs.createReadStream( html, 'utf8' );
-    return new StreamableFile( htmlStream );
+    htmlStream.pipe(res)
 
   }
 
   @UseInterceptors( FileInterceptor( 'file' ) )
-  @Post( '1029384756' )
+  @Post( '' )
   async upload(
     @UploadedFile() file,
     @Res() res
@@ -62,7 +74,7 @@ export class AppController {
 
     });
 
-    return res.redirect('1029384756');
+    return res.redirect( '/' );
 
   }
 

@@ -68,4 +68,4 @@ Go to folder 'server'
 
 ### Additionally
 - You can change the server connection address in 'client/.env'
-- You can change the server address in 'server/src/main.ts'
+- You can change the server port in 'server/src/main.ts'

@@ -1,13 +1,19 @@
 **/node_modules
 **/dist
 *.spec.ts
-server/test/
+
+# server
 server/mobileApp/
 server/views/
+server/test/
+
+# client
 client/android/
+client/android_img/
 client/bincan/
 client/resources/
-client/android_img/
+
+# main
 send_server
 apk
 TODO
