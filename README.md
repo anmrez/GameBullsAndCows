@@ -1,6 +1,6 @@
 # Bulls and cows
 
-[Demo game](http://79.132.136.197:5000/)
+
 [My Boosty](https://boosty.to/anmrez)
 [My Patreon](https://www.patreon.com/anmrez)
 [my YouTube](https://www.youtube.com/channel/UCB9DSZs7L30FA9zjyz4TTaQ)
